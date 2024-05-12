@@ -1,0 +1,43 @@
+
+   .menu li {
+    list-style-type: none;
+    margin-bottom: 10px;
+  }
+  
+
+  .menu li.active a {
+    padding: 5px 30px 5px 20px;
+    border-radius: 5px;
+    background-color: #000000; /* Change to your preferred highlight color */
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .menu-items{
+    cursor: pointer;
+    border-radius: 5px;
+    width: 150px;
+  }
+
+  ol, ul {
+    padding-left: 0rem;
+}
+
+.sidebar {
+  padding: 15px;
+  height: 100%;
+  width: 180px;
+  margin: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #F0EBE3;
+  padding-top: 20px;
+  border-radius:20px;
+  display: block;
+}
+
+
+#bottom-item {
+  margin-top: auto; /* Push this item to the bottom */
+}

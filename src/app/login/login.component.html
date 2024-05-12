@@ -1,21 +1,34 @@
-<div class="app">
-  <div class="bg"></div>
+<div class="container-fluid body">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="container centered">
+        <div class="logo">
+          <h2 style="font-size: 70px; font-weight: 700;">Saloon</h2>
+        </div>
+        <form action="#" style="width: 70%">
+          <div class="mb-3 form-box">
+            <label for="">User Name</label>
+            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="">Password</label>
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="logIn.password"  required>
+          </div>
+          <div class="mb-3">
 
-  <form>
-    <header>
-      <img src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/reading_0re1.svg">
-    </header>
-
-    <div class="inputs">
-      <input type="text" name="" placeholder="username or email" />
-      <input type="password" name="" placeholder="password" />
-
-      <p class="light"><a href="#">Forgot password?</a></p>
+          </div>
+          <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="logMein()">Log In</button>
+          <p-toast></p-toast>
+          <div class="mb-2"></div>
+          <p style="cursor: pointer;">Need help Signing in?</p>
+        </form>
+      </div>
+      
     </div>
-  </form>
-
-  <footer>
-    <button>Continue</button>
-    <p>Don't have an account? <a href="#">Sign Up</a></p>
-  </footer>
+    <div class="col-lg-6">
+          
+    </div>
+  </div>
 </div>
+
+

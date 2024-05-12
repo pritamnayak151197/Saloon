@@ -1,0 +1,136 @@
+<div class="container-fluid">
+    <!-- <div class="rounded-top"></div> -->
+    <div class="rounded-top" style="display: flex; margin: 5px;">
+        <input type="text" class="form-control" style="width: 30%;">
+        <button class="btn btn-dark" style="margin-left: auto;" (click)="addSaloon()"><i class="fa-solid fa-plus"></i> Add Saloon</button>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card left-card" style="padding: 5px 2% 2% 2%;">
+                <div style="display: flex; padding: 5px;">
+                    <span style="font-size: 20px; font-weight: 700;">Total Saloons on Platform</span>
+                    <h4 style="margin-left: 220px; font-size: 20px; font-weight: 800;">{{totalCount}}</h4>
+                </div>
+                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of saloonList; let i = index" (click)="handleCardClick(item.salonId)" [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
+                    <div class="card-body">
+                    <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;" src="{{item.salonLogo}}" alt="">
+                      <span class="card-title">{{ item.salonName }}</span><br>
+                      <span class="card-text">{{ item.phone }}</span>
+                    </div>
+                  </div>
+            </div>
+            
+            
+        </div>
+        <div class="col-md-7">
+            <div class="card right-card" style="padding: 5px 2% 2% 2%;">
+                <h1 style="font-size: 20px; font-weight: 700; margin-top: 5px;">{{saloonData.salonName}}</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="label">Saloon Id:</span>
+                    <span class="value">{{saloonData.salonId}}</span> <br>
+
+                    <span class="label">Phone No:</span>
+                    <span class="value">{{saloonData.phone}}</span> <br>
+
+                    <span class="label">Registered On:</span>
+                    <span class="value">{{saloonData.registeredOn}}</span> <br>
+
+                    <span class="label">Trial period Start date:</span>
+                    <span class="value">{{saloonData.trialPeriodStartDate}}</span> <br>
+
+                    <span class="label">Membership:</span>
+                    <span class="value">
+                        <span *ngIf="saloonData.membership" style="background-color: #CEF3DA; padding: 1px; border-radius: 5px;">Active</span>
+                        <span *ngIf="!saloonData.membership" style="background-color: #FECFCC; padding: 1px; border-radius: 5px;">Inactive</span>
+                    </span> <br>
+
+                    <span class="label">Status:</span>
+                    <span class="value">
+                        <span *ngIf="saloonData.status" style="background-color: #CEF3DA; padding: 1px; border-radius: 5px;">Active</span>
+                        <span *ngIf="!saloonData.status" style="background-color: #FECFCC; padding: 1px; border-radius: 5px;">Inactive</span>
+                    </span> <br>
+
+                    <span class="label">Address:</span>
+                    <span class="value">{{saloonData.address}}</span> <br>
+                </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <img style="height: 170px; width: 200px; border: solid 1px;" src="{{saloonData.qrCode}}" alt="">
+                </div>
+            </div>
+            <div class="card-container" style="margin-top: 3%;">
+                <div class="card service-card" *ngFor="let service of saloonData.services">
+                    <div class="card-header">
+                        <span>{{service.serviceName}}</span>
+                    </div>
+                    <div class="card-body">
+                    <span class="label">Service Id:</span>
+                    <span class="value">{{service.serviceId}}</span> <br>
+
+                    <span class="label">Service Details:</span>
+                    <span class="value">{{service.details}}</span> <br>
+
+                    <span class="label">Price:</span>
+                    <span class="value">{{service.price}}</span> <br>
+
+                    <span class="label">Discount:</span>
+                    <span class="value">{{service.discountPrice}}</span> <br>
+
+                    <span class="label">Service Type:</span>
+                    <span class="value">{{service.serviceType}}</span> <br>
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Add new saloon" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+    <div class="row" style="padding: 1% 5% 5% 5%;">
+        <div class="col-md-6">
+        <label for="">Saloon Name</label>
+        <input class="addEmployeeDetails form-control" type="text">
+
+        <label for="">Phone Number</label>
+        <input class="addEmployeeDetails form-control" type="text">
+
+        <label for="">Registered on</label>
+        <input class="addEmployeeDetails form-control" type="text">
+
+        <label for="">Trial Period Start date</label>
+        <input class="addEmployeeDetails form-control" type="text">
+
+        <label for="">Address</label>
+        <input class="addEmployeeDetails form-control" type="text">
+
+        <label for="">Address URL</label>
+        <input class="addEmployeeDetails form-control" type="text">
+        </div>
+
+        <div class="col-md-6">
+            <label for="">Status</label>
+            <input class="addEmployeeDetails form-control" type="text">
+    
+            <label for="">Coupon</label>
+            <input class="addEmployeeDetails form-control" type="text">
+    
+            <label for="">Membership</label>
+            <input class="addEmployeeDetails form-control" type="text">
+    
+            <label for="">SMS</label>
+            <input class="addEmployeeDetails form-control" type="text">
+    
+            <label for="">Saloon Loogo</label>
+            <input class="addEmployeeDetails form-control" type="text">
+    
+            <label for="">QR Code</label>
+            <input class="addEmployeeDetails form-control" type="text">
+            </div>
+    </div>
+      <div class="flex float-end gap-2">
+        <button class="btn btn-primary">Add</button>&nbsp;
+        <button class="btn btn-danger" (click)="visible = false">Cancel</button>
+    </div>
+</p-dialog>
