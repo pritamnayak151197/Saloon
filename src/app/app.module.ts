@@ -1,20 +1,44 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { InputTextModule } from "primeng/inputtext";
+import { DialogModule } from 'primeng/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ForgotPassComponent } from './login/forgot-pass/forgot-pass.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
+import { LayoutComponent } from './layout/layout.component';
+import { ApiService } from './api.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { SidebarModule } from 'primeng/sidebar';
+import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.component';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ForgotPassComponent,
+    LayoutComponent,
+    ManageSaloonsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    InputTextModule,
+    FormsModule,
+    DialogModule,
+    BrowserAnimationsModule,
+    ToastModule,
+    HttpClientModule,
+    SidebarModule
   ],
-  providers: [],
+  providers: [DialogService,ApiService,MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

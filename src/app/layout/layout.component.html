@@ -1,0 +1,20 @@
+<div class="comtainer-fluid">
+    <div class="sidebar">
+        <p style="font-size: 20px; font-weight: 800;"><i class="fa-brands fa-stumbleupon"></i> Saloon</p>
+        <ul class="menu" style="margin-top: 5px;">
+            <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="Saloons"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
+            <li class="menu-items" [class.active]="selectedItem === 'item2'"><a  (click)="selectItem('item2')"><i class="fa-solid fa-bars-progress"></i> Manage</a></li>
+            <li class="menu-items" [class.active]="selectedItem === 'item3'"><a  (click)="selectItem('item3')">Item 3</a></li>
+            <li class="menu-items" [class.active]="selectedItem === 'item4'"><a  (click)="selectItem('item4')">Item 4</a></li>
+            <li class="menu-items" [class.active]="selectedItem === 'item5'"><a (click)="selectItem('item5')">Item 5</a></li>
+            <li style="margin-top: 457px;"><a><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li>
+          </ul>
+    </div>
+    <div style="margin-left: 180px;">
+        <router-outlet></router-outlet>
+    </div>
+    
+</div>
+
+
+  
