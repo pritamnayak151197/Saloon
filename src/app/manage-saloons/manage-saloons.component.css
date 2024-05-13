@@ -90,10 +90,10 @@
   color: rgb(29, 28, 28);
 }
 .card.active {
-  background-color: #FEFDED;
+  background-color: #99BC85;
   color: rgb(29, 28, 28);
 }
 .card-header{
-  background-color: #F0EBE3;
+  background-color: #99BC85;
   color: rgb(29, 28, 28);
 }

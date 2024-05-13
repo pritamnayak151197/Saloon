@@ -96,11 +96,16 @@
         <label for="">Phone Number</label>
         <input class="addEmployeeDetails form-control" type="text">
 
-        <label for="">Registered on</label>
-        <input class="addEmployeeDetails form-control" type="text">
+        <label for="">Registered on</label><br>
+        <p-calendar 
+        [showIcon]="true" 
+        icon="calender"
+        panelStyle="bottom"
+        inputId="icondisplay"
+        [showButtonBar]="true"></p-calendar>
 
         <label for="">Trial Period Start date</label>
-        <input class="addEmployeeDetails form-control" type="text">
+        <p-calendar></p-calendar><br>
 
         <label for="">Address</label>
         <input class="addEmployeeDetails form-control" type="text">

@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
 import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.component';
-
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -36,7 +36,8 @@ import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.componen
     BrowserAnimationsModule,
     ToastModule,
     HttpClientModule,
-    SidebarModule
+    SidebarModule,
+    CalendarModule
   ],
   providers: [DialogService,ApiService,MessageService],
   bootstrap: [AppComponent]

@@ -8,7 +8,7 @@
   .menu li.active a {
     padding: 5px 30px 5px 20px;
     border-radius: 5px;
-    background-color: #000000; /* Change to your preferred highlight color */
+    background-color: #99BC85; /* Change to your preferred highlight color */
     color: #fff;
     cursor: pointer;
   }
@@ -31,7 +31,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #F0EBE3;
+  background-color: #EEEEEE;
   padding-top: 20px;
   border-radius:20px;
   display: block;
