@@ -22,6 +22,13 @@ export class LoginComponent implements OnInit {
   Username: any;
   visible: boolean = false;
   username: string = '';
+  display: boolean = false;
+  email: string = '';
+  otp: string = '';
+  otpSent: boolean = false;
+  otpVerified: boolean = false;
+  newPassword: string = '';
+  confirmPassword: string = '';
   logIn = {
     "username":"",
     "phone":"",
@@ -49,6 +56,44 @@ export class LoginComponent implements OnInit {
     });
   }
 
+
+
+  
+  //forgot Password
+  showDialog() {
+    this.display = true;
+    this.otpSent = false;
+    this.email = '';
+    this.otp = '';
+  }
+
+  submitEmail() {
+    if (this.email) {
+      // Simulate sending OTP to the email
+      console.log('OTP sent to email:', this.email);
+      this.otpSent = true;
+    }
+  }
+
+  submitOTP() {
+    if (this.otp) {
+      // Simulate OTP verification
+      console.log('OTP entered:', this.otp);
+      this.otpSent = false;
+      this.otpVerified = true;
+    }
+  }
+
+  resetPassword() {
+    if (this.newPassword && this.newPassword === this.confirmPassword) {
+      // Handle password reset logic here
+      console.log('New password set:', this.newPassword);
+      this.display = false;
+    } else {
+      // Handle password mismatch
+      console.log('Passwords do not match');
+    }
+  }
   
 
 }

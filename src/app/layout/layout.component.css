@@ -8,7 +8,7 @@
   .menu li.active a {
     padding: 5px 30px 5px 20px;
     border-radius: 5px;
-    background-color: #99BC85; /* Change to your preferred highlight color */
+    background-color: #856343; /* Change to your preferred highlight color */
     color: #fff;
     cursor: pointer;
   }
@@ -31,10 +31,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #EEEEEE;
+  background-image: url('../assets/pic3.png');
   padding-top: 20px;
   border-radius:20px;
   display: block;
+  color: #FFFFFF;
 }
 
 
