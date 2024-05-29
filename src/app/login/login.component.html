@@ -20,7 +20,7 @@
           <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="logMein()">Log In</button>
           <p-toast></p-toast>
           <div class="mb-2"></div>
-          <p style="cursor: pointer;">Need help Signing in?</p>
+          <p style="cursor: pointer;" (click)="showDialog()">Need help Signing in?</p>
         </form>
       </div>
       
@@ -30,5 +30,59 @@
     </div>
   </div>
 </div>
+
+
+<!-- Forgot password Modal -->
+
+<!-- app.component.html -->
+<p-button label="Forgot Password" icon="pi pi-info-circle" (click)="showDialog()"></p-button>
+
+<p-dialog header="Forgot Password" [(visible)]="display" [modal]="true" [closable]="false" [dismissableMask]="true">
+  <div class="row">
+    <div class="col-md-4">
+      <img src="../assets/saloon.jpg">
+    </div>
+    <div class="col-md-8">
+      <div *ngIf="!otpSent && !otpVerified" class="p-fluid">
+        <div class="p-field">
+          <label for="email">Email</label>
+          <input id="email" type="text" pInputText [(ngModel)]="email">
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn btn-success" label="Submit" (click)="submitEmail()" icon="pi pi-check" style="margin-right: 5px;">Submit</button>
+          <button class="btn btn-danger" label="Cancel" (click)="display=false" icon="pi pi-times">Cancel</button>
+        </div>
+      </div>
+      
+      <div *ngIf="otpSent && !otpVerified" class="p-fluid">
+        <div class="p-field">
+          <label for="otp">Enter OTP</label>
+          <input id="otp" type="text" pInputText [(ngModel)]="otp" maxlength="6">
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn btn-success" label="Submit" (click)="submitOTP()" icon="pi pi-check" style="margin-right: 5px;">Verify OTP</button>
+          <button class="btn btn-danger" label="Cancel" (click)="display=false" icon="pi pi-times">Cancel</button>
+        </div>
+      </div>
+      
+      <div *ngIf="otpVerified" class="p-fluid">
+        <div class="p-field">
+          <label for="newPassword">New Password</label>
+          <input id="newPassword" type="password" pInputText [(ngModel)]="newPassword">
+        </div>
+        <div class="p-field">
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" type="password" pInputText [(ngModel)]="confirmPassword">
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn btn-success" label="Submit" (click)="resetPassword()" icon="pi pi-check" style="margin-right: 5px;">Reset Password</button>
+          <button class="btn btn-danger" label="Cancel" (click)="display=false" icon="pi pi-times">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</p-dialog>
+
 
 

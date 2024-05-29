@@ -15,7 +15,11 @@ export class ApiService {
     return this.http.post(`https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/admin/v1/login/usernameOrPhone`, param);
   }
 
-  getSaloonList(): Observable<Salon[]>{
-    return this.http.get<Salon[]>('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/salon/viewList')
+  getSaloonList(){
+    return this.http.get('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/salon/viewList');
+  }
+
+  addSaloon(body:any){
+    return this.http.post('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/salon/addSalon', body);
   }
 }

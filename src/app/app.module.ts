@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
 import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.component';
-
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -36,7 +36,9 @@ import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.componen
     BrowserAnimationsModule,
     ToastModule,
     HttpClientModule,
-    SidebarModule
+    SidebarModule,
+    CalendarModule,
+    ReactiveFormsModule
   ],
   providers: [DialogService,ApiService,MessageService],
   bootstrap: [AppComponent]

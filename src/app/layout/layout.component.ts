@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -8,7 +9,9 @@ import { MessageService } from 'primeng/api';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService,
+    private router: Router
+  ) { }
   sidebarVisible: boolean = false;
   selectedItem=  "item2";
 
@@ -24,4 +27,7 @@ export class LayoutComponent implements OnInit {
     this.messageService.add({ severity: 'success', detail: 'res.success.message' });
   }
 
+  logout() {
+    this.router.navigate(['Login']);
+  }
 }
