@@ -7,8 +7,10 @@
     <div class="row">
         <div class="col-md-5">
             <div class="card left-card" style="padding: 5px 2% 2% 2%;">
-              <input type="text" class="form-control">
-              
+              <div style="display: flex; gap: 10px;">
+                <input type="text" class="form-control" [(ngModel)]="inputValue" (ngModelChange)="onInputChange($event)"   placeholder="Enter salon name">
+                <button type="button" class="btn btn-outline-success" (click)="exportToExcel()">Export</button>
+              </div>
                 <div style="display: flex; padding: 5px;">
                     <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Total Saloons on Platform</span>
                     <h4 style="margin-left: 220px; font-size: 20px; font-weight: 800;">{{totalCount}}</h4>

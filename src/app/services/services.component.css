@@ -1,0 +1,114 @@
+.left-card{
+    border-radius: 5px;
+    background-color: #F6F5F2;
+    background-image: url('../assets/pic2.png');
+}
+.card-title{
+  font-weight: 600;
+  font-family:Arial, Helvetica, sans-serif;
+}
+.card-text{
+    font-style:oblique;
+}
+
+.right-card{
+  border-radius: 5px;
+  color: #F6F5F2;
+  background-image: url('../assets/pic2.png');
+}
+
+.label{
+  font-weight: 500;
+  margin-right: 20px;
+}
+
+.card-container {
+  display: flex; /* Use Flexbox */
+  flex-wrap: wrap;
+  gap: 5px; /* Optional: Add spacing between cards */
+}
+
+/* Basic styles for the card */
+.service-card {
+  width: 230px !important;
+  background-color: #EEEEEE;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+/* .saloon-list-card{
+  border-radius: 5px !important;
+  background-color: #D4E7C5;
+  color: black;
+} */
+
+.odd-card {
+  border-radius: 5px !important;
+  background-color: #F6F5F2;
+  color: black;
+}
+
+.even-card {
+  border-radius: 5px !important;
+  background-color: #F0EBE3;
+  color: black;
+}
+
+
+
+/* Additional styles for card content */
+.content {
+  font-size: 16px;
+}
+
+/* Animation for card entrance */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.rounded-top{
+  border-radius: 5px; /* Border radius applied to the right side */
+  margin: 5px 0 5px 0;
+  height: 50px; 
+  padding: 5px;
+  display: flex;
+  color: #ffffff;
+  background-image: url('../assets/pic3.png');
+} 
+
+/* Hover effect and box shadow on hover */
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.saloon-list-card:hover{
+  background-color: #FED8B1;
+  color: rgb(29, 28, 28);
+}
+.card.active {
+  background-color: #FED8B1;
+  color: rgb(29, 28, 28);
+}
+.card-header{
+  background-color: #FED8B1;
+  color: rgb(29, 28, 28);
+}
+.p-dialog-header {
+  background-color: #99BC85 !important;
+}
+
+.custom-dialog .ui-dialog-titlebar {
+  background-color: #ff0000; /* Change to your desired color */
+  color: #ffffff; /* Change the text color if needed */
+}
+
+.p-ripple{
+  color: #ff0000 !important;
+}

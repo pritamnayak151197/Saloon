@@ -1,5 +1,5 @@
 <div class="container-fluid body">
-  <div class="row">
+  <div class="row" *ngIf="false">
     <div class="col-lg-6">
       <div class="container centered">
         <div class="logo">
@@ -21,6 +21,51 @@
           <p-toast></p-toast>
           <div class="mb-2"></div>
           <p style="cursor: pointer;" (click)="showDialog()">Need help Signing in?</p>
+        </form>
+      </div>
+      
+    </div>
+    <div class="col-lg-6">
+          
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="container centered">
+        <div class="logo">
+          <h2 style="font-size: 70px; font-weight: 700;">Saloon</h2>
+        </div>
+        <form action="#" style="width: 70%" *ngIf="!otpSent">
+          <div class="mb-3 form-box">
+            <label for="">Phone Number</label>
+            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="logInWithOtp.phoneNumber" required>
+          </div>
+          <!-- <div class="mb-3">
+            <label for="">OTP</label>
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="logIn.password"  required>
+          </div>
+          <div class="mb-3">
+
+          </div> -->
+          <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="logMein()">Send OTP</button>
+          <p-toast></p-toast>
+          <div class="mb-2"></div>
+          <p style="cursor: pointer;" (click)="showDialog()">Need help Signing in?</p>
+        </form>
+
+        <form action="#" style="width: 70%" *ngIf="otpSent">
+          
+          <div class="mb-3">
+            <label for="">OTP</label>
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="recievedOtp"  required>
+          </div>
+          <div class="mb-3">
+
+          </div>
+          <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="verifyOtp()">Verify OTP</button>
+          <p-toast></p-toast>
+          <div class="mb-2"></div>
+          <p style="cursor: pointer;" (click)="logMein()">didn't grt it Resend code?</p>
         </form>
       </div>
       

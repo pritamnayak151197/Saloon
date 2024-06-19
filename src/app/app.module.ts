@@ -17,6 +17,10 @@ import { MessageService } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
 import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.component';
 import { CalendarModule } from 'primeng/calendar';
+import {PackagesComponent} from './packages/packages.component';
+import {ServicesComponent} from './services/services.component';
+
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -25,7 +29,9 @@ import { CalendarModule } from 'primeng/calendar';
     LoginComponent,
     ForgotPassComponent,
     LayoutComponent,
-    ManageSaloonsComponent
+    ManageSaloonsComponent,
+    PackagesComponent,
+    ServicesComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +44,8 @@ import { CalendarModule } from 'primeng/calendar';
     HttpClientModule,
     SidebarModule,
     CalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelectModule
   ],
   providers: [DialogService,ApiService,MessageService],
   bootstrap: [AppComponent]

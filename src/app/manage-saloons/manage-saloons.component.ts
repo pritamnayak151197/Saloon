@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Salon } from '../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { ExportToExcelService } from '../export-to-excel.service';
 
 @Component({
   selector: 'app-manage-saloons',
@@ -12,7 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ManageSaloonsComponent implements OnInit {
 
   constructor(private _apiService: ApiService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _exportToExcelService: ExportToExcelService,
   ) { }
   totalCount: any;
   saloonList: Salon[] = [];
@@ -21,14 +22,30 @@ export class ManageSaloonsComponent implements OnInit {
   visible = false;
   salonForm: any;
   responseDataSubmit: any;
-  
+  inputValue: string = '';
+  selectedFile: any;
+
+  exportToExcel(): void {
+    this._exportToExcelService.exportToExcel(this.saloonList, 'saloon_list');
+  }
+  onInputChange(value: string): void {
+    if (value.length === 3) {
+      this.triggerFunction(value);
+    }
+  }
+
+  triggerFunction(value: string): void {
+  //  this.saloonList = this.saloonList.filter(salon => salon.salonName === value);
+  }
 
   onSubmit(){
     if (this.salonForm.valid) {
       console.log(this.salonForm.value);
       this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
         this.responseDataSubmit = data;
+        this.saloonList.push(this.responseDataSubmit.data)
       });
+      this.visible = false;
     }
   }
 
@@ -40,6 +57,10 @@ export class ManageSaloonsComponent implements OnInit {
 
   addSaloon(){
     this.visible = true;
+  }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
   }
 
   isInvalid(controlName: string): boolean {
