@@ -15,13 +15,16 @@ const routes: Routes = [
     path: 'Layout', component: LayoutComponent,
     children: [
       { path: '', component: ManageSaloonsComponent },
-      { path: 'Saloons', component: ManageSaloonsComponent, canActivate: [AuthGuard], data: { expectedRole: 'superadmin' } },
-      { path: 'Services', component: ServicesComponent, canActivate: [AuthGuard], data: { expectedRole: 'admin' } },
-      { path: 'Packages', component: PackagesComponent, canActivate: [AuthGuard], data: { expectedRole: 'admin' } },
+      { path: 'Saloons', component: ManageSaloonsComponent, canActivate: [AuthGuard] },
+      { path: 'Services', component: ServicesComponent, canActivate: [AuthGuard] },
+      { path: 'Packages', component: PackagesComponent, canActivate: [AuthGuard] }
     ]
   },
   { path: 'unauthorized', component: UnauthorizedComponent },
 ];
+
+
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

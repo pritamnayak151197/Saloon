@@ -4,6 +4,8 @@ import { Salon } from '../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-services',
@@ -15,7 +17,8 @@ export class ServicesComponent implements OnInit {
   constructor(private _apiService: ApiService,
     private fb: FormBuilder,
     private _exportToExcelService: ExportToExcelService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) { }
   totalCount: any;
   serviceslist:any = [];
@@ -29,11 +32,46 @@ export class ServicesComponent implements OnInit {
   userData: any;
   selectedFile: any;
   selectedFileUrl: any;
+  editVisible = false;
+  editServiceForm: any;
+  serviceIdforEdit: any;
+  isSuperAdmin = false
+  salons: any;
+  selectedSaloon: any;
 
 
   exportToExcel(): void {
     this._exportToExcelService.exportToExcel(this.serviceslist, 'service_list');
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Data exported successfully!' });
+  }
+
+  onUpdate() {
+    if(this.selectedFile){
+      this._apiService.uploadImage(this.selectedFile).subscribe((res: any) =>{
+        this.selectedFileUrl = res[0].url;
+        this.serviceForm.value.servicePic = this.selectedFileUrl;
+        let salonId = this.getUserData();
+        this.serviceForm.value.salonId = salonId.salonId
+        console.log(this.serviceForm)
+        if (this.serviceForm.valid) {
+          this._apiService.updateServiceById(this.serviceForm.value).subscribe((res)=>{
+          });
+        } else {
+          console.log('Form is invalid');
+        }
+      });
+    }
+
+    else{
+      this.serviceForm.value.serviceId = this.serviceIdforEdit;
+      this.serviceForm.value.servicePic = this.editServiceForm.servicePic;
+      this._apiService.updateServiceById(this.serviceForm.value).subscribe((res)=>{
+        
+        this.editVisible = false
+        this.loadData(null);
+      });
+    }
+    this.visible = false
   }
   
   onSubmit() {
@@ -59,12 +97,20 @@ export class ServicesComponent implements OnInit {
   }
 
 
-  handleCardClick(details:any){
-      // this.saloonData = this.saloonList.find(salon => salon.salonId === details);
-      // this.selectedCardId = details;
+  handleCardClick(details: any) {
+    this.serviceIdforEdit = details;
+    this.editServiceForm = this.serviceslist.find((service: any) => service.serviceId === details);
+    this.editVisible = true;
+    this.openEditDialog(this.editServiceForm)
   }
 
+openEditDialog(data: any) {
+  this.editVisible = true;
+  this.populateForm(data); // Assuming data contains existing service details
+}
+
   addServices(){
+    this.clearData();
     this.visible = true;
   }
 
@@ -82,8 +128,68 @@ export class ServicesComponent implements OnInit {
     return JSON.parse(this.userData);
   }
 
+  populateForm(data: any) {
+    this.serviceForm.patchValue({
+      serviceName: data.serviceName,
+      details: data.details,
+      price: data.price,
+      discountPrice: data.discountPrice,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      status: data.status,
+      salonId: data.salonId
+    });
+  }
+  clearData() {
+    this.serviceForm.patchValue({
+      serviceName: null,
+      details: null,
+      price: null,
+      discountPrice: null,
+      startDate: null,
+      endDate: null,
+      status: null,
+      salonId: null
+    });
+  }
+
+  loadData(saloonIdforSuperadmin: any){
+    if(saloonIdforSuperadmin == null){
+      let saloonId = this.getUserData();
+    this._apiService.getServiceBySaloonId(saloonId.salonId).subscribe((res: any) =>{
+      this.serviceslist = res
+      this.totalCount = res.length;
+      console.log(this.serviceslist);
+    });  
+    }
+    else{
+      this._apiService.getServiceBySaloonId(saloonIdforSuperadmin).subscribe((res: any) =>{
+        this.serviceslist = res
+        this.totalCount = res.length;
+        console.log(this.serviceslist);
+      });  
+    }
+    
+  }
+  onSalonSelect(event: Event) {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    this.selectedSaloon = selectedId ? Number(selectedId) : null;
+    console.log('Selected Salon ID:', this.selectedSaloon);
+    this.loadData(this.selectedSaloon);
+    this.isSuperAdmin = false;
+  }
+
   ngOnInit(): void {
-    let saloonId = this.getUserData();
+    let userdata = this.getUserData();
+    if(userdata.userType == "superadmin"){
+      this._apiService.getSaloonList().subscribe((res)=>{
+        this.salons = res;
+      });
+      this.isSuperAdmin = true;
+    }
+    else{
+      this.loadData(null);
+    }
     this.serviceForm = this.fb.group({
       serviceName: ['', [Validators.required]],
       details: ['', [Validators.required]],
@@ -93,13 +199,5 @@ export class ServicesComponent implements OnInit {
       status: [false, [Validators.required]],
       serviceType: ['', [Validators.required]]
     });
-    
-    this._apiService.getServiceBySaloonId(saloonId.salonId).subscribe((res: any) =>{
-      this.serviceslist = res
-      this.totalCount = res.length;
-      console.log(this.serviceslist);
-      // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
-    });  
   }
-
 }

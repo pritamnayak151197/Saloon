@@ -4,6 +4,7 @@ import { Salon } from '../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 
+
 @Component({
   selector: 'app-packages',
   templateUrl: './packages.component.html',
@@ -26,27 +27,119 @@ export class PackagesComponent implements OnInit {
   userData: any;
   serviceData: any;
   dropdownSettings = {};
+  selectedOptions: string[] = [];
+  packageIdforEdit: any;
+  editPackageForm: any;
+  editVisible: any;
+  salons: any;
+  isSuperAdmin = false;
+  selectedSaloon: any;
+  selectedId: any;
+
+  onOptionChange(event: any, value: string) {
+    if (event.target.checked) {
+      this.selectedOptions.push(value);
+    } else {
+      const index = this.selectedOptions.indexOf(value);
+      if (index >= 0) {
+        this.selectedOptions.splice(index, 1);
+      }
+    }
+  }
 
   exportToExcel(): void {
     this._exportToExcelService.exportToExcel(this.serviceslist, 'package_list');
   }
 
+
   onSubmit(){
-    if (this.salonForm.valid) {
-      console.log(this.salonForm.value);
-      this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
-        this.responseDataSubmit = data;
-      });
+    let userdata = this.getUserData();
+    if(userdata.userType != "superadmin"){
+      this.packageForm.value.salonId = userdata.salonId;
     }
+    else{
+      this.packageForm.value.salonId = +this.selectedId;
+    }
+      const formValues = this.packageForm.value;
+      // Format the date
+      formValues.startDate = this.formatDate(formValues.startDate);
+      formValues.endDate = this.formatDate(formValues.endDate);
+
+      this.packageForm.value.services = this.selectedOptions;
+      this._apiService.addPackages(this.packageForm.value).subscribe((data) =>{
+        this.visible = false;
+        this.serviceslist.push(data);
+      });
+  }
+  onEdit(){
+      const formValues = this.packageForm.value;
+      // Format the date
+      formValues.startDate = this.formatDate(formValues.startDate);
+      formValues.endDate = this.formatDate(formValues.endDate);
+      if(!this.packageForm.value.services){
+        this.packageForm.value.services = this.editPackageForm.services;
+      }
+      else{
+        
+      }
+      this.packageForm.value.packageLogo = '';
+      this.packageForm.value.salonLogo = '';
+      this.packageForm.value.packageId = this.editPackageForm.packageId;
+      this._apiService.updatePackageById(this.packageForm.value).subscribe((res)=>{
+        
+        this.editVisible = false
+        this.loadData(null);
+      });
+    this.visible = false
+  }
+
+  formatDate(date: string): string {
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
   }
 
 
   handleCardClick(details:any){
-      // this.saloonData = this.saloonList.find(salon => salon.salonId === details);
-      // this.selectedCardId = details;
+    this.packageIdforEdit = details;
+    this.editPackageForm = this.serviceslist.find((service: any) => service.packageId === details);
+    this.editVisible = true;
+    this.openEditDialog(this.editPackageForm)
   }
 
+  openEditDialog(data: any) {
+    this.editVisible = true;
+    this.populateForm(data); // Assuming data contains existing service details
+  }
+
+  populateForm(data: any) {
+    this.packageForm.patchValue({
+      packageName: data.packageName,
+      price: data.price,
+      discountPrice: data.discountPrice,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      status: data.status,
+      salonId: data.salonId
+    });
+  }
+
+  clearData() {
+    this.packageForm.patchValue({
+      packageName: '',
+      price: null,
+      discountPrice: null,
+      startDate: null,
+      endDate: null,
+      status: null,
+      salonId: null
+    });
+  }
+  onEditSubmit(){}
+
   addSaloon(){
+    this.clearData();
     this.visible = true;
   }
 
@@ -75,39 +168,60 @@ export class PackagesComponent implements OnInit {
     this.packageForm.patchValue({ services: selectedServices });
   }
 
-
-  ngOnInit(): void {
+  loadData(saloonIdIfSuperAdmin: any){
     let saloonId = this.getUserData();
     this._apiService.getServiceBySaloonId(saloonId.salonId).subscribe((res: any) =>{
       this.serviceData = res;
     });
+    if(saloonIdIfSuperAdmin == null){
+      this._apiService.getPackagesBySaloonId(saloonId.salonId).subscribe((res: any) =>{
+        this.serviceslist = res
+        this.totalCount = res.length;
+        console.log(this.serviceslist);
+        // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
+      });  
+    }
+    else{
+      this._apiService.getPackagesBySaloonId(saloonIdIfSuperAdmin).subscribe((res: any) =>{
+        this.serviceslist = res
+        this.totalCount = res.length;
+        console.log(this.serviceslist);
+        // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
+      });  
+    }
+    
+   
+    
+  }
+
+
+  onSalonSelect(event: Event) {
+    this.selectedId = (event.target as HTMLSelectElement).value;
+    this.selectedSaloon = this.selectedId ? Number(this.selectedId) : null;
+    console.log('Selected Salon ID:', this.selectedSaloon);
+    this.loadData(this.selectedSaloon);
+    this.isSuperAdmin = false;
+  }
+
+  ngOnInit(): void {
+    let userdata = this.getUserData();
+    if(userdata.userType == "superadmin"){
+      this._apiService.getSaloonList().subscribe((res)=>{
+        this.salons = res;
+      });
+      this.isSuperAdmin = true;
+    }
+    else{
+      this.loadData(null);
+    }
     this.packageForm = this.fb.group({
       packageName: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
       discountPrice: [null, [Validators.required, Validators.min(0)]],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      status: [false, Validators.required],
-      services: [[], Validators.required],
-      salonId: [null, Validators.required]
+      status: [false, Validators.required]
     });
-   
-    this._apiService.getPackagesBySaloonId(saloonId.salonId).subscribe((res: any) =>{
-      this.serviceslist = res
-      this.totalCount = res.length;
-      console.log(this.serviceslist);
-      // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
-    });  
-
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'id',
-      textField: 'name',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
   }
 
 }

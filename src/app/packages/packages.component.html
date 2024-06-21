@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-outline-success" style="height: 100%;" (click)="exportToExcel()">Export</button>
                 </div>
                 
-                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index" (click)="handleCardClick(item.serviceId)" [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
+                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index" (click)="handleCardClick(item.packageId)" [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
                     <div class="card-body">
                       <div class="row">
                         <div class="col-md-3">
@@ -39,7 +39,7 @@
             </div>
         </div>
 </div>
-<p-dialog header="Add new Service" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+<p-dialog header="Add new package" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
   <div class="row">
     <form [formGroup]="packageForm" (ngSubmit)="onSubmit()">
       <div>
@@ -61,7 +61,7 @@
         <label for="startDate">Start Date:</label>
         <input class="form-control" id="startDate" formControlName="startDate" type="date">
       </div>
-    
+
       <div>
         <label for="endDate">End Date:</label>
         <input class="form-control" id="endDate" formControlName="endDate" type="date">
@@ -73,27 +73,32 @@
       </div>
     
       <div>
-        <label for="services">Services:</label>
-        <select class="form-control" id="services" formControlName="services" multiple>
-          <!-- <option *ngFor="let service of availableServices" [value]="service.id">{{service.name}}</option> -->
-        </select>
+        <div class="dropdown">
+          <div style="border: solid 1px; border-radius: 5px; color: grey; height: 35px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Select Options</span><span style="margin-left: auto;"><i class="fa-solid fa-caret-down"></i></span>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li *ngFor="let option of serviceData">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [value]="option.value" 
+                  (change)="onOptionChange($event, option.serviceId)"
+                  [checked]="selectedOptions.includes(option.serviceId)">
+                <label class="form-check-label">
+                  {{ option.serviceName }}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <p>Selected Options: {{ selectedOptions | json }}</p>
+        
       </div>
-
-      <label *ngFor="let service of serviceData">
-        <input
-          type="checkbox"
-          [value]="service.id"
-          (change)="onCheckboxChange($event)"
-        />
-        {{ service.name }}
-      </label>
     
-      <div>
-        <label for="salonId">Salon ID:</label>
-        <input class="form-control" id="salonId" formControlName="salonId" type="number">
-      </div>
-    
-      <div class="d-flex justify-content-end gap-2">
+      <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
         <button type="submit" class="btn btn-primary">Submit</button>
         <button type="button" class="btn btn-danger" (click)="visible = false">Cancel</button>
       </div>
@@ -101,4 +106,84 @@
     
   </div>
      
+</p-dialog>
+
+<p-dialog header="Edit package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '50rem' }">
+  <div class="row">
+    <form [formGroup]="packageForm" (ngSubmit)="onEdit()">
+      <div>
+        <label for="packageName">Package Name:</label>
+        <input class="form-control" id="packageName" formControlName="packageName" type="text">
+      </div>
+    
+      <div>
+        <label for="price">Price:</label>
+        <input class="form-control" id="price" formControlName="price" type="number">
+      </div>
+    
+      <div>
+        <label for="discountPrice">Discount Price:</label>
+        <input class="form-control" id="discountPrice" formControlName="discountPrice" type="number">
+      </div>
+    
+      <div>
+        <label for="startDate">Start Date:</label>
+        <input class="form-control" id="startDate" formControlName="startDate" type="date">
+      </div>
+
+      <div>
+        <label for="endDate">End Date:</label>
+        <input class="form-control" id="endDate" formControlName="endDate" type="date">
+      </div>
+    
+      <div>
+        <label for="status">Status:</label>
+        <input  id="status" formControlName="status" type="checkbox">
+      </div>
+    
+      <div>
+        <div class="dropdown">
+          <div style="border: solid 1px; border-radius: 5px; color: grey; height: 35px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Select Options</span><span style="margin-left: auto;"><i class="fa-solid fa-caret-down"></i></span>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li *ngFor="let option of serviceData">
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [value]="option.value" 
+                  (change)="onOptionChange($event, option.serviceId)"
+                  [checked]="selectedOptions.includes(option.serviceId)">
+                <label class="form-check-label">
+                  {{ option.serviceName }}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <p>Selected Options: {{ selectedOptions | json }}</p>
+        
+      </div>
+    
+      <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
+      </div>
+    </form>
+    
+  </div>
+     
+</p-dialog>
+
+<p-dialog header="Select Salon" [(visible)]="isSuperAdmin"  [closable]="true" [style]="{width: '300px'}">
+  <div class="p-fluid">
+    <div class="p-field">
+      <select id="salon" class="form-control" (change)="onSalonSelect($event)">
+        <option value="" disabled selected>Select a Salon</option>
+        <option *ngFor="let salon of salons" [value]="salon.salonId">{{ salon.salonName }}</option>
+      </select>
+    </div>
+  </div>
 </p-dialog>

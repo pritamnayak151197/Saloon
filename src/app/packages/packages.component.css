@@ -112,3 +112,63 @@
 .p-ripple{
   color: #ff0000 !important;
 }
+
+
+
+
+/* dropdown */
+
+.custom-select-container {
+  position: relative;
+  width: 200px;
+  font-family: Arial, sans-serif;
+}
+
+.custom-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.custom-select .selected-items {
+  flex: 1;
+}
+
+.custom-select .arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+}
+
+.options-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: #fff;
+  display: none;
+  z-index: 1;
+}
+
+.options-container label {
+  display: block;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.options-container label:hover {
+  background-color: #f0f0f0;
+}
+
+.options-container input[type="checkbox"] {
+  margin-right: 8px;
+}

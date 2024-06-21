@@ -20,8 +20,6 @@ import { CalendarModule } from 'primeng/calendar';
 import {PackagesComponent} from './packages/packages.component';
 import {ServicesComponent} from './services/services.component';
 
-import { MultiSelectModule } from 'primeng/multiselect';
-
 
 @NgModule({
   declarations: [
@@ -45,7 +43,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
     SidebarModule,
     CalendarModule,
     ReactiveFormsModule,
-    MultiSelectModule
   ],
   providers: [DialogService,ApiService,MessageService],
   bootstrap: [AppComponent]

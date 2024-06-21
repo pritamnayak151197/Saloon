@@ -48,6 +48,22 @@ export class ApiService {
     return this.http.post(url, formData);
   }
 
+  addPackages(body: any){
+    const url = `${this.baseUrl}package/addPackage`;
+    return this.http.post(url, body);
+  }
+
+  updateServiceById(updatedFormData: any){
+    const url = `${this.baseUrl}services/update`;
+    return this.http.put(url, updatedFormData);
+  }
+
+  updatePackageById(updatedFormData: any){
+    const url = `${this.baseUrl}package/updatePackages`;
+    return this.http.put(url, updatedFormData);
+  }
+  
+
   addservice(body: any){
     return this.http.post('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/services/add', body);
   }
