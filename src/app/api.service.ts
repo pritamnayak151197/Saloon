@@ -63,6 +63,10 @@ export class ApiService {
     return this.http.put(url, updatedFormData);
   }
   
+  updateSaloonById(updatedFormData: any){
+    const url = `${this.baseUrl}salon/updateSalon`;
+    return this.http.put(url, updatedFormData);
+  }
 
   addservice(body: any){
     return this.http.post('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/services/add', body);

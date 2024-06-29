@@ -12,31 +12,37 @@
                 </div>
                 <div style="display: flex; gap: 5px;">
                   <input type="text" class="form-control mb-4">
-                <button type="button" class="btn btn-outline-success" style="height: 100%;" (click)="exportToExcel()">Export</button>
+                <button type="button" class="btn btn-success" style="height: 60%;" (click)="exportToExcel()">Export</button>
                 </div>
-                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index" (click)="handleCardClick(item.serviceId)" [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
+                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index"  [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
                     <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-3">
+                      <div style="display: flex; gap: 17%;">
+                        <div>
+                          <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;" src="{{item.servicePic}}" alt="">
+                        </div>
+                        <div style="width: 150px;">
                           <span class="card-title">{{ item.serviceName }}</span><br>
                           <span class="card-text">Price : {{ item.price }}</span>
                         </div>
-                        <div class="col-md-3">
+                        <div style="width: 150px;">
                           <span class="card-text">Service Id : {{ item.serviceId }}</span><br>
                           <span class="card-text">Details : {{ item.details }}</span>
                         </div>
-                        <div class="col-md-3">
+                        <div>
                           <span class="card-text">Discount Price : {{ item.discountPrice }}</span><br>
                           <span class="card-text">Status : {{ item.status }}</span>
                         </div>
-                        <div class="col-md-3">
-                          <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;" src="{{item.servicePic}}" alt="">
+                        <div>
+                          <i class="fa-solid fa-pen" (click)="handleCardClick(item.serviceId)" style="cursor: pointer;"></i>
                         </div>
                       </div>
                     </div>
                   </div>
                   
                 
+            </div>
+            <div *ngIf="totalCount == 0">
+              No data found
             </div>
         </div>
 </div>
@@ -87,7 +93,6 @@
       </div>
     </form>
   </div>
-     
 </p-dialog>
 
 <p-dialog header="Edit Service" [modal]="true" [(visible)]="editVisible" [style]="{ width: '50rem' }">

@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { Salon } from '../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -15,15 +16,16 @@ export class PackagesComponent implements OnInit {
   constructor(private _apiService: ApiService,
     private fb: FormBuilder,
     private _exportToExcelService: ExportToExcelService,
+    private route: ActivatedRoute
   ) { }
   totalCount: any;
-  serviceslist:any = [];
+  serviceslist: any = [];
   saloonData: any;
   selectedCardId = 1;
   visible = false;
   salonForm: any;
   responseDataSubmit: any;
-  packageForm : any;
+  packageForm: any;
   userData: any;
   serviceData: any;
   dropdownSettings = {};
@@ -52,44 +54,44 @@ export class PackagesComponent implements OnInit {
   }
 
 
-  onSubmit(){
+  onSubmit() {
     let userdata = this.getUserData();
-    if(userdata.userType != "superadmin"){
+    if (userdata.userType != "superadmin") {
       this.packageForm.value.salonId = userdata.salonId;
     }
-    else{
+    else {
       this.packageForm.value.salonId = +this.selectedId;
     }
-      const formValues = this.packageForm.value;
-      // Format the date
-      formValues.startDate = this.formatDate(formValues.startDate);
-      formValues.endDate = this.formatDate(formValues.endDate);
+    const formValues = this.packageForm.value;
+    // Format the date
+    formValues.startDate = this.formatDate(formValues.startDate);
+    formValues.endDate = this.formatDate(formValues.endDate);
 
-      this.packageForm.value.services = this.selectedOptions;
-      this._apiService.addPackages(this.packageForm.value).subscribe((data) =>{
-        this.visible = false;
-        this.serviceslist.push(data);
-      });
+    this.packageForm.value.services = this.selectedOptions;
+    this._apiService.addPackages(this.packageForm.value).subscribe((data) => {
+      this.visible = false;
+      this.serviceslist.unshift(data);
+    });
   }
-  onEdit(){
-      const formValues = this.packageForm.value;
-      // Format the date
-      formValues.startDate = this.formatDate(formValues.startDate);
-      formValues.endDate = this.formatDate(formValues.endDate);
-      if(!this.packageForm.value.services){
-        this.packageForm.value.services = this.editPackageForm.services;
-      }
-      else{
-        
-      }
-      this.packageForm.value.packageLogo = '';
-      this.packageForm.value.salonLogo = '';
-      this.packageForm.value.packageId = this.editPackageForm.packageId;
-      this._apiService.updatePackageById(this.packageForm.value).subscribe((res)=>{
-        
-        this.editVisible = false
-        this.loadData(null);
-      });
+  onEdit() {
+    const formValues = this.packageForm.value;
+    // Format the date
+    formValues.startDate = this.formatDate(formValues.startDate);
+    formValues.endDate = this.formatDate(formValues.endDate);
+    if (!this.packageForm.value.services) {
+      this.packageForm.value.services = this.editPackageForm.services;
+    }
+    else {
+
+    }
+    this.packageForm.value.packageLogo = '';
+    this.packageForm.value.salonLogo = '';
+    this.packageForm.value.packageId = this.editPackageForm.packageId;
+    this._apiService.updatePackageById(this.packageForm.value).subscribe((res) => {
+
+      this.editVisible = false
+      this.loadData(null);
+    });
     this.visible = false
   }
 
@@ -101,7 +103,7 @@ export class PackagesComponent implements OnInit {
   }
 
 
-  handleCardClick(details:any){
+  handleCardClick(details: any) {
     this.packageIdforEdit = details;
     this.editPackageForm = this.serviceslist.find((service: any) => service.packageId === details);
     this.editVisible = true;
@@ -136,9 +138,9 @@ export class PackagesComponent implements OnInit {
       salonId: null
     });
   }
-  onEditSubmit(){}
+  onEditSubmit() { }
 
-  addSaloon(){
+  addSaloon() {
     this.clearData();
     this.visible = true;
   }
@@ -168,30 +170,30 @@ export class PackagesComponent implements OnInit {
     this.packageForm.patchValue({ services: selectedServices });
   }
 
-  loadData(saloonIdIfSuperAdmin: any){
+  loadData(saloonIdIfSuperAdmin: any) {
     let saloonId = this.getUserData();
-    this._apiService.getServiceBySaloonId(saloonId.salonId).subscribe((res: any) =>{
+    this._apiService.getServiceBySaloonId(saloonId.salonId).subscribe((res: any) => {
       this.serviceData = res;
     });
-    if(saloonIdIfSuperAdmin == null){
-      this._apiService.getPackagesBySaloonId(saloonId.salonId).subscribe((res: any) =>{
+    if (saloonIdIfSuperAdmin == null) {
+      this._apiService.getPackagesBySaloonId(saloonId.salonId).subscribe((res: any) => {
         this.serviceslist = res
         this.totalCount = res.length;
         console.log(this.serviceslist);
         // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
-      });  
+      });
     }
-    else{
-      this._apiService.getPackagesBySaloonId(saloonIdIfSuperAdmin).subscribe((res: any) =>{
+    else {
+      this._apiService.getPackagesBySaloonId(saloonIdIfSuperAdmin).subscribe((res: any) => {
         this.serviceslist = res
         this.totalCount = res.length;
         console.log(this.serviceslist);
         // this.saloonData = this.serviceslist.find(salon => salon.salonId === 1);
-      });  
+      });
     }
-    
-   
-    
+
+
+
   }
 
 
@@ -202,18 +204,29 @@ export class PackagesComponent implements OnInit {
     this.loadData(this.selectedSaloon);
     this.isSuperAdmin = false;
   }
-
+  salonId: any;
   ngOnInit(): void {
-    let userdata = this.getUserData();
-    if(userdata.userType == "superadmin"){
-      this._apiService.getSaloonList().subscribe((res)=>{
-        this.salons = res;
-      });
-      this.isSuperAdmin = true;
+    this.route.paramMap.subscribe(params => {
+      this.salonId = Number(params.get('id'));
+    });
+    if (!this.salonId) {
+      let userdata = this.getUserData();
+      if (userdata.userType == "superadmin") {
+        this._apiService.getSaloonList().subscribe((res) => {
+          this.salons = res;
+        });
+        this.isSuperAdmin = true;
+      }
+      else {
+        this.loadData(null);
+      }
     }
     else{
-      this.loadData(null);
+      this.isSuperAdmin = false;
+      this.loadData(this.salonId);
     }
+
+
     this.packageForm = this.fb.group({
       packageName: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],

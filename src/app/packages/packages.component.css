@@ -2,6 +2,8 @@
     border-radius: 5px;
     background-color: #F6F5F2;
     background-image: url('../assets/pic2.png');
+    height: 90vh;
+    overflow: auto;
 }
 .card-title{
   font-weight: 600;
@@ -171,4 +173,8 @@
 
 .options-container input[type="checkbox"] {
   margin-right: 8px;
+}
+
+label{
+  font-weight: 600 !important;
 }

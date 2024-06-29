@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Salon } from '../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-saloons',
@@ -14,6 +15,7 @@ export class ManageSaloonsComponent implements OnInit {
   constructor(private _apiService: ApiService,
     private fb: FormBuilder,
     private _exportToExcelService: ExportToExcelService,
+    private router: Router,
   ) { }
   totalCount: any;
   saloonList: Salon[] = [];
@@ -24,6 +26,11 @@ export class ManageSaloonsComponent implements OnInit {
   responseDataSubmit: any;
   inputValue: string = '';
   selectedFile: any;
+  editSaloonData = false;
+  contextMenuVisible = false;
+  contextMenuX = 0;
+  contextMenuY = 0;
+  
 
   exportToExcel(): void {
     this._exportToExcelService.exportToExcel(this.saloonList, 'saloon_list');
@@ -46,7 +53,79 @@ export class ManageSaloonsComponent implements OnInit {
         this.saloonList.push(this.responseDataSubmit.data)
       });
       this.visible = false;
+
     }
+  }
+
+  onEdit(){
+    this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
+      this.responseDataSubmit = data;
+      this.saloonList.push(this.responseDataSubmit.data);
+      this.editSaloonData = false;
+      this.loaddata();
+    });
+    
+  }
+
+  editSaloon(){
+    console.log(this.saloonData);
+    this.editSaloonData = true;
+    this.populateForm(this.saloonData);
+  }
+  populateForm(data: any) {
+    this.salonForm.patchValue({
+      salonId: data.salonId,
+      salonName: data.salonName,
+      phone: data.phone,
+      address: data.address,
+      addressUrl: data.addressUrl,
+      salonLogo: data.salonLogo,
+      qrCode: data.qrCode,
+      registeredOn : data.registeredOn,
+      trialPeriodStartDate: data.trialPeriodStartDate,
+      status: data.status,
+      sms: data.sms,
+      coupon: data.coupon,
+      membership: data.membership
+    });
+  }
+  clearData() {
+    this.salonForm.patchValue({
+      salonId: null,
+      salonName: null,
+      phone: null,
+      address: null,
+      addressUrl: null,
+      salonLogo: null,
+      registeredOn : null,
+      trialPeriodStartDate: null,
+      status: null,
+      sms: null,
+      coupon: null,
+      membership: null
+    });
+  }
+  saloonId = null;
+  onRightClick(event: MouseEvent, salonId: any) {
+    this.saloonId = salonId
+    event.preventDefault();
+    this.contextMenuX = event.clientX;
+    this.contextMenuY = event.clientY;
+    this.contextMenuVisible = true;
+  }
+
+  onAction(action: string) {
+    if(action == "packages"){
+      this.router.navigate(['Layout/Services', this.saloonId]);
+
+    }
+    console.log(action);
+    this.contextMenuVisible = false;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.contextMenuVisible = false;
   }
 
 
@@ -56,6 +135,7 @@ export class ManageSaloonsComponent implements OnInit {
   }
 
   addSaloon(){
+    this.clearData();
     this.visible = true;
   }
 
@@ -68,12 +148,16 @@ export class ManageSaloonsComponent implements OnInit {
     return control ? control.invalid && (control.dirty || control.touched) : false;
   }
 
-  ngOnInit(): void {
+  loaddata(){
     this._apiService.getSaloonList().subscribe((res: any) =>{
       this.saloonList = res
       this.totalCount = res.length
       this.saloonData = this.saloonList.find(salon => salon.salonId === 1);
     });
+  }
+
+  ngOnInit(): void {
+    this.loaddata();
     this.salonForm = this.fb.group({
       salonId: ['', Validators.required],
       salonName: ['', Validators.required],

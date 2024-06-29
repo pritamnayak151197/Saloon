@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ForgotPassComponent } from './forgot-pass/forgot-pass.component';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -97,16 +96,6 @@ export class LoginComponent implements OnInit {
     
   }
 
-
-
-  
-  //forgot Password
-  showDialog() {
-    this.display = true;
-    this.otpSent = false;
-    this.email = '';
-    this.otp = '';
-  }
 
   submitEmail() {
     if (this.email) {

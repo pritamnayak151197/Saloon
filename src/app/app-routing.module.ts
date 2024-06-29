@@ -17,6 +17,7 @@ const routes: Routes = [
       { path: '', component: ManageSaloonsComponent },
       { path: 'Saloons', component: ManageSaloonsComponent, canActivate: [AuthGuard] },
       { path: 'Services', component: ServicesComponent, canActivate: [AuthGuard] },
+      { path: 'Services/:id', component: ServicesComponent },
       { path: 'Packages', component: PackagesComponent, canActivate: [AuthGuard] }
     ]
   },

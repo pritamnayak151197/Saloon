@@ -3,7 +3,7 @@
     <div class="col-lg-6">
       <div class="container centered">
         <div class="logo">
-          <h2 style="font-size: 70px; font-weight: 700;">Saloon</h2>
+          <h2 style="font-size: 70px; font-weight: 700;">Salon</h2>
         </div>
         <form action="#" style="width: 70%">
           <div class="mb-3 form-box">
@@ -20,7 +20,7 @@
           <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="logMein()">Log In</button>
           <p-toast></p-toast>
           <div class="mb-2"></div>
-          <p style="cursor: pointer;" (click)="showDialog()">Need help Signing in?</p>
+          <p style="cursor: pointer;">Need help Signing in?</p>
         </form>
       </div>
       
@@ -33,7 +33,7 @@
     <div class="col-lg-6">
       <div class="container centered">
         <div class="logo">
-          <h2 style="font-size: 70px; font-weight: 700;">Saloon</h2>
+          <h2 style="font-size: 70px; font-weight: 700;">Salon</h2>
         </div>
         <form action="#" style="width: 70%" *ngIf="!otpSent">
           <div class="mb-3 form-box">
@@ -45,12 +45,11 @@
             <input type="password" class="form-control" id="password" name="password" [(ngModel)]="logIn.password"  required>
           </div>
           <div class="mb-3">
-
           </div> -->
           <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="logMein()">Send OTP</button>
           <p-toast></p-toast>
           <div class="mb-2"></div>
-          <p style="cursor: pointer;" (click)="showDialog()">Need help Signing in?</p>
+          <p style="cursor: pointer;">Login With Username & Password.</p>
         </form>
 
         <form action="#" style="width: 70%" *ngIf="otpSent">
@@ -65,7 +64,11 @@
           <button type="submit" class="btn btn-secondary login-btn w-45 mb-3" (click)="verifyOtp()">Verify OTP</button>
           <p-toast></p-toast>
           <div class="mb-2"></div>
-          <p style="cursor: pointer;" (click)="logMein()">didn't grt it Resend code?</p>
+          <div (click)="otpSent = false">
+            <p>Edit mobile number <span style="color: blue; cursor: pointer;">{{logInWithOtp.phoneNumber}}</span></p>
+          </div>
+          
+          <p style="cursor: pointer;" (click)="logMein()">didn't get it Resend code?</p>
         </form>
       </div>
       
@@ -78,9 +81,6 @@
 
 
 <!-- Forgot password Modal -->
-
-<!-- app.component.html -->
-<p-button label="Forgot Password" icon="pi pi-info-circle" (click)="showDialog()"></p-button>
 
 <p-dialog header="Forgot Password" [(visible)]="display" [modal]="true" [closable]="false" [dismissableMask]="true">
   <div class="row">

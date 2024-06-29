@@ -7,7 +7,6 @@ import { LoginComponent } from './login/login.component';
 import { InputTextModule } from "primeng/inputtext";
 import { DialogModule } from 'primeng/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ForgotPassComponent } from './login/forgot-pass/forgot-pass.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
 import { LayoutComponent } from './layout/layout.component';
@@ -25,7 +24,6 @@ import {ServicesComponent} from './services/services.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    ForgotPassComponent,
     LayoutComponent,
     ManageSaloonsComponent,
     PackagesComponent,
