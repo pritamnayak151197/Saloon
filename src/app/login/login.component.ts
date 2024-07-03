@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../auth.service';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
       private router: Router,
       private messageService: MessageService,
       private authService: AuthService,
+      private notificationService: NotificationService
   ) { }
 
   Username: any;
@@ -32,8 +34,9 @@ export class LoginComponent implements OnInit {
   confirmPassword: string = '';
   recievedOtp: string ='';
   data: string = '';
+  loginWithEmail = false;
   logIn = {
-    "username":"",
+    "username":"krati",
     "phone":"",
     "password":""
   }
@@ -50,24 +53,24 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  // logMein(){
+  logMeinWithEmail(){
 
-  //   if(this.username.includes('@')){
-  //     this.logIn.username = this.username;
-  //   }
-  //   else{
-  //     this.logIn.phone = this.username;
-  //   }
-  //   this._apiService.login(this.logIn).subscribe((res: any)=>{
-  //     if(res.success){
-  //       localStorage.setItem('adminData', res.data);
-  //       this.router.navigate(['Layout']);
-  //       this.messageService.add({ severity: 'success', detail: res.success.message });
-  //     }
-  //   }, (error)=>{
-  //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Message Content' });
-  //   });
-  // }
+    if(this.username.includes('@')){
+      this.logIn.username = this.username;
+    }
+    else{
+      this.logIn.phone = this.username;
+    }
+    this._apiService.login(this.logIn).subscribe((res: any)=>{
+      if(res.success){
+        localStorage.setItem('adminData', res.data);
+        this.router.navigate(['Layout']);
+        this.messageService.add({ severity: 'success', detail: res.success.message });
+      }
+    }, (error)=>{
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Message Content' });
+    });
+  }
 
   logMein(){
     this._apiService.logInWithOtp(this.logInWithOtp).subscribe((res: any)=>{
@@ -78,6 +81,10 @@ export class LoginComponent implements OnInit {
     });
     this.otpSent = true;
   }
+
+  loginWithEmailPass(){
+    this.loginWithEmail = true;
+  }
   verifyOtp(){
     this.validateOtp.otp = this.recievedOtp;
     this.validateOtp.phoneNumber = this.logInWithOtp.phoneNumber;
@@ -87,6 +94,11 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('userData', JSON.stringify(res.Data));
 
       if (res.Data.userType === 'admin') {
+        this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
+          let notifictions = res;
+          this.notificationService.setNotifications(notifictions);
+          console.log(notifictions);
+        })
         this.router.navigate(['/Layout/Services']); // Redirect admin to Services component
       } else if (res.Data.userType === 'superadmin') {
         this.router.navigate(['/Layout/Saloons']); // Redirect superadmin to Saloons component

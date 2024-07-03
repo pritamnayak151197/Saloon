@@ -75,12 +75,13 @@ export class ServicesComponent implements OnInit {
   }
 
   onSubmit() {
+    let salonId = this.getUserData();
+    this.serviceForm.value.salonId = salonId.salonId
     if (this.selectedFile) {
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
         this.serviceForm.value.servicePic = this.selectedFileUrl;
-        let salonId = this.getUserData();
-        this.serviceForm.value.salonId = salonId.salonId
+        
         console.log(this.serviceForm)
         if (this.serviceForm.valid) {
           this._apiService.addservice(this.serviceForm.value).subscribe((res) => {
@@ -93,7 +94,7 @@ export class ServicesComponent implements OnInit {
       });
     }
     else{
-      if (this.serviceForm.valid) {
+      if (true) {
         this._apiService.addservice(this.serviceForm.value).subscribe((res)=>{
           this.serviceslist.unshift(res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
@@ -146,8 +147,7 @@ export class ServicesComponent implements OnInit {
       details: data.details,
       price: data.price,
       discountPrice: data.discountPrice,
-      startDate: data.startDate,
-      endDate: data.endDate,
+      serviceType: data.serviceType,
       status: data.status,
       salonId: data.salonId
     });
@@ -161,6 +161,7 @@ export class ServicesComponent implements OnInit {
       startDate: null,
       endDate: null,
       status: null,
+      serviceType:  null,
       salonId: null
     });
   }

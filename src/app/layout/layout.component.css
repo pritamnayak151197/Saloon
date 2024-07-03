@@ -42,3 +42,61 @@
 #bottom-item {
   margin-top: auto; /* Push this item to the bottom */
 }
+.rounded-top{
+  border-radius: 5px; /* Border radius applied to the right side */
+  margin: 5px 0 5px 0;
+  height: 50px; 
+  padding: 5px;
+  display: flex;
+  color: #ffffff;
+  background-image: url('../assets/pic3.png');
+} 
+
+
+
+
+.notification-bell {
+  position: relative;
+  display: inline-block;
+}
+
+.bell-icon {
+  cursor: pointer;
+  position: relative;
+}
+
+.badge {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.5em;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
+
+.notification-dropdown {
+  display: none;
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.notification-bell:hover .notification-dropdown {
+  display: block;
+}
+
+.unread {
+  font-weight: bold;
+}
