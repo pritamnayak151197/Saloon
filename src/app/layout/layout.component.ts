@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { NotificationService } from '../notification.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-layout',
@@ -14,7 +15,8 @@ export class LayoutComponent implements OnInit {
   constructor(private messageService: MessageService,
     private router: Router,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private apiService: ApiService
   ) { }
   sidebarVisible: boolean = false;
   selectedItem=  "item2";
@@ -22,6 +24,10 @@ export class LayoutComponent implements OnInit {
   isSuperAdmin: any;
   notifications: any;
   unreadCount: any;
+  userData: any;
+  notificationCount = 0;
+  dropdownVisible = false;
+  saloonData:any;
 
   selectItem(item: string) {
     this.selectedItem = item;
@@ -31,17 +37,38 @@ export class LayoutComponent implements OnInit {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
+  getUserData(): any {
+    this.userData = localStorage.getItem('userData');
+    return JSON.parse(this.userData);
+  }
+
   ngOnInit(): void {
     this.messageService.add({ severity: 'success', detail: 'res.success.message' });
     this.isAdmin = this.authService.isAdmin();
     this.isSuperAdmin = this.authService.isSuperAdmin();
 
+    let saloonId = this.getUserData();
     if (this.isAdmin) {
-      this.notificationService.getNotifications().subscribe((data) => {
+      this.apiService.fetchNotifications(saloonId.salonId).subscribe((data) => {
         this.notifications = data;
+        this.notificationCount = data.length;
         // this.unreadCount = this.notifications.filter(notification => !notification.read).length;
       });
+      this.apiService.getServiceBySaloonId(saloonId.salonId).subscribe((data) => {
+        this.saloonData = data;
+      });
     }
+  }
+  toggleDropdown(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.dropdownVisible = !this.dropdownVisible;
+  }
+
+  markAsRead(notification: any): void {
+    notification.read = true;
+    // this.unreadCount = this.notifications.filter(n => !n.read).length;
   }
 
   logout() {

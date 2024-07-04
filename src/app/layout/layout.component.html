@@ -124,24 +124,29 @@
           </ul>
     </div>
     <div style="margin-left: 180px;">
+      <div>
+        
         <div class="rounded-top" style="display: flex; margin: 6px;">
-            <!-- <h3>Saloon List</h3> -->
-            <div class="notification-bell" style="margin-left: auto;">
-              <span class="bell-icon">
+
+          <div style=" gap: 10px;">
+            <!-- <h3 *ngIf="!isAdmin">Saloon Name</h3> -->
+            <div class="notification-bell" (click)="toggleDropdown()">
+              <span class="bell-icon" style="margin-left: auto">
                 🔔
-                <span *ngIf="notifications.length > 0" class="badge">{{ notifications.length }}</span>
+                <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
               </span>
-              <div class="notification-dropdown">
-                <div *ngFor="let notification of notifications">
+              <div class="notification-dropdown" *ngIf="dropdownVisible">
+                <button class="close-btn" (click)="toggleDropdown($event)">✖</button>
+                <div *ngFor="let notification of notifications" (click)="markAsRead(notification)">
                   <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
                   <span>{{ notification.timestamp | date:'short' }}</span>
                 </div>
               </div>
             </div>
-            
-            
-              
-          </div>
+          </div>   
+        </div>
+      </div>
+          
         <router-outlet></router-outlet>
     </div>
     

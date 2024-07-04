@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   data: string = '';
   loginWithEmail = false;
   logIn = {
-    "username":"krati",
+    "username":"",
     "phone":"",
     "password":""
   }
@@ -62,13 +62,17 @@ export class LoginComponent implements OnInit {
       this.logIn.phone = this.username;
     }
     this._apiService.login(this.logIn).subscribe((res: any)=>{
-      if(res.success){
-        localStorage.setItem('adminData', res.data);
-        this.router.navigate(['Layout']);
-        this.messageService.add({ severity: 'success', detail: res.success.message });
+      localStorage.setItem('userData', JSON.stringify(res.Data));
+      if (res.Data.userType === 'admin') {
+        this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
+          let notifictions = res;
+          this.notificationService.setNotifications(notifictions);
+          console.log(notifictions);
+        })
+        this.router.navigate(['/Layout/Services']); // Redirect admin to Services component
+      } else if (res.Data.userType === 'superadmin') {
+        this.router.navigate(['/Layout/Saloons']); // Redirect superadmin to Saloons component
       }
-    }, (error)=>{
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Message Content' });
     });
   }
 

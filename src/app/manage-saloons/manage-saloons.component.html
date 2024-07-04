@@ -1,15 +1,11 @@
 <div class="container-fluid">
-    <!-- <div class="rounded-top"></div> -->
-    <div class="rounded-top" style="display: flex; margin: 5px;">
-      <!-- <h3>Saloon List</h3> -->
-      <button class="btn btn-secondary" style="margin-left: auto;" (click)="addSaloon()"><i class="fa-solid fa-plus"></i> Add Salon</button>
-    </div>
     <div class="row">
         <div class="col-md-5">
             <div class="card left-card" style="padding: 5px 2% 2% 2%;">
               <div style="display: flex; gap: 10px;">
                 <input type="text" class="form-control" [(ngModel)]="inputValue" (ngModelChange)="onInputChange($event)"   placeholder="Enter salon name">
                 <button type="button" class="btn btn-outline-success" (click)="exportToExcel()">Export</button>
+                <button class="btn btn-secondary" style="margin-left: auto;" (click)="addSaloon()"><i class="fa-solid fa-plus"></i></button>
               </div>
                 <div style="display: flex; padding: 5px;">
                     <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Total Salons on Platform</span>
