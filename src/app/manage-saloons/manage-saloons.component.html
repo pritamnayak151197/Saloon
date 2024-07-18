@@ -1,195 +1,244 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="card left-card" style="padding: 5px 2% 2% 2%;">
-              <div style="display: flex; gap: 10px;">
-                <input type="text" class="form-control" [(ngModel)]="inputValue" (ngModelChange)="onInputChange($event)"   placeholder="Enter salon name">
-                <button type="button" class="btn btn-outline-success" (click)="exportToExcel()">Export</button>
-                <button class="btn btn-secondary" style="margin-left: auto;" (click)="addSaloon()"><i class="fa-solid fa-plus"></i></button>
-              </div>
-                <div style="display: flex; padding: 5px;">
-                    <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Total Salons on Platform</span>
-                    <h4 style="margin-left: 220px; font-size: 20px; font-weight: 800; color: #FFFFFF;">{{totalCount}}</h4>
-                </div>
-                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of saloonList; let i = index" (contextmenu)="onRightClick($event, item.salonId)" (click)="handleCardClick(item.salonId)" [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
-                    <div class="card-body">
-                    <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;" src="{{item.salonLogo}}" alt="">
-                      <span class="card-title">{{ item.salonName }}</span><br>
-                      <span class="card-text">{{ item.phone }}</span><br>
-                      <span class="card-text">{{ item.registeredOn | date }}</span>
-                    </div>
-                  </div>
-            </div>
-
-            <div class="context-menu" *ngIf="contextMenuVisible" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
-              <ul>
-                <li (click)="onAction('packages')">Packages</li>
-                <li (click)="onAction('services')">Services</li>
-              </ul>
-            </div>
-            
-            
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card left-card" style="padding: 5px 2% 2% 2%;">
+        <div style="display: flex; gap: 10px;">
+          <input type="text" class="form-control" [(ngModel)]="inputValue" (ngModelChange)="onInputChange($event)"
+            placeholder="Enter salon name">
+          <button type="button" class="btn btn-outline-success" (click)="exportToExcel()">Export</button>
+          <button class="btn btn-secondary" style="margin-left: auto;" (click)="addSaloon()"><i
+              class="fa-solid fa-plus"></i></button>
         </div>
-        <div class="col-md-7">
-            <div class="card right-card" style="padding: 5px 2% 2% 2%;">
-              <div style="display: flex;">
-                <h1 style="font-size: 20px; font-weight: 700; margin-top: 5px;">{{saloonData.salonName}}</h1>
-                <i class="fa-solid fa-pen-to-square" style="margin-top: 10px; margin-left: auto;" (click)="editSaloon()"></i>
-              </div>
-                
-            <div class="row">
-                <div class="col-md-6">
-                    <span class="label">Salon Id:</span>
-                    <span class="value">{{saloonData.salonId}}</span> <br>
-
-                    <span class="label">Phone No:</span>
-                    <span class="value">{{saloonData.phone}}</span> <br>
-
-                    <span class="label">Registered On:</span>
-                    <span class="value">{{saloonData.registeredOn |  date}}</span> <br>
-
-                    <span class="label">Registration End Date:</span>
-                    <span class="value">{{saloonData.trialPeriodStartDate | date}}</span> <br>
-
-                    <span class="label">Membership:</span>
-                    <span class="value">
-                      <i *ngIf="saloonData.membership" style="color: #44de75;" class="fa-solid fa-toggle-on"></i>
-                      <i *ngIf="!saloonData.membership" style="color: #e5520e;" class="fa-solid fa-toggle-on"></i>
-                    </span> <br>
-
-                    <span class="label">Status:</span>
-                    <span class="value">
-                      <i *ngIf="saloonData.membership" style="color: #44de75;" class="fa-solid fa-toggle-on"></i>
-                      <i *ngIf="!saloonData.membership" style="color: #e5520e;" class="fa-solid fa-toggle-on"></i>
-                    </span> <br>
-
-                    <span class="label">Address:</span>
-                    <span class="value">{{saloonData.address}}</span> <br>
-                </div>
-                <div class="col-md-6" style="text-align: center;">
-                    <img style="height: 170px; width: 200px; border: solid 1px;" src="{{saloonData.qrCode}}" alt="">
-                </div>
-            </div>
-            <hr>
-            <h3>Service List</h3>
-            <h3></h3>
-            <div class="card-container" style="margin-top: 3%;">
-                <div class="card service-card" *ngFor="let service of saloonData.services">
-                    <div class="card-header">
-                        <span>{{service.serviceName}}</span>
-                    </div>
-                    <div class="card-body">
-                    <span class="label">Service Id:</span>
-                    <span class="value">{{service.serviceId}}</span> <br>
-
-                    <span class="label">Service Details:</span>
-                    <span class="value">{{service.details}}</span> <br>
-
-                    <span class="label">Price:</span>
-                    <span class="value">{{service.price}}</span> <br>
-
-                    <span class="label">Discount:</span>
-                    <span class="value">{{service.discountPrice}}</span> <br>
-
-                    <span class="label">Service Type:</span>
-                    <span class="value">{{service.serviceType}}</span> <br>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <h3>Customer List</h3>
-            <div class="card-container" style="margin-top: 3%;">
-              <div class="card service-card" *ngFor="let service of saloonData.customer">
-                  <div class="card-header">
-                      <span>{{service.name}}</span>
-                  </div>
-                  <div class="card-body">
-                  <span class="label">Phone No:</span>
-                  <span class="value">{{service.phone}}</span> <br>
-
-                  <span class="label">Email:</span>
-                  <span class="value">{{service.email}}</span> <br>
-
-                  <span class="label">startDate:</span>
-                  <span class="value">{{service.startDate | date}}</span> <br>
-
-                  <span class="label">Birth Date:</span>
-                  <span class="value">{{service.birthDate}}</span> <br>
-
-                  <span class="label">gender:</span>
-                  <span class="value">{{service.gender}}</span> <br>
-                  </div>
-              </div>
+        <div style="display: flex; padding: 5px;">
+          <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Total Salons on Platform</span>
+          <h4 style="margin-left: 220px; font-size: 20px; font-weight: 800; color: #FFFFFF;">{{totalCount}}</h4>
+        </div>
+        <div class="card" style="margin-bottom: 5px;" *ngFor="let item of saloonList; let i = index"
+          (contextmenu)="onRightClick($event, item.salonId)" (click)="handleCardClick(item.salonId)"
+          [class.active]="selectedCardId === item.salonId"
+          [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
+          <div class="card-body">
+            <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;"
+              src="{{item.salonLogo}}" alt="">
+            <span class="card-title">{{ item.salonName }}</span><br>
+            <span class="card-text">{{ item.phone }}</span><br>
+            <span class="card-text">{{ item.subscriptionEndDate | date }}</span>
           </div>
-            </div>
-            
         </div>
+      </div>
+
+      <div class="context-menu" *ngIf="contextMenuVisible" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
+        <ul>
+          <li (click)="onAction('packages')">Packages</li>
+          <li (click)="onAction('services')">Services</li>
+        </ul>
+      </div>
+
+
     </div>
+    <div class="col-md-7">
+      <div class="card right-card" style="padding: 5px 2% 2% 2%;">
+        <div style="display: flex;">
+          <h1 style="font-size: 20px; font-weight: 700; margin-top: 5px;">{{saloonData.salonName}}</h1>
+          <i class="fa-solid fa-pen-to-square" style="margin-top: 10px; margin-left: auto;" (click)="editSaloon()"></i>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <!-- <span class="label">Salon Id:</span>
+            <span class="value">{{saloonData.salonId}}</span> <br> -->
+
+            <span class="label">Phone No:</span>
+            <span class="value">{{saloonData.phone}}</span> <br>
+
+            <span class="label">Registered On:</span>
+            <span class="value">{{saloonData.registeredOn | date}}</span> <br>
+
+            <span class="label">Subscription End Date:</span>
+            <span class="value">{{saloonData.subscriptionStartDate | date}}</span> <br>
+
+            <span class="label">Subscription End Date:</span>
+            <span class="value">{{saloonData.subscriptionEndDate | date}}</span> <br>
+
+            <span class="label">Membership:</span>
+            <span class="value">
+              <i *ngIf="saloonData.membership" style="color: #44de75;" class="fa-solid fa-toggle-on"></i>
+              <i *ngIf="!saloonData.membership" style="color: #e5520e;" class="fa-solid fa-toggle-on"></i>
+            </span> <br>
+
+            <span class="label">Status:</span>
+            <span class="value">
+              <i *ngIf="saloonData.status" style="color: #44de75;" class="fa-solid fa-toggle-on"></i>
+              <i *ngIf="!saloonData.status" style="color: #e5520e;" class="fa-solid fa-toggle-on"></i>
+            </span> <br>
+
+            <span class="label">Address:</span>
+            <span class="value">{{saloonData.address}}</span> <br>
+          </div>
+          <div class="col-md-6" style="text-align: center;">
+            <img style="height: 170px; width: 200px; border: solid 1px;" src="{{saloonData.qrCode}}" alt="">
+          </div>
+        </div>
+        <hr>
+        <h3>Service List</h3>
+        <h3></h3>
+        <div class="card-container" style="margin-top: 3%;">
+          <div class="card service-card" *ngFor="let service of saloonData.services">
+            <div class="card-header">
+              <span>{{service.serviceName}}</span>
+            </div>
+            <div class="card-body">
+              <span class="label">Service Id:</span>
+              <span class="value">{{service.serviceId}}</span> <br>
+
+              <span class="label">Service Details:</span>
+              <span class="value">{{service.details}}</span> <br>
+
+              <span class="label">Price:</span>
+              <span class="value">{{service.price}}</span> <br>
+
+              <span class="label">Discount:</span>
+              <span class="value">{{service.discountPrice}}</span> <br>
+
+              <span class="label">Service Type:</span>
+              <span class="value">{{service.serviceType}}</span> <br>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <h3>Customer List</h3>
+        <div class="card-container" style="margin-top: 3%;">
+          <div class="card service-card" *ngFor="let service of saloonData.customer">
+            <div class="card-header">
+              <span>{{service.name}}</span>
+            </div>
+            <div class="card-body">
+              <span class="label">Phone No:</span>
+              <span class="value">{{service.phone}}</span> <br>
+
+              <span class="label">Email:</span>
+              <span class="value">{{service.email}}</span> <br>
+
+              <span class="label">startDate:</span>
+              <span class="value">{{service.startDate | date}}</span> <br>
+
+              <span class="label">Birth Date:</span>
+              <span class="value">{{service.birthDate}}</span> <br>
+
+              <span class="label">gender:</span>
+              <span class="value">{{service.gender}}</span> <br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<p-dialog header="Add new salon" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
-  <form [formGroup]="salonForm" (ngSubmit)="onSubmit()">
+<p-dialog header="Add New Salon" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+  <form [formGroup]="salonForm" (ngSubmit)="onSubmit()" *ngIf="!createAdmin">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 mb-3">
+        <!-- <div class="col-md-6 mb-3">
           <label for="salonId" class="form-label">Salon ID:</label>
           <input id="salonId" formControlName="salonId" type="number" class="form-control" [class.is-invalid]="isInvalid('salonId')">
-        </div>
+        </div> -->
         <div class="col-md-6 mb-3">
           <label for="salonName" class="form-label">Salon Name:</label>
-          <input id="salonName" formControlName="salonName" type="text" class="form-control" [class.is-invalid]="isInvalid('salonName')">
+          <input id="salonName" formControlName="salonName" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('salonName')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="phone" class="form-label">Phone:</label>
-          <input id="phone" formControlName="phone" type="text" class="form-control" [class.is-invalid]="isInvalid('phone')">
+          <input id="phone" formControlName="phone" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('phone')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="address" class="form-label">Address:</label>
-          <input id="address" formControlName="address" type="text" class="form-control" [class.is-invalid]="isInvalid('address')">
+          <input id="address" formControlName="address" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('address')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="addressUrl" class="form-label">Address URL:</label>
-          <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control" [class.is-invalid]="isInvalid('addressUrl')">
+          <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('addressUrl')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="salonLogo" class="form-label">Salon Logo:</label>
-          <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control" [class.is-invalid]="isInvalid('salonLogo')">
+          <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('salonLogo')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="registeredOn" class="form-label">Registered On:</label>
-          <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control" [class.is-invalid]="isInvalid('registeredOn')">
+          <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('registeredOn')">
         </div>
         <div class="col-md-6 mb-3">
-          <label for="trialPeriodStartDate" class="form-label">Registration End Date:</label>
-          <input id="trialPeriodStartDate" formControlName="trialPeriodStartDate" type="date" class="form-control" [class.is-invalid]="isInvalid('trialPeriodStartDate')">
+          <label for="subscriptionStartDate" class="form-label">Subscription Start Date:</label>
+          <input id="subscriptionStartDate" formControlName="subscriptionStartDate" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('subscriptionStartDate')">
         </div>
         <div class="col-md-6 mb-3">
-          <label for="status" class="form-label">Status:</label>
-          <input id="status" style="margin-left: 5px;" formControlName="status" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('status')">
-
-          <label for="sms" style="margin-left: 20px;" class="form-label">SMS:</label>
-          <input id="sms" style="margin-left: 5px;" formControlName="sms" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('sms')"><br>
-
-          <label for="coupon" class="form-label">Coupon:</label>
-          <input id="coupon" style="margin-left: 5px;" formControlName="coupon" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('coupon')">
-
-          <label for="membership" style="margin-left: 20px;" class="form-label">Membership:</label>
-          <input id="membership"  style="margin-left: 5px;" formControlName="membership" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('membership')">
+          <label for="subscriptionEndDate" class="form-label">Subscription End Date:</label>
+          <input id="subscriptionEndDate" formControlName="subscriptionEndDate" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('subscriptionEndDate')">
         </div>
+        
         <div class="col-md-6 mb-3">
           <label for="qrCode" class="form-label">QR Code:</label>
-          <input id="qrCode" formControlName="qrCode" type="text" class="form-control" [class.is-invalid]="isInvalid('qrCode')">
+          <input id="qrCode" formControlName="qrCode" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('qrCode')">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="status" class="form-label">Status:</label>
+          <input id="status" style="margin-left: 5px;" formControlName="status" type="checkbox" class="form-check-input"
+            >
+
+          <label for="sms" style="margin-left: 20px;" class="form-label">SMS:</label>
+          <input id="sms" style="margin-left: 5px;" formControlName="sms" type="checkbox" class="form-check-input"
+           ><br>
+
+          <label for="coupon" class="form-label">Coupon:</label>
+          <input id="coupon" style="margin-left: 5px;" formControlName="coupon" type="checkbox" class="form-check-input"
+           >
+
+          <label for="membership" style="margin-left: 20px;" class="form-label">Membership:</label>
+          <input id="membership" style="margin-left: 5px;" formControlName="membership" type="checkbox"
+            >
         </div>
       </div>
+     
       <div class="d-flex justify-content-end gap-2">
-        <button type="submit" class="btn btn-primary" [disabled]="!salonForm.valid">Submit</button>
+        <button type="submit" class="btn btn-success" [disabled]="!salonForm.valid">Submit</button>
         <button type="button" class="btn btn-danger" (click)="visible = false">Cancel</button>
       </div>
     </div>
+
   </form>
+
+
+  <div *ngIf="createAdmin">
+    <h5>Create Admin</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">User Name:</label>
+        <input #userNameInput type="text" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Password:</label>
+        <input #passwordInput type="text" class="form-control">
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="submit" class="btn btn-success" (click)="createAdminForSalon(userNameInput.value, passwordInput.value)">Submit</button>
+    </div>
+  </div>
 </p-dialog>
 
-<p-dialog header="Edit salon" [modal]="true" [(visible)]="editSaloonData" [style]="{ width: '50rem' }">
+<p-dialog header="Edit Salon" [modal]="true" [(visible)]="editSaloonData" [style]="{ width: '50rem' }">
   <form [formGroup]="salonForm" (ngSubmit)="onEdit()">
     <div class="container">
       <div class="row">
@@ -199,52 +248,69 @@
         </div> -->
         <div class="col-md-6 mb-3">
           <label for="salonName" class="form-label">Salon Name:</label>
-          <input id="salonName" formControlName="salonName" type="text" class="form-control" [class.is-invalid]="isInvalid('salonName')">
+          <input id="salonName" formControlName="salonName" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('salonName')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="phone" class="form-label">Phone:</label>
-          <input id="phone" formControlName="phone" type="text" class="form-control" [class.is-invalid]="isInvalid('phone')">
+          <input id="phone" formControlName="phone" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('phone')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="address" class="form-label">Address:</label>
-          <input id="address" formControlName="address" type="text" class="form-control" [class.is-invalid]="isInvalid('address')">
+          <input id="address" formControlName="address" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('address')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="addressUrl" class="form-label">Address URL:</label>
-          <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control" [class.is-invalid]="isInvalid('addressUrl')">
+          <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('addressUrl')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="salonLogo" class="form-label">Salon Logo:</label>
-          <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control" [class.is-invalid]="isInvalid('salonLogo')">
+          <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('salonLogo')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="registeredOn" class="form-label">Registered On:</label>
-          <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control" [class.is-invalid]="isInvalid('registeredOn')">
+          <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('registeredOn')">
         </div>
         <div class="col-md-6 mb-3">
-          <label for="trialPeriodStartDate" class="form-label">Registration End Date:</label>
-          <input id="trialPeriodStartDate" formControlName="trialPeriodStartDate" type="date" class="form-control" [class.is-invalid]="isInvalid('trialPeriodStartDate')">
+          <label for="registeredOn" class="form-label">Subscription Start Date:</label>
+          <input id="registeredOn" formControlName="subscriptionStartDate" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('registeredOn')">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="trialPeriodStartDate" class="form-label">Subscription End Date:</label>
+          <input id="trialPeriodStartDate" formControlName="subscriptionEndDate" type="date" class="form-control"
+            [class.is-invalid]="isInvalid('trialPeriodStartDate')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="status" class="form-label">Status:</label>
-          <input id="status" style="margin-left: 5px;" formControlName="status" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('status')">
+          <input id="status" style="margin-left: 5px;" formControlName="status" type="checkbox" class="form-check-input"
+            [class.is-invalid]="isInvalid('status')">
 
           <label for="sms" style="margin-left: 20px;" class="form-label">SMS:</label>
-          <input id="sms" style="margin-left: 5px;" formControlName="sms" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('sms')"><br>
+          <input id="sms" style="margin-left: 5px;" formControlName="sms" type="checkbox" class="form-check-input"
+            [class.is-invalid]="isInvalid('sms')"><br>
 
           <label for="coupon" class="form-label">Coupon:</label>
-          <input id="coupon" style="margin-left: 5px;" formControlName="coupon" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('coupon')">
+          <input id="coupon" style="margin-left: 5px;" formControlName="coupon" type="checkbox" class="form-check-input"
+            [class.is-invalid]="isInvalid('coupon')">
 
           <label for="membership" style="margin-left: 20px;" class="form-label">Membership:</label>
-          <input id="membership"  style="margin-left: 5px;" formControlName="membership" type="checkbox" class="form-check-input" [class.is-invalid]="isInvalid('membership')">
+          <input id="membership" style="margin-left: 5px;" formControlName="membership" type="checkbox"
+            class="form-check-input" [class.is-invalid]="isInvalid('membership')">
         </div>
         <div class="col-md-6 mb-3">
           <label for="qrCode" class="form-label">QR Code:</label>
-          <input id="qrCode" formControlName="qrCode" type="text" class="form-control" [class.is-invalid]="isInvalid('qrCode')">
+          <input id="qrCode" formControlName="qrCode" type="text" class="form-control"
+            [class.is-invalid]="isInvalid('qrCode')">
         </div>
       </div>
       <div class="d-flex justify-content-end gap-2">
-        <button type="submit" class="btn btn-primary" [disabled]="!salonForm.valid">Submit</button>
+        <button type="submit" class="btn btn-success" [disabled]="!salonForm.valid">Submit</button>
         <button type="button" class="btn btn-danger" (click)="editSaloonData = false">Cancel</button>
       </div>
     </div>

@@ -120,13 +120,23 @@ export class PackagesComponent implements OnInit {
       packageName: data.packageName,
       price: data.price,
       discountPrice: data.discountPrice,
-      startDate: data.startDate,
+
       endDate: data.endDate,
       status: data.status,
       salonId: data.salonId
     });
+
+    const dateStr = this.arrayToDateStr(data.startDate);
+    this.packageForm.value.startDate = dateStr
   }
 
+  arrayToDateStr(dateArray: number[]): string {
+    const [year, month, day] = dateArray;
+    const monthStr = (month + 1).toString().padStart(2, '0'); // Adjust for zero-indexed months
+    const dayStr = day.toString().padStart(2, '0');
+    return `${year}-${monthStr}-${dayStr}`;
+  }
+  
   clearData() {
     this.packageForm.patchValue({
       packageName: '',

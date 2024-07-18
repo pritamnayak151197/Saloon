@@ -26,6 +26,10 @@ export class ApiService {
   getSaloonList(){
     return this.http.get('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/salon/viewList');
   }
+  getSaloonListById(saloonId: any){
+    const url = `${this.baseUrl}getDataBySalonId/${saloonId}`;
+    return this.http.get(url);
+  }
 
   addSaloon(body:any){
     return this.http.post('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/salon/addSalon', body);
@@ -72,7 +76,10 @@ export class ApiService {
     return this.http.post('https://0qyq8zjv0f.execute-api.ap-south-1.amazonaws.com/Salon/services/add', body);
   }
 
-
+  addAdmin(body: any){
+    const url = `${this.baseUrl}admin/v1/add`;
+    return this.http.post(url, body);
+  }
 
 
 

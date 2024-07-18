@@ -18,7 +18,8 @@ import { ManageSaloonsComponent } from './manage-saloons/manage-saloons.componen
 import { CalendarModule } from 'primeng/calendar';
 import {PackagesComponent} from './packages/packages.component';
 import {ServicesComponent} from './services/services.component';
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import {CustommerLoginComponent} from './custommer-login/custommer-login.component'
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {ServicesComponent} from './services/services.component';
     LayoutComponent,
     ManageSaloonsComponent,
     PackagesComponent,
-    ServicesComponent
+    ServicesComponent,
+    CustommerLoginComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,7 @@ import {ServicesComponent} from './services/services.component';
     CalendarModule,
     ReactiveFormsModule,
   ],
-  providers: [DialogService,ApiService,MessageService],
+  providers: [DialogService,ApiService,MessageService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -52,7 +52,7 @@
             <path transform="translate(622,848)" d="m0 0 5 1-1 5-5-1z"/>
             <path transform="translate(977,848)" d="m0 0 4 1-1 5h-4l-1-4z"/>
             </svg>
-             Saloon</p>
+             Salon</p>
         <ul class="menu" style="margin-top: 5px;">
             <li class="menu-items" [class.active]="selectedItem === 'item1'"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item2'" routerLink="Saloons"><a  (click)="selectItem('item2')"><i class="fa-solid fa-bars-progress"></i> Manage</a></li>
@@ -115,7 +115,7 @@
             <path transform="translate(622,848)" d="m0 0 5 1-1 5-5-1z"/>
             <path transform="translate(977,848)" d="m0 0 4 1-1 5h-4l-1-4z"/>
             </svg>
-             Saloon</p>
+             Salon</p>
         <ul class="menu" style="margin-top: 5px;">
             <li class="menu-items" [class.active]="selectedItem === 'item1'"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item3'" routerLink="Services"><a  (click)="selectItem('item3')"><i class="fa-solid fa-cube"></i> Services</a></li>
@@ -127,19 +127,24 @@
       <div>
         
         <div class="rounded-top" style="display: flex; margin: 6px;">
-
-          <div style=" gap: 10px;">
-            <!-- <h3 *ngIf="!isAdmin">Saloon Name</h3> -->
+          <!-- <h3 *ngIf="isAdmin">{{adminSalonData.name}}</h3> -->
+          <div style="margin-left: auto;">
+            
             <div class="notification-bell" (click)="toggleDropdown()">
-              <span class="bell-icon" style="margin-left: auto">
+              <span class="bell-icon">
                 🔔
                 <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
               </span>
               <div class="notification-dropdown" *ngIf="dropdownVisible">
-                <button class="close-btn" (click)="toggleDropdown($event)">✖</button>
+                <div> 
+                  <button class="close-btn" (click)="toggleDropdown($event)" style="float: inline-end; margin-bottom: 20px;">✖</button>
+                </div>
                 <div *ngFor="let notification of notifications" (click)="markAsRead(notification)">
-                  <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
-                  <span>{{ notification.timestamp | date:'short' }}</span>
+                  <div class="card">
+                    <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
+                  <span style="margin-left: auto; font-size: small;">{{ notification.timestamp | date:'short' }}</span>
+                  </div>
+                  
                 </div>
               </div>
             </div>

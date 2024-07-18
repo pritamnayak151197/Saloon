@@ -30,6 +30,10 @@ export class ManageSaloonsComponent implements OnInit {
   contextMenuVisible = false;
   contextMenuX = 0;
   contextMenuY = 0;
+  userName = '';
+  password = '';
+  adminDetails: any;
+  createAdmin = false;
   
 
   exportToExcel(): void {
@@ -50,11 +54,24 @@ export class ManageSaloonsComponent implements OnInit {
       console.log(this.salonForm.value);
       this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
         this.responseDataSubmit = data;
-        this.saloonList.push(this.responseDataSubmit.data)
+        this.saloonList.push(this.responseDataSubmit.data);
+        this.createAdmin = true;
       });
-      this.visible = false;
-
     }
+  }
+  createAdminForSalon(userName: string, password: string){
+    let body = {
+      salonId: this.responseDataSubmit.Data.salonId,
+      username: userName,
+      password: password,
+      phone: this.salonForm.value.phone,
+      prefix: 'krati'
+    };
+
+    this._apiService.addAdmin(body).subscribe((res)=>{
+      this.adminDetails = res;
+      this.visible = false;
+    })
   }
 
   onEdit(){
@@ -74,15 +91,14 @@ export class ManageSaloonsComponent implements OnInit {
   }
   populateForm(data: any) {
     this.salonForm.patchValue({
-      salonId: data.salonId,
       salonName: data.salonName,
       phone: data.phone,
       address: data.address,
       addressUrl: data.addressUrl,
       salonLogo: data.salonLogo,
       qrCode: data.qrCode,
-      registeredOn : data.registeredOn,
-      trialPeriodStartDate: data.trialPeriodStartDate,
+      subscriptionStartDate: data.subscriptionStartDate,
+      subscriptionEndDate: data.subscriptionEndDate,
       status: data.status,
       sms: data.sms,
       coupon: data.coupon,
@@ -91,19 +107,21 @@ export class ManageSaloonsComponent implements OnInit {
   }
   clearData() {
     this.salonForm.patchValue({
-      salonId: null,
       salonName: null,
       phone: null,
       address: null,
       addressUrl: null,
       salonLogo: null,
-      registeredOn : null,
-      trialPeriodStartDate: null,
+      subscriptionStartDate: null,
+      subscriptionEndDate: null,
+      qrCode: null,
       status: null,
       sms: null,
       coupon: null,
       membership: null
     });
+    this.userName = '';
+    this.password = '';
   }
   saloonId = null;
   onRightClick(event: MouseEvent, salonId: any) {
@@ -159,19 +177,19 @@ export class ManageSaloonsComponent implements OnInit {
   ngOnInit(): void {
     this.loaddata();
     this.salonForm = this.fb.group({
-      salonId: ['', Validators.required],
       salonName: ['', Validators.required],
       phone: ['', [Validators.required]],
       address: ['', Validators.required],
       addressUrl: ['', Validators.required],
       salonLogo: ['', Validators.required],
       registeredOn: ['', Validators.required],
-      trialPeriodStartDate: ['', Validators.required],
-      status: [false, Validators.required],
+      subscriptionStartDate: ['', Validators.required],
+      subscriptionEndDate: ['', Validators.required],
+      status: [false, ],
       qrCode: ['', Validators.required],
-      sms: [false, Validators.required],
-      coupon: [false, Validators.required],
-      membership: [false, Validators.required]
+      sms: [false, ],
+      coupon: [false, ],
+      membership: [false, ]
     });
 
     

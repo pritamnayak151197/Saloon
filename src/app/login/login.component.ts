@@ -55,25 +55,26 @@ export class LoginComponent implements OnInit {
   }
   logMeinWithEmail(){
 
-    if(this.username.includes('@')){
-      this.logIn.username = this.username;
-    }
-    else{
-      this.logIn.phone = this.username;
-    }
-    this._apiService.login(this.logIn).subscribe((res: any)=>{
-      localStorage.setItem('userData', JSON.stringify(res.Data));
-      if (res.Data.userType === 'admin') {
-        this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
-          let notifictions = res;
-          this.notificationService.setNotifications(notifictions);
-          console.log(notifictions);
-        })
-        this.router.navigate(['/Layout/Services']); // Redirect admin to Services component
-      } else if (res.Data.userType === 'superadmin') {
-        this.router.navigate(['/Layout/Saloons']); // Redirect superadmin to Saloons component
-      }
-    });
+    // if(this.username.includes('@')){
+    //   this.logIn.username = this.username;
+    // }
+    // else{
+    //   this.logIn.phone = this.username;
+    // }
+    // this._apiService.login(this.logIn).subscribe((res: any)=>{
+    //   localStorage.setItem('userData', JSON.stringify(res.Data));
+    //   if (res.Data.userType === 'admin') {
+    //     this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
+    //       let notifictions = res;
+    //       this.notificationService.setNotifications(notifictions);
+    //       console.log(notifictions);
+    //     })
+    //     this.router.navigate(['/Layout/Services']); // Redirect admin to Services component
+    //   } else if (res.Data.userType === 'superadmin') {
+    //     this.router.navigate(['/Layout/Saloons']); // Redirect superadmin to Saloons component
+    //   }
+    // });
+    this.router.navigate(['/Layout/Saloons']);
   }
 
   logMein(){
@@ -139,6 +140,10 @@ export class LoginComponent implements OnInit {
       // Handle password mismatch
       console.log('Passwords do not match');
     }
+  }
+
+  loginAsCustommer(){
+    this.router.navigate(['Custommer-Login']);
   }
   
 

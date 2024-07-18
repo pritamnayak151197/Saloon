@@ -1,0 +1,28 @@
+.body{
+    align-items: center;
+    justify-content: center;
+    background-image: url('../assets/pic3.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    color: #FFFFFF;
+}
+
+
+.centered {
+	display: flex;
+	flex-direction: column;
+	margin-top: 30%;
+  width: 70%;
+  }
+
+  @media only screen and (max-width: 400px) {
+    .centered {
+      display: flex;
+      flex-direction: column;
+      margin-top: 45%;
+      width: 100%;
+      }
+  }

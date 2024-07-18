@@ -28,6 +28,7 @@ export class LayoutComponent implements OnInit {
   notificationCount = 0;
   dropdownVisible = false;
   saloonData:any;
+  adminSalonData:any;
 
   selectItem(item: string) {
     this.selectedItem = item;
@@ -51,11 +52,19 @@ export class LayoutComponent implements OnInit {
     if (this.isAdmin) {
       this.apiService.fetchNotifications(saloonId.salonId).subscribe((data) => {
         this.notifications = data;
-        this.notificationCount = data.length;
+        this.unreadCount = data.length;
         // this.unreadCount = this.notifications.filter(notification => !notification.read).length;
       });
+      // this.notificationService.getNotifications().subscribe((res) => {
+      //   this.notifications = res;
+      //   this.unreadCount = res.length;
+      // });
       this.apiService.getServiceBySaloonId(saloonId.salonId).subscribe((data) => {
         this.saloonData = data;
+      });
+
+      this.apiService.getSaloonListById(saloonId.salonId).subscribe((data) => {
+        this.adminSalonData = data;
       });
     }
   }

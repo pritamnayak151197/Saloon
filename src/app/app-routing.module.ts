@@ -7,10 +7,12 @@ import {ServicesComponent } from './services/services.component'
 import { PackagesComponent } from './packages/packages.component'
 import { AuthGuard } from './auth.guard';
 import { UnauthorizedComponent } from './unauthorized.component'
+import {CustommerLoginComponent} from './custommer-login/custommer-login.component'
 
 const routes: Routes = [
   { path: '', redirectTo: 'Login', pathMatch: 'full' },
   { path: 'Login', component: LoginComponent },
+  { path: 'Custommer-Login', component: CustommerLoginComponent },
   {
     path: 'Layout', component: LayoutComponent,
     children: [

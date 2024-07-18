@@ -6,7 +6,8 @@ export interface Salon {
     addressUrl: string;
     salonLogo: string;
     registeredOn: number;
-    trialPeriodStartDate: number;
+    subscriptionStartDate: number;
+    subscriptionEndDate: number;
     status: boolean;
     qrCode: string;
     sms: boolean;
