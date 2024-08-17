@@ -1,0 +1,59 @@
+<div class="container">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="profile-pic">
+      <img [src]="profilePicUrl || 'https://via.placeholder.com/100'" alt="Profile Picture">
+      <input type="file" id="file-input" (change)="onFileSelected($event)">
+      <label for="file-input">Change Profile Picture</label>
+    </div>
+
+    <div class="form-fields">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" formControlName="phone" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="locality">Locality</label>
+        <input id="locality" type="text" formControlName="locality" />
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Start Date</label>
+        <!-- <input id="startDate" formControlName="startDate"> -->
+        <input id="registeredOn" formControlName="startDate" type="date" class="form-control" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input id="birthDate" formControlName="birthDate">
+      </div>
+      <div class="form-group">
+        <label for="birthMonth">Birth Month</label>
+        <input id="birthMonth" formControlName="birthMonth">
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <button type="submit" class="save-button" (click)="updateUser()">Save</button>
+    </div>
+    
+  </form>
+</div>
+

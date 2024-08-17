@@ -77,12 +77,12 @@
     
       <div class="mb-2">
         <div class="dropdown">
-          <div style="border: solid 1px; border-radius: 5px; color: grey; height: 35px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span>Select Options</span><span style="margin-left: auto;"><i class="fa-solid fa-caret-down"></i></span>
+          <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Select Options</span>
           </div>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngFor="let option of serviceData">
-              <div class="form-check">
+              <div class="form-check custom-dropdown-item">
                 <input 
                   class="form-check-input" 
                   type="checkbox" 
@@ -96,6 +96,7 @@
             </li>
           </ul>
         </div>
+        
         
         <p>Selected Options: {{ selectedOptions | json }}</p>
         
@@ -115,7 +116,7 @@
      
 </p-dialog>
 
-<p-dialog header="Edit Package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '28rem' }">
+<p-dialog header="Edit Package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '30rem' }">
   <div class="row">
     <form [formGroup]="packageForm" (ngSubmit)="onEdit()">
       <div class="mb-2">
@@ -151,8 +152,8 @@
     
       <div class="mb-2">
         <div class="dropdown">
-          <div style="border: solid 1px; border-radius: 5px; color: grey; height: 35px;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span>Select Options</span><span style="margin-left: auto;"><i class="fa-solid fa-caret-down"></i></span>
+          <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Select Options</span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngFor="let option of serviceData">
@@ -170,6 +171,9 @@
             </li>
           </ul>
         </div>
+        
+        
+        
         
         <p>Selected Options: {{ selectedOptions | json }}</p>
         

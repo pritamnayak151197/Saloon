@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.container {
+  padding-bottom: 60px; /* Adjust according to bottom bar height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-pic img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-pic input[type="file"] {
+  display: none;
+}
+
+.profile-pic label {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #fff;
+  background-color: #e74c3c;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profile-pic label:hover {
+  background-color: #555;
+}
+
+.form-fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+ 
+}
+
+.form-group {
+  margin-bottom: 15px;
+  width: 48%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-button {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #555;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: grey;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.bottom-bar .icon {
+  font-size: 24px;
+}
+
+.bottom-bar.hidden {
+  transform: translateY(100%);
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 calc(50% - 10px); /* Each card takes 1/2 of the row with some margin for tablet and mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex: 1 1 calc(100% - 10px); /* Each card takes full width of the row with some margin for smaller screens */
+  }
+}

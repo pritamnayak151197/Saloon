@@ -246,6 +246,29 @@
           <label for="salonId" class="form-label">Salon ID:</label>
           <input id="salonId" formControlName="salonId" type="number" class="form-control" [class.is-invalid]="isInvalid('salonId')">
         </div> -->
+        
+          <div class="col-md-6 mb-3">
+            <!-- <label for="servicePic">Service Picture</label> -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div class="image-preview mb-2">
+                <img [src]="saloonLogo" alt="Service Image" class="img-fluid" />
+              </div>
+              <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
+              <input type="file" (change)="onFileSelected($event)" class="form-control mt-2"/>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <!-- <label for="servicePic">Service Picture</label> -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div class="image-preview mb-2">
+                <img [src]="qrCode" alt="Service Image" class="img-fluid" />
+              </div>
+              <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
+              <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
+            </div>
+          </div>
+        
         <div class="col-md-6 mb-3">
           <label for="salonName" class="form-label">Salon Name:</label>
           <input id="salonName" formControlName="salonName" type="text" class="form-control"
@@ -266,11 +289,11 @@
           <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control"
             [class.is-invalid]="isInvalid('addressUrl')">
         </div>
-        <div class="col-md-6 mb-3">
+        <!-- <div class="col-md-6 mb-3">
           <label for="salonLogo" class="form-label">Salon Logo:</label>
           <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control"
             [class.is-invalid]="isInvalid('salonLogo')">
-        </div>
+        </div> -->
         <div class="col-md-6 mb-3">
           <label for="registeredOn" class="form-label">Registered On:</label>
           <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control"
@@ -303,11 +326,11 @@
           <input id="membership" style="margin-left: 5px;" formControlName="membership" type="checkbox"
             class="form-check-input" [class.is-invalid]="isInvalid('membership')">
         </div>
-        <div class="col-md-6 mb-3">
+        <!-- <div class="col-md-6 mb-3">
           <label for="qrCode" class="form-label">QR Code:</label>
           <input id="qrCode" formControlName="qrCode" type="text" class="form-control"
             [class.is-invalid]="isInvalid('qrCode')">
-        </div>
+        </div> -->
       </div>
       <div class="d-flex justify-content-end gap-2">
         <button type="submit" class="btn btn-success" [disabled]="!salonForm.valid">Submit</button>

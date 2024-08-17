@@ -1,0 +1,37 @@
+<div class="top-bar">
+  <div class="profile">
+    <img src="https://via.placeholder.com/40" alt="User Profile">
+    <span class="membership-type">{{data.name}}</span>
+  </div>
+  <div class="icon-container">
+    <!-- <div class="icon">
+      <i class="fas fa-heart"></i>
+    </div> -->
+    <div class="icon">
+      <i class="fas fa-shopping-cart" routerLink="add-to-cart"></i>
+    </div>
+  </div>
+</div>
+<app-sidebar [isVisible]="isSidebarVisible" (closeSidebar)="closeSidebar()"></app-sidebar>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="bottom-bar" id="bottomBar">
+    <div class="icon">
+      <i class="fa-solid fa-gift" routerLink="c-Services"></i>
+    </div>
+    <div class="icon">
+      <i class="fa-solid fa-gifts" routerLink="c-Packages"></i>
+    </div>
+    <div class="icon">
+      <i class="fas fa-user" routerLink="User"></i>
+    </div>
+    <div class="icon">
+      <i class="fas fa-book" routerLink="History"></i>
+    </div>
+
+    <div class="icon">
+      <i class="fa-solid fa-arrow-right-from-bracket" (click)="logOut()"></i>
+    </div>
+  </div>

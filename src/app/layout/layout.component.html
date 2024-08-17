@@ -1,4 +1,4 @@
-<div class="comtainer-fluid">
+<div class="comtainer-fluid hide-on-mobile">
     <div class="sidebar"  *ngIf="isSuperAdmin">
         <p style="font-size: 20px; font-weight: 800;">
             <svg version="1.1" viewBox="0 0 1500 1500" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +54,7 @@
             </svg>
              Salon</p>
         <ul class="menu" style="margin-top: 5px;">
-            <li class="menu-items" [class.active]="selectedItem === 'item1'"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
+            <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="DashBoard"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item2'" routerLink="Saloons"><a  (click)="selectItem('item2')"><i class="fa-solid fa-bars-progress"></i> Manage</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item3'" routerLink="Services"><a  (click)="selectItem('item3')"><i class="fa-solid fa-cube"></i> Services</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item4'" routerLink="Packages"><a  (click)="selectItem('item4')"><i class="fa-solid fa-cubes"></i> Package</a></li>
@@ -117,7 +117,7 @@
             </svg>
              Salon</p>
         <ul class="menu" style="margin-top: 5px;">
-            <li class="menu-items" [class.active]="selectedItem === 'item1'"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
+          <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="DashBoard"><a  (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Dashboard</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item3'" routerLink="Services"><a  (click)="selectItem('item3')"><i class="fa-solid fa-cube"></i> Services</a></li>
             <li class="menu-items" [class.active]="selectedItem === 'item4'" routerLink="Packages"><a  (click)="selectItem('item4')"><i class="fa-solid fa-cubes"></i> Package</a></li>
             <li style="bottom: 0; cursor: pointer;" (click)="logout()"><a><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li>

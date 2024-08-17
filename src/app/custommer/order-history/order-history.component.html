@@ -1,0 +1,20 @@
+<div class="order-history-container">
+
+      <!-- <i class="fa fa-arrow-left back-arrow" (click)="goBack()"></i>
+      <h2>Order History</h2> -->
+
+    <div *ngFor="let order of orderHistory" class="order-card">
+      <div class="order-details">
+        <!-- <img class="order-image" [src]="order.image" alt="{{ order.name }}"> -->
+        <div class="order-info">
+          <div class="order-name">Booking Id : {{ order.bookingId }}</div>
+          <div class="order-date">Booking Date :{{ order.bookingDate | date}}</div>
+          <div class="order-date">Slot Allocated Date : {{ order.slotAllocatedDate | date }}</div>
+          <!-- <div class="order-price">
+            <span class="original-price">{{ order.price | currency }}</span>
+            <span class="discount-price">{{ order.discountPrice | currency }}</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>

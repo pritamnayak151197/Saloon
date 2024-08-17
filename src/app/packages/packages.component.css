@@ -119,62 +119,61 @@
 
 
 /* dropdown */
-
-.custom-select-container {
-  position: relative;
-  width: 200px;
-  font-family: Arial, sans-serif;
-}
-
-.custom-select {
+.dropdown-toggle {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: grey;
+  height: 35px;
   display: flex;
   align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
+  background-color: white;
   justify-content: space-between;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #fff;
+  position: relative;
 }
 
-.custom-select .selected-items {
-  flex: 1;
-}
-
-.custom-select .arrow {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #333;
-}
-
-.options-container {
+.dropdown-toggle::after {
+  content: '\f0d7'; /* Font Awesome Unicode for the caret-down icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  border: 1px solid #ccc;
-  border-top: none;
+  right: 12px;
+  font-size: 12px;
+}
+
+.custom-dropdown-menu {
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  max-height: 200px; /* Adjust this value to control the height */
+  overflow-y: auto; /* Adds vertical scrollbar when needed */
+  padding: 0;
   background-color: #fff;
-  display: none;
-  z-index: 1;
 }
 
-.options-container label {
-  display: block;
-  padding: 8px;
+.custom-dropdown-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.options-container label:hover {
-  background-color: #f0f0f0;
+.custom-dropdown-item:last-child {
+  border-bottom: none; /* Remove the border for the last item */
 }
 
-.options-container input[type="checkbox"] {
-  margin-right: 8px;
+.custom-dropdown-item:hover {
+  background-color: #f1f1f1; /* Adds a hover effect */
+  margin-left: 5px;
 }
 
-label{
-  font-weight: 600 !important;
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: #333;
 }

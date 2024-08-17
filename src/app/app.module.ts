@@ -19,7 +19,17 @@ import { CalendarModule } from 'primeng/calendar';
 import {PackagesComponent} from './packages/packages.component';
 import {ServicesComponent} from './services/services.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import {CustommerLoginComponent} from './custommer-login/custommer-login.component'
+import {CustommerLoginComponent} from './custommer-login/custommer-login.component';
+import { CustommerServiceComponent } from './custommer/custommer-service/custommer-service.component';
+import { CustommerPackagesComponent } from './custommer/custommer-packages/custommer-packages.component'
+import { CustommerComponent } from './custommer/custommer.component';
+import { UserDatailsComponent } from './custommer/user-datails/user-datails.component';
+import { OrderHistoryComponent } from './custommer/order-history/order-history.component';
+import { SidebarComponent } from './custommer/sidebar/sidebar.component';
+import { AddToCartComponent } from './custommer/add-to-cart/add-to-cart.component';
+import { ViewPackageComponent } from './custommer/custommer-packages/view-package/view-package.component';
+import { ViewServiceComponent } from './custommer/custommer-service/view-service/view-service.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +39,17 @@ import {CustommerLoginComponent} from './custommer-login/custommer-login.compone
     ManageSaloonsComponent,
     PackagesComponent,
     ServicesComponent,
-    CustommerLoginComponent
+    CustommerLoginComponent,
+    CustommerServiceComponent,
+    CustommerPackagesComponent,
+    CustommerComponent,
+    UserDatailsComponent,
+    OrderHistoryComponent,
+    SidebarComponent,
+    AddToCartComponent,
+    ViewPackageComponent,
+    ViewServiceComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

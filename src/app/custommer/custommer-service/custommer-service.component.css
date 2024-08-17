@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.header {
+  font-size: 24px; /* Adjust font size as needed */
+  font-weight: bold;
+  text-align: center;
+  margin: 5px 0; /* Space above and below the header */
+  color: #333; /* Text color */
+}
+
+.container {
+  padding: 5px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card {
+  flex: 1 1 calc(50% - 10px); /* Each card takes 1/2 of the row with some margin */
+  background-color: #EEEDEB;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 5px;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.image-container img {
+  width: 100px;
+  height: 100px; /* Making the image square */
+  border-radius: 8px; /* Optional: to slightly round the corners of the square image */
+  border: solid 1px #ddd;
+}
+
+.card-details {
+  text-align: center;
+}
+
+.card-title {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.price-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.original-price {
+  font-size: 14px;
+  color: #888;
+  text-decoration: line-through;
+}
+
+.discount-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #E53935;
+}
+
+.card-text {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+

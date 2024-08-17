@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.order-history-container {
+  padding-bottom: 60px; /* Adjust according to bottom bar height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.back-arrow {
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+.order-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 15px;
+  width: 90%;
+  display: flex;
+  align-items: center;
+}
+
+.order-details {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.order-image {
+  height: 50px;
+  width: 50px;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.order-name {
+  font-size: 16px;
+  color: #333;
+}
+
+.order-date,
+.order-price {
+  font-size: 14px;
+  color: #666;
+}
+
+.order-price {
+  display: flex;
+  align-items: center;
+}
+
+.original-price {
+  text-decoration: line-through;
+  margin-right: 10px;
+}
+
+.discount-price {
+  color: red;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: grey;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.bottom-bar .icon {
+  font-size: 24px;
+}
+
+.bottom-bar.hidden {
+  transform: translateY(100%);
+}
+
+@media (max-width: 768px) {
+  .order-card {
+    flex: 1 1 calc(50% - 10px); /* Each order card takes 1/2 of the row with some margin for tablet and mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .order-card {
+    flex: 1 1 calc(100% - 10px); /* Each order card takes full width of the row with some margin for smaller screens */
+  }
+}

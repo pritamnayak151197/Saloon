@@ -89,6 +89,16 @@ export class ManageSaloonsComponent implements OnInit {
     this.editSaloonData = true;
     this.populateForm(this.saloonData);
   }
+  formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  saloonLogo = '';
+  qrCode = '';
   populateForm(data: any) {
     this.salonForm.patchValue({
       salonName: data.salonName,
@@ -97,14 +107,19 @@ export class ManageSaloonsComponent implements OnInit {
       addressUrl: data.addressUrl,
       salonLogo: data.salonLogo,
       qrCode: data.qrCode,
-      subscriptionStartDate: data.subscriptionStartDate,
-      subscriptionEndDate: data.subscriptionEndDate,
+      registeredOn: this.formatDate(data.registeredOn),
+      subscriptionStartDate: this.formatDate(data.subscriptionStartDate),
+      subscriptionEndDate: this.formatDate(data.subscriptionEndDate),
       status: data.status,
       sms: data.sms,
       coupon: data.coupon,
       membership: data.membership
     });
+
+    this.saloonLogo = data.salonLogo;
+    this.qrCode = data.qrCode;
   }
+  
   clearData() {
     this.salonForm.patchValue({
       salonName: null,

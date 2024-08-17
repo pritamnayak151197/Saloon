@@ -1,0 +1,74 @@
+<!-- Display Packages -->
+<div *ngIf="expandedPackages.length">
+  <div *ngFor="let package of expandedPackages" class="package">
+    <img [src]="package.packageLogo" alt="{{package.packageName}}" class="package-logo">
+    <div class="package-details">
+      <h2>{{package.packageName}}</h2>
+      <p>Price: {{package.price}} (Discount: {{package.discountPrice}})</p>
+      <p>Start Date: {{package.startDate | date}}</p>
+      <p>End Date: {{package.endDate | date}}</p>
+      <!-- <p>Status: {{package.status ? 'Active' : 'Inactive'}}</p> -->
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-warning" (click)="removeitem(package.packageId, 'package')">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Display Services -->
+<div *ngIf="expandedServices.length">
+  <div *ngFor="let service of expandedServices" class="service">
+    <img [src]="service.servicePic" alt="{{service.serviceName}}" class="service-pic">
+    <div class="service-details">
+      <h2>{{service.serviceName}}</h2>
+      <p>Price: {{service.price}} (Discount: {{service.discountPrice}})</p>
+      <!-- <p>Status: {{service.status ? 'Active' : 'Inactive'}}</p> -->
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-warning" (click)="removeitem(service.serviceId, 'service')">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Single Place Order Button -->
+<div style="text-align: center; margin-top: 20px;" *ngIf="placeOrderButton">
+  <button class="btn btn-success" (click)="showDialog()">Place Order</button>
+</div>
+
+<!-- PrimeNG Dialog for Slot Selection -->
+<p-dialog header="Select Slot" [(visible)]="displayModal" (onHide)="hideDialog()">
+  <div class="p-grid">
+    <div class="p-col-12 p-md-6">
+      <div class="p-field">
+        <label for="slotAllocatedDate">Slot Allocated Date</label>
+        <input id="slotAllocatedDate" type="date" pInputText [(ngModel)]="slotAllocatedDate" />
+      </div>
+    </div>
+    <div class="p-col-12 p-md-6">
+      <div class="p-field">
+        <label for="slotAllocatedTime">Slot Allocated Time</label>
+        <input id="slotAllocatedTime" type="time" pInputText [(ngModel)]="slotAllocatedTime" />
+      </div>
+    </div>
+    <div class="p-col-12">
+      <div class="p-field">
+        <label for="remarks">Remarks</label>
+        <input id="remarks" type="text" pInputText [(ngModel)]="remarks" placeholder="Enter remarks" />
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" class="btn btn-success" icon="pi pi-check" (click)="placeOrder()">Subnmit</button>
+    <button type="button"  class="btn btn-danger" icon="pi pi-times" (click)="hideDialog()">Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<!-- PrimeNG Dialog for Make Payment -->
+<p-dialog header="Make Payment" [(visible)]="displayModal2" (onHide)="hideDialog2()">
+  <div style="height: 200px; width: 100%; background-color: black;">
+    <img src="{{this.qrCodeUrl.qrCode}}" alt="" style="height: 200px;">
+  </div>
+  <p-footer>
+    <button type="button" class="btn btn-warning"  icon="pi pi-times" (click)="hideDialog2()">Skip</button>
+  </p-footer>
+</p-dialog>

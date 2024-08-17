@@ -73,6 +73,10 @@ export class ServicesComponent implements OnInit {
     }
     this.visible = false
   }
+  imageInputVisible: boolean  = true;
+  changeImage(): void {
+    this.imageInputVisible = true;
+  }
 
   onSubmit() {
     let salonId = this.getUserData();
@@ -140,7 +144,7 @@ export class ServicesComponent implements OnInit {
     this.userData = localStorage.getItem('userData');
     return JSON.parse(this.userData);
   }
-
+  imgURL = ''
   populateForm(data: any) {
     this.serviceForm.patchValue({
       serviceName: data.serviceName,
@@ -151,6 +155,10 @@ export class ServicesComponent implements OnInit {
       status: data.status,
       salonId: data.salonId
     });
+
+    this.serviceForm.patchValue();
+    console.log("Image URL:", data.servicePic);
+    this.imgURL = data.servicePic;
   }
   clearData() {
     this.serviceForm.patchValue({
