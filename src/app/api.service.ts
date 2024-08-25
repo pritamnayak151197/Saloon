@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Salon } from './assets/saloon.interface';
+import { Salon } from '../assets/saloon.interface';
+import { Service } from '../assets/saloon.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,8 @@ export class ApiService {
   }
 
   addSaloon(body:any){
-    return this.http.post('http://testapp-env.eba-4t2jzzh3.ap-south-1.elasticbeanstalk.com/salon/addSalon', body);
+    const url = `${this.baseUrl}/salon/addSalon`;
+    return this.http.post(url, body);
   }
 
   getServiceBySaloonId(saloonId: any): Observable<any> {
@@ -79,7 +81,8 @@ export class ApiService {
   }
 
   addservice(body: any){
-    return this.http.post('http://testapp-env.eba-4t2jzzh3.ap-south-1.elasticbeanstalk.com/services/add', body);
+    const url = `${this.baseUrl}/services/add`;
+    return this.http.post(url, body);
   }
 
   addAdmin(body: any){
@@ -157,7 +160,7 @@ export class ApiService {
     return this.http.get(url);
   }
 
-  viewBookingsByCustommerId(Id: any){
+  viewBookingsBySalonId(Id: any){
     const url = `${this.baseUrl}/booking/viewAllBookingsByCustomerId/${Id}`;
     return this.http.get(url);
   }
@@ -165,5 +168,15 @@ export class ApiService {
   updateBooking(Booking : any){
     const url = `${this.baseUrl}/booking/update`;
     return this.http.put(url, Booking);
+  }
+
+  viewAllBookings(){
+    const url = `${this.baseUrl}/booking/viewAllBookings`;
+    return this.http.get(url);
+  }
+
+  getServicesById(Id : any){
+    const url = `${this.baseUrl}/services/getById/${Id}`;
+    return this.http.get<Service>(url);
   }
 }

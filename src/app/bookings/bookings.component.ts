@@ -2,28 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-bookings',
+  templateUrl: './bookings.component.html',
+  styleUrls: ['./bookings.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class BookingsComponent implements OnInit {
 
   customerId: string = '';
   bookingDetails: any;
   bookings: any;
-  custommerList: any;
+  custommerList : any;
   show = false;
-  message = ''
 
-  constructor(private apiService: ApiService) { }
+  constructor( private apiService : ApiService) {}
 
   fetchCustommerDetails() {
     // custommer
-
+   
   }
 
   saloonList: any;
-  fetchSalonDetails() {
+  fetchSalonDetails(){
     this.apiService.getSaloonList().subscribe((res) => {
       this.saloonList = res
       this.saloonList.unshift({
@@ -33,9 +32,9 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  onSaloonSelect(event: any) {
+  onSaloonSelect(event : any){
     const selectedCustomerId = (event.target as HTMLSelectElement).value;
-    this.apiService.getAllCustommerdetails(+selectedCustomerId).subscribe((res) => {
+    this.apiService.getAllCustommerdetails(+selectedCustomerId).subscribe((res) =>{
       this.custommerList = res;
       this.custommerList.unshift({
         "customerId": 0,
@@ -54,8 +53,7 @@ export class DashboardComponent implements OnInit {
     this.show = true;
   }
 
-
-  userData: any;
+  userData : any; 
   getUserData(): any {
     this.userData = localStorage.getItem('userData');
     return JSON.parse(this.userData);
@@ -70,24 +68,25 @@ export class DashboardComponent implements OnInit {
       this.isSuperAdmin = true;
       this.fetchSalonDetails();
     }
-    this.apiService.viewBookingsBySalonId(userdata.salonId).subscribe((res) => {
+    if (userdata.userType == "admin") {
+      this.isAdmin = true;
+      this.saloonId = userdata.salonId;
+    }
+    this.apiService.viewAllBookings().subscribe((res) => {
       this.bookings = res;
-      if (this.bookings) {
-        this.message = 'No Data Found'
-      }
     })
   }
 
 
-  updateBooking(ibookingsd: any) {
-    this.apiService.updateBooking(ibookingsd).subscribe((res) => {
-
+  updateBooking(ibookingsd: any){
+    this.apiService.updateBooking(ibookingsd).subscribe((res) =>{
+      
     })
   }
 
-  saveBooking(bookings: any) {
-    this.apiService.updateBooking(bookings).subscribe((res) => {
-
+  saveBooking(bookings:any){
+    this.apiService.updateBooking(bookings).subscribe((res) =>{
+      
     })
   }
 }

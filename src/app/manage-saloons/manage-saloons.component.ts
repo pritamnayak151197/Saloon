@@ -1,9 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ApiService } from '../api.service';
-import { Salon } from '../assets/saloon.interface';
+import { Salon } from '../../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 import { Router } from '@angular/router';
+import { switchMap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-saloons',
@@ -34,6 +35,10 @@ export class ManageSaloonsComponent implements OnInit {
   password = '';
   adminDetails: any;
   createAdmin = false;
+  saloonId2 : any;
+  filteredServices: Salon[] = [];
+  searchText: string = '';
+  selectedFile2: any
   
 
   exportToExcel(): void {
@@ -44,20 +49,73 @@ export class ManageSaloonsComponent implements OnInit {
       this.triggerFunction(value);
     }
   }
-
+  filterServices() {
+    this.filteredServices = this.saloonList.filter((Salon: { salonName: string; phone: { toString: () => string; } }) => {
+      const searchTerm = this.searchText.toLowerCase();
+      return Salon.salonName.toLowerCase().includes(searchTerm) ||
+      Salon.phone.toString().toLowerCase().includes(searchTerm)
+    });
+  }
   triggerFunction(value: string): void {
   //  this.saloonList = this.saloonList.filter(salon => salon.salonName === value);
   }
+  onFileSelected3(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  onFileSelected4(event: any): void {
+    this.selectedFile2 = event.target.files[0];
+  }
+ 
 
   onSubmit(){
-    if (this.salonForm.valid) {
-      console.log(this.salonForm.value);
-      this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
-        this.responseDataSubmit = data;
-        this.saloonList.push(this.responseDataSubmit.data);
-        this.createAdmin = true;
+    if (this.selectedFile || this.selectedFile2) {
+      this._apiService.uploadImage(this.selectedFile).pipe(
+        switchMap((res1: any) => {
+          // First image upload response
+          this.selectedFile = res1[0].url;
+          this.salonForm.value.salonLogo = this.selectedFile;
+      
+          // Upload the second image
+          return this._apiService.uploadImage(this.selectedFile2);
+        }),
+        switchMap((res2: any) => {
+          // Second image upload response
+          this.selectedFile2 = res2[0].url;
+          this.salonForm.value.qrCode = this.selectedFile2;
+      
+          // After both images are uploaded, call the addSaloon API
+          if (this.salonForm.valid) {
+            return this._apiService.addSaloon(this.salonForm.value);
+          } else {
+            throw new Error('Form is invalid');
+          }
+        })
+      ).subscribe({
+        next: (data) => {
+          // Handle the response from addSaloon API
+          this.responseDataSubmit = data;
+          this.saloonList.push(this.responseDataSubmit.data);
+          this.createAdmin = true;
+        },
+        error: (err) => {
+          console.error('Error occurred:', err);
+        }
       });
+      
     }
+    else{
+      if (this.salonForm.valid) {
+        console.log(this.salonForm.value);
+        this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
+          this.responseDataSubmit = data;
+          this.saloonList.push(this.responseDataSubmit.data);
+          this.createAdmin = true;
+        });
+      }
+    }
+    
+    
   }
   createAdminForSalon(userName: string, password: string){
     let body = {
@@ -73,8 +131,36 @@ export class ManageSaloonsComponent implements OnInit {
       this.visible = false;
     })
   }
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    this._apiService.uploadImage(this.selectedFile).subscribe((res: any) =>{
+      this.salonForm.value = this.saloonData;
+
+      this.salonForm.value['salonId'] = this.saloonId2;
+      this.salonForm.value['salonLogo'] = res[0].url;
+      this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
+        this.responseDataSubmit = data;
+        this.saloonList.push(this.responseDataSubmit.data);
+      });
+    })
+  }
+
+  onFileSelected2(event: any): void {
+    this.selectedFile2 = event.target.files[0];
+
+    this._apiService.uploadImage(this.selectedFile2).subscribe((res: any) =>{
+      this.salonForm.value = this.saloonData;
+      this.salonForm.value['salonId'] = this.saloonId2;
+      this.salonForm.value['qrCode'] = res[0].url;
+      this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
+        this.responseDataSubmit = data;
+        this.saloonList.push(this.responseDataSubmit.data);
+      });
+    })
+  }
 
   onEdit(){
+    this.salonForm.value['salonId'] = this.saloonId2;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
       this.saloonList.push(this.responseDataSubmit.data);
@@ -83,19 +169,20 @@ export class ManageSaloonsComponent implements OnInit {
     });
     
   }
-
-  editSaloon(){
+ 
+  editSaloon(id : any){
+    this.clearData();
+    this.saloonId2 = id;
     console.log(this.saloonData);
     this.editSaloonData = true;
     this.populateForm(this.saloonData);
   }
-  formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based
-    const day = ('0' + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
+  formatDate(date: string): string {
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
 
   saloonLogo = '';
   qrCode = '';
@@ -105,8 +192,6 @@ export class ManageSaloonsComponent implements OnInit {
       phone: data.phone,
       address: data.address,
       addressUrl: data.addressUrl,
-      salonLogo: data.salonLogo,
-      qrCode: data.qrCode,
       registeredOn: this.formatDate(data.registeredOn),
       subscriptionStartDate: this.formatDate(data.subscriptionStartDate),
       subscriptionEndDate: this.formatDate(data.subscriptionEndDate),
@@ -137,6 +222,8 @@ export class ManageSaloonsComponent implements OnInit {
     });
     this.userName = '';
     this.password = '';
+    this.selectedFile = null;
+    this.selectedFile2 = null;
   }
   saloonId = null;
   onRightClick(event: MouseEvent, salonId: any) {
@@ -170,10 +257,11 @@ export class ManageSaloonsComponent implements OnInit {
   addSaloon(){
     this.clearData();
     this.visible = true;
-  }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
+    this.salonForm.patchValue({
+      status: true,
+      sms: true
+    });
   }
 
   isInvalid(controlName: string): boolean {
@@ -186,6 +274,7 @@ export class ManageSaloonsComponent implements OnInit {
       this.saloonList = res
       this.totalCount = res.length
       this.saloonData = this.saloonList.find(salon => salon.salonId === 1);
+      this.filteredServices = [...this.saloonList];
     });
   }
 
@@ -193,14 +282,14 @@ export class ManageSaloonsComponent implements OnInit {
     this.loaddata();
     this.salonForm = this.fb.group({
       salonName: ['', Validators.required],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^\\+?[1-9]\\d{1,14}$')]],
       address: ['', Validators.required],
       addressUrl: ['', Validators.required],
       salonLogo: ['', Validators.required],
-      registeredOn: ['', Validators.required],
+      registeredOn: [new Date().toISOString().substring(0, 10), Validators.required],
       subscriptionStartDate: ['', Validators.required],
       subscriptionEndDate: ['', Validators.required],
-      status: [false, ],
+      status: [true, ],
       qrCode: ['', Validators.required],
       sms: [false, ],
       coupon: [false, ],

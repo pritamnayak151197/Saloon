@@ -1,22 +1,24 @@
 .left-card{
     border-radius: 5px;
     background-color: #F6F5F2;
-    background-image: url('../assets/pic2.png');
+    background-image: url('../../assets/pic2.png');
     height: 90vh;
     overflow: auto;
 }
 .card-title{
   font-weight: 600;
   font-family:Arial, Helvetica, sans-serif;
+  color: #1E2A5E;
 }
 .card-text{
     font-style:oblique;
+    color: #686D76;
 }
 
 .right-card{
   border-radius: 5px;
   color: #F6F5F2;
-  background-image: url('../assets/pic2.png');
+  background-image: url('../../assets/pic2.png');
   height: 90vh;
   overflow: auto;
 }
@@ -84,7 +86,7 @@
   padding: 5px;
   display: flex;
   color: #ffffff;
-  background-image: url('../assets/pic3.png');
+  background-image: url('../../assets/pic3.png');
 } 
 
 /* Hover effect and box shadow on hover */
@@ -102,7 +104,9 @@
 }
 .card-header{
   background-color: #FED8B1;
-  color: rgb(29, 28, 28);
+  font-weight: 600;
+  font-family:Arial, Helvetica, sans-serif;
+  color: #1E2A5E;
 }
 .p-dialog-header {
   background-color: #99BC85 !important;

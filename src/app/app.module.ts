@@ -30,6 +30,8 @@ import { AddToCartComponent } from './custommer/add-to-cart/add-to-cart.componen
 import { ViewPackageComponent } from './custommer/custommer-packages/view-package/view-package.component';
 import { ViewServiceComponent } from './custommer/custommer-service/view-service/view-service.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BookingsComponent } from './bookings/bookings.component';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AddToCartComponent,
     ViewPackageComponent,
     ViewServiceComponent,
-    DashboardComponent
+    DashboardComponent,
+    BookingsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +66,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     SidebarModule,
     CalendarModule,
     ReactiveFormsModule,
+    MultiSelectModule
   ],
   providers: [DialogService,ApiService,MessageService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

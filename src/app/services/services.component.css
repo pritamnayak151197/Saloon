@@ -1,59 +1,65 @@
-.left-card{
-    border-radius: 5px;
-    background-color: #F6F5F2;
-    background-image: url('../assets/pic2.png');
-    height: 90vh;
-    overflow: auto;
-}
-.card-title{
-  font-weight: 600;
-  font-family:Arial, Helvetica, sans-serif;
-}
-.card-text{
-    font-style:oblique;
-}
-
-.right-card{
+.bodyContainer{
+  background-image: url('../../assets/pic2.png') !important;
+  height: 88vh;
   border-radius: 5px;
-  color: #F6F5F2;
-  background-image: url('../assets/pic2.png');
+  color: #f2f2f2;
 }
 
-.label{
-  font-weight: 500;
-  margin-right: 20px;
+.card {
+  background-image: url('../../assets/pic2.png') !important;
+  height: 88vh;
+  border-radius: 5px;
+  color: #f2f2f2;
 }
 
-.card-container {
-  display: flex; /* Use Flexbox */
-  flex-wrap: wrap;
-  gap: 5px; /* Optional: Add spacing between cards */
-}
-
-/* Basic styles for the card */
-.service-card {
-  width: 230px !important;
-  background-color: #EEEEEE;
+.card-header {
+  background-color: #343a40;
+  color: #FFFFFF;
+  padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-/* .saloon-list-card{
-  border-radius: 5px !important;
-  background-color: #D4E7C5;
-  color: black;
-} */
-
-.odd-card {
-  border-radius: 5px !important;
-  background-color: #F6F5F2;
-  color: black;
 }
 
-.even-card {
-  border-radius: 5px !important;
-  background-color: #F0EBE3;
-  color: black;
+.table {
+  border-radius: 8px;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+.odd-row {
+  background-color: #f9f9f9;
+}
+
+.even-row {
+  background-color: #ffffff;
+}
+
+.table-active {
+  background-color: #e9ecef !important;
+}
+
+
+.card-body {
+  padding: 20px;
+}
+
+.form-control {
+  flex: 1;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.btn-success, .btn-secondary {
+  padding: 10px 20px;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
 }
 
 
@@ -82,7 +88,7 @@
   padding: 5px;
   display: flex;
   color: #ffffff;
-  background-image: url('../assets/pic3.png');
+  background-image: url('../../assets/pic3.png');
 } 
 
 /* Hover effect and box shadow on hover */
@@ -171,4 +177,112 @@ label{
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+.table-container {
+  max-height: 67vh; /* Adjust this value based on your design */
+  overflow-y: auto;  /* Enables vertical scrolling */
+  overflow-x: auto;  /* Enables horizontal scrolling if necessary */
+  margin-top: 20px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.table {
+  width: 100%; /* Ensures the table takes up full width of its container */
+  border-collapse: collapse; /* Ensures borders are combined */
+}
+
+
+/* General form styling */
+.p-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.p-card-header {
+  background-color: #007ad9;
+  color: white;
+  padding: 16px;
+}
+
+.p-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.p-card-body {
+  padding: 24px;
+}
+
+.p-field label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.p-inputtext,
+.p-dropdown {
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.p-inputtextarea {
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.p-inputtext:focus,
+.p-dropdown:focus,
+.p-inputtextarea:focus {
+  border-color: #007ad9;
+  box-shadow: 0 0 3px rgba(0, 122, 217, 0.5);
+}
+
+.p-checkbox-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.p-button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.p-button-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.p-button-success:hover {
+  background-color: #218838;
+}
+
+.p-button-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.p-button-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Image preview styling */
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

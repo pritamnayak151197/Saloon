@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
   recievedOtp: string ='';
   data: string = '';
   loginWithEmail = false;
+  saloonData: any;
   logIn = {
     "username":"",
     "phone":"",
@@ -64,15 +65,22 @@ export class LoginComponent implements OnInit {
     this._apiService.login(this.logIn).subscribe((res: any)=>{
       localStorage.setItem('userData', JSON.stringify(res.Data));
       if (res.Data.userType === 'admin') {
-        this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
-          let notifictions = res;
-          this.notificationService.setNotifications(notifictions);
-          console.log(notifictions);
+        // this._apiService.fetchNotifications(res.Data.salonId).subscribe((res)=>{
+        //   let notifictions = res;
+        //   this.notificationService.setNotifications(notifictions);
+        //   console.log(notifictions);
+        // })
+        this._apiService.getSaloonListById(res.Data.salonId).subscribe((res) => {
+          this.saloonData = res;
+          localStorage.setItem('saloonData', JSON.stringify(this.saloonData));
+          this.router.navigate(['/Layout/Services']);
         })
-        this.router.navigate(['/Layout/Services']);
+       
       } else if (res.Data.userType === 'superadmin') {
         this.router.navigate(['/Layout/Saloons']);
       }
+    },(error)=>{
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username or Password is incorrect' });
     });
     // this.router.navigate(['/Layout/Saloons']);
   }

@@ -7,8 +7,8 @@
       <h2>{{ product.packageName }}</h2>
       <p>{{ product.details }}</p>
       <p>
-        <span class="original-price">{{ product.price | currency }}</span>
-        <span class="discounted-price">{{ product.discountPrice | currency }}</span>
+        <span class="original-price">{{ product.price | currency:'INR' }}</span>
+        <span class="discounted-price">{{ product.discountPrice | currency:'INR' }}</span>
       </p>
       <p>Services: {{ product.services.join(', ') }}</p>
     </div>

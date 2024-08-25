@@ -1,7 +1,7 @@
 .body{
     align-items: center;
     justify-content: center;
-    background-image: url('../assets/pic3.png');
+    background-image: url('../../assets/pic3.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

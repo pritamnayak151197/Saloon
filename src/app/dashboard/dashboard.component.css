@@ -1,6 +1,6 @@
 /* Customize the card header and body */
 .bodyContainer{
-  background-image: url('../assets/pic2.png') !important;
+  background-image: url('../../assets/pic2.png') !important;
   height: 88vh;
   border-radius: 5px;
   color: #f2f2f2;

@@ -17,6 +17,7 @@ import { AddToCartComponent } from './custommer/add-to-cart/add-to-cart.componen
 import { ViewPackageComponent } from './custommer/custommer-packages/view-package/view-package.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BookingsComponent } from './bookings/bookings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Login', pathMatch: 'full' },
@@ -26,7 +27,8 @@ const routes: Routes = [
     path: 'Layout', component: LayoutComponent,
     children: [
       { path: '', component: ManageSaloonsComponent },
-      { path: 'DashBoard', component: DashboardComponent },
+      { path: 'Bookings', component: BookingsComponent },
+      { path: 'History', component: DashboardComponent },
       { path: 'Saloons', component: ManageSaloonsComponent, canActivate: [AuthGuard] },
       { path: 'Services', component: ServicesComponent, canActivate: [AuthGuard] },
       { path: 'Services/:id', component: ServicesComponent },

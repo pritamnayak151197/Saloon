@@ -1,45 +1,134 @@
 <div class="container-fluid">
-    <!-- <div class="rounded-top"></div> -->
-    <div class="card">
-            <div class="card left-card" style="padding: 5px 2% 2% 2%; height: 90vh;">
-                <div style="display: flex; padding: 5px;">
-                    <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Packages List</span>
-                    <span style="margin-left: auto; font-size: 20px; font-weight: 600; color: #FFFFFF;">Total count : {{totalCount}}</span>
-                </div>
-                <div style="display: flex; gap: 5px;">
-                  <input type="text" class="form-control mb-4">
-                <button type="button" class="btn btn-success" style="height: 60%;" (click)="exportToExcel()">Export</button>
-                <button class="btn btn-secondary" style="margin-left: auto; height: 60%;" (click)="addSaloon()"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                
-                <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index"  [class.active]="selectedCardId === item.salonId" [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
-                    <div class="card-body">
-                      <div style="display: flex; gap: 10%;">
-                        <div>
-                          <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;" src="{{item.packageLogo}}" alt="">
-                        </div>
-                        <div style="width: 150px;">
-                          <span class="card-title">{{ item.packageName }}</span><br>
-                          <span class="card-text">Price : {{ item.price }}</span>
-                        </div>
-                        <div>
-                          <span class="card-text">Service Id : {{ item.packageId }}</span><br>
-                          <span class="card-text">Details : {{ item.details }}</span>
-                        </div>
-                        <div>
-                          <span class="card-text">Discount Price : {{ item.discountPrice }}</span><br>
-                          <span class="card-text">Status : {{ item.status }}</span>
-                        </div>
-                        
-                      </div>
+  <!-- <div class="rounded-top"></div> -->
+  <!-- <div class="card">
+    <div class="card left-card" style="padding: 5px 2% 2% 2%; height: 90vh;">
+      <div style="display: flex; padding: 5px;">
+        <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Packages List</span>
+        <span style="margin-left: auto; font-size: 20px; font-weight: 600; color: #FFFFFF;">Total count :
+          {{totalCount}}</span>
+      </div>
+      <div style="display: flex; gap: 5px;">
+        <input type="text" class="form-control mb-4">
+        <button type="button" class="btn btn-success" style="height: 60%;" (click)="exportToExcel()">Export</button>
+        <button class="btn btn-secondary" style="margin-left: auto; height: 60%;" (click)="addSaloon()"><i
+            class="fa-solid fa-plus"></i></button>
+      </div>
 
-                      <div style="float: right;">
-                        <i class="fa-solid fa-pen" (click)="handleCardClick(item.packageId)" style="cursor: pointer;"></i>
-                      </div>
-                    </div>
-                  </div>
+      <div class="card" style="margin-bottom: 5px;" *ngFor="let item of serviceslist; let i = index"
+        [class.active]="selectedCardId === item.salonId"
+        [ngClass]="{'odd-card': i % 2 !== 0, 'even-card': i % 2 === 0}">
+        <div class="card-body">
+          <div style="display: flex; gap: 10%;">
+            <div>
+              <img style="float: right; height: 50px; width: 50px; border-radius: 100%; border: solid 1px;"
+                src="{{item.packageLogo}}" alt="">
             </div>
+            <div style="width: 150px;">
+              <span class="card-title">{{ item.packageName }}</span><br>
+              <span class="card-text">Price : {{ item.price }}</span>
+            </div>
+            <div>
+              <span class="card-text">Service Id : {{ item.packageId }}</span><br>
+              <span class="card-text">Details : {{ item.details }}</span>
+            </div>
+            <div>
+              <span class="card-text">Discount Price : {{ item.discountPrice }}</span><br>
+              <span class="card-text">Status : {{ item.status }}</span>
+            </div>
+
+          </div>
+
+          <div style="float: right;">
+            <i class="fa-solid fa-pen" (click)="handleCardClick(item.packageId)" style="cursor: pointer;"></i>
+          </div>
         </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="card" style="border-radius: 8px; padding: 10px;">
+    <div class="card-header" style="padding: 15px; border-radius: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0; font-size: 24px;">Package List</h2>
+        <span style="font-size: 18px;">Total count: {{filteredServices.length}}</span>
+      </div>
+      <div *ngIf="isSuperAdmin" style="display: flex; gap: 10px; margin-top: 15px;">
+        <div  style="width: 300px;">
+          <select id="salon" class="gender-select" (change)="onSalonSelect($event)">
+            <option value="" disabled selected>Select a Salon</option>
+            <option *ngFor="let salon of salons" [value]="salon.salonId">{{ salon.salonName }}</option>
+          </select>
+        </div>
+        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText"
+          (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px;">
+        <button *ngIf="showAddButton" type="button" class="btn btn-success" (click)="exportToExcel()"
+          style="padding: 10px 20px;">Export</button>
+        <button *ngIf="showAddButton" type="button" class="btn btn-secondary" (click)="addSaloon()"
+          style="padding: 10px 20px;">
+          <i class="fa-solid fa-plus"></i> Add Package
+        </button>
+      </div>
+
+
+      <div *ngIf="!isSuperAdmin" style="display: flex; gap: 10px; margin-top: 15px;">
+        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText"
+          (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px;">
+        <button type="button" class="btn btn-success" (click)="exportToExcel()"
+          style="padding: 10px 20px;">Export</button>
+        <button type="button" class="btn btn-secondary" (click)="addSaloon()" style="padding: 10px 20px;">
+          <i class="fa-solid fa-plus"></i> Add Package
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="filteredServices.length > 0" class="card-body table-container" style="padding: 0;">
+      <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th style="width: 60px;">Image</th>
+            <th>package Name</th>
+            <th>Price</th>
+            <th>Discount Price</th>
+            <th>Package Id</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+
+            <th>Status</th>
+            <th style="width: 50px;">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredServices; let i = index"
+            [class.table-active]="selectedCardId === item.packageId"
+            [ngClass]="{'odd-row': i % 2 !== 0, 'even-row': i % 2 === 0}">
+            <td>
+              <img [src]="item.packageLogo" alt="Service Image" style="height: 50px; width: 50px; border-radius: 50%;">
+            </td>
+            <td>{{ item.packageName }}</td>
+            <td>{{ item.price | currency:'INR' }}</td>
+            <td>{{ item.discountPrice | currency:'INR' }}</td>
+            <td>{{ item.packageId }}</td>
+            <td>{{ item.startDate}}</td>
+            <td>{{ item.endDate}}</td>
+
+            <td>
+              <span [ngClass]="{'text-success': item.status === true, 'text-danger': item.status === false}">
+                {{ item.status ? 'Available' : 'Unavailable' }}
+              </span>
+            </td>
+            <td>
+              <i class="fa-solid fa-pen" (click)="handleCardClick(item.packageId)" style="cursor: pointer;"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="filteredServices.length === 0" class="card-body text-center">
+      <p>{{message}}</p>
+    </div>
+  </div>
+
 </div>
 <p-dialog header="Add New Package" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
   <div class="row">
@@ -48,13 +137,20 @@
         <label for="packageName">Package Name:</label>
         <input class="form-control" id="packageName" formControlName="packageName" type="text">
       </div>
-    
+
+
+      <div class="mb-2">
+        <label for="servicePic">Package Picture</label>
+        <div style="display: flex; flex-direction: column;">
+          <input type="file" (change)="onFileSelected($event)" class="form-control" required />
+        </div>
+      </div>
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="price">Price:</label>
           <input class="form-control" id="price" formControlName="price" type="number">
         </div>
-      
+
         <div class="col-md-6">
           <label for="discountPrice">Discount Price:</label>
           <input class="form-control" id="discountPrice" formControlName="discountPrice" type="number">
@@ -66,16 +162,16 @@
           <label for="startDate">Start Date:</label>
           <input class="form-control" id="startDate" formControlName="startDate" type="date" style="width: 110%;">
         </div>
-  
+
         <div class="col-md-6">
           <label for="endDate">End Date:</label>
           <input class="form-control" id="endDate" formControlName="endDate" type="date">
         </div>
       </div>
-    
-      
-    
-      <div class="mb-2">
+
+
+
+      <!-- <div class="mb-2">
         <div class="dropdown">
           <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             <span>Select Options</span>
@@ -83,10 +179,8 @@
           <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngFor="let option of serviceData">
               <div class="form-check custom-dropdown-item">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [value]="option.value" 
+                <input class="form-check-input" type="checkbox"
+                  [value]="option.serviceId"
                   (change)="onOptionChange($event, option.serviceId)"
                   [checked]="selectedOptions.includes(option.serviceId)">
                 <label class="form-check-label">
@@ -95,41 +189,61 @@
               </div>
             </li>
           </ul>
+            
         </div>
-        
-        
+
+
         <p>Selected Options: {{ selectedOptions | json }}</p>
-        
-      </div>
-      
+
+      </div> -->
+
+      <p-multiSelect 
+  [options]="serviceData.serviceName" 
+  [(ngModel)]="serviceData.serviceId" 
+  optionLabel="name" 
+  optionValue="id" 
+  placeholder="Select Services">
+</p-multiSelect>
+
       <div>
         <label for="status">Status</label>
-        <input  id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
+        <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
       </div>
       <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
         <button type="submit" class="btn btn-success">Submit</button>
         <button type="button" class="btn btn-danger" (click)="visible = false">Cancel</button>
       </div>
     </form>
-    
+
   </div>
-     
+
 </p-dialog>
 
 <p-dialog header="Edit Package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '30rem' }">
   <div class="row">
     <form [formGroup]="packageForm" (ngSubmit)="onEdit()">
+
+
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="image-preview mb-2">
+          <img [src]="imgUrl" alt="Service Image" class="img-fluid" />
+        </div>
+        <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
+         <label for="servicePic">Package Image</label>
+        <input type="file" (change)="onFileSelected($event)" class="form-control mt-2"/>
+      </div>
+
       <div class="mb-2">
         <label for="packageName">Package Name:</label>
         <input class="form-control" id="packageName" formControlName="packageName" type="text">
       </div>
-    
+
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="price">Price:</label>
           <input class="form-control" id="price" formControlName="price" type="number">
         </div>
-      
+
         <div class="col-md-6">
           <label for="discountPrice">Discount Price:</label>
           <input class="form-control" id="discountPrice" formControlName="discountPrice" type="number">
@@ -141,15 +255,15 @@
           <label for="startDate">Start Date:</label>
           <input class="form-control" id="startDate" formControlName="startDate" type="date" style="width: 110%;">
         </div>
-  
+
         <div class="col-md-6">
           <label for="endDate">End Date:</label>
           <input class="form-control" id="endDate" formControlName="endDate" type="date">
         </div>
       </div>
-    
-      
-    
+
+
+
       <div class="mb-2">
         <div class="dropdown">
           <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -158,10 +272,7 @@
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngFor="let option of serviceData">
               <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [value]="option.value" 
+                <input class="form-check-input" type="checkbox" [value]="option.serviceId"
                   (change)="onOptionChange($event, option.serviceId)"
                   [checked]="selectedOptions.includes(option.serviceId)">
                 <label class="form-check-label">
@@ -170,36 +281,34 @@
               </div>
             </li>
           </ul>
+          
         </div>
-        
-        
-        
-        
+
+
+
+
         <p>Selected Options: {{ selectedOptions | json }}</p>
-        
+
       </div>
-      
+
       <div>
         <label for="status">Status:</label>
-        <input  id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
+        <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
       </div>
       <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
         <button type="submit" class="btn btn-success">Submit</button>
         <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
       </div>
     </form>
-    
-  </div>
-     
-</p-dialog>
 
-<p-dialog header="Select Salon" [(visible)]="isSuperAdmin"  [closable]="true" [style]="{width: '300px'}">
+  </div>
+
+</p-dialog>
+<!-- 
+<p-dialog header="Select Salon" [(visible)]="isSuperAdmin" [closable]="true" [style]="{width: '300px'}">
   <div class="p-fluid">
     <div class="p-field">
-      <select id="salon" class="form-control" (change)="onSalonSelect($event)">
-        <option value="" disabled selected>Select a Salon</option>
-        <option *ngFor="let salon of salons" [value]="salon.salonId">{{ salon.salonName }}</option>
-      </select>
+      
     </div>
   </div>
-</p-dialog>
+</p-dialog> -->

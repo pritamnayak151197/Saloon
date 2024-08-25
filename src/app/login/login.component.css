@@ -1,7 +1,7 @@
 .body{
     align-items: center;
     justify-content: center;
-    background-image: url('../assets/pic3.png');
+    background-image: url('../../assets/pic3.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -10,11 +10,15 @@
     color: #FFFFFF;
 }
 
+.saloon-logo{
+  height: 100px;
+  width: 100px;
+}
 
 .centered {
 	display: flex;
 	flex-direction: column;
-	margin-top: 30%;
+	margin-top: 20%;
   width: 70%;
   }
 

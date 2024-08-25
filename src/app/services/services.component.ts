@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { Salon } from '../assets/saloon.interface';
+import { Salon, Service } from '../../assets/saloon.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 import { MessageService } from 'primeng/api';
@@ -19,7 +19,18 @@ export class ServicesComponent implements OnInit {
     private _exportToExcelService: ExportToExcelService,
     private messageService: MessageService,
     private router: Router
-  ) { }
+  ) {
+
+    interface Service {
+      serviceId: string;
+      serviceName: string;
+      price: number;
+      details: string;
+      discountPrice: number;
+      status: string;
+      servicePic: string;
+    }
+   }
   totalCount: any;
   serviceslist: any = [];
   saloonData: any;
@@ -38,7 +49,22 @@ export class ServicesComponent implements OnInit {
   isSuperAdmin = false
   salons: any;
   selectedSaloon: any;
+  filteredServices: Service[] = [];
+  searchText: string = '';
+  selectedId: any;
+  message: any;
+ showAddServiceButton = false;
 
+
+  filterServices() {
+    this.filteredServices = this.serviceslist.filter((service: { serviceName: string; serviceId: { toString: () => string; }; details: string; price: string; }) => {
+      const searchTerm = this.searchText.toLowerCase();
+      return service.serviceName.toLowerCase().includes(searchTerm) ||
+             service.serviceId.toString().toLowerCase().includes(searchTerm) ||
+             service.details.toLowerCase().includes(searchTerm) ||
+             service.price.toString().toLowerCase().includes(searchTerm)
+    });
+  }
 
   exportToExcel(): void {
     this._exportToExcelService.exportToExcel(this.serviceslist, 'service_list');
@@ -46,15 +72,31 @@ export class ServicesComponent implements OnInit {
   }
 
   onUpdate() {
+    let salonId = this.getUserData();
+    let userdata = this.getUserData();
+    if (userdata.userType != "superadmin") {
+      this.serviceForm.value.salonId = userdata.salonId;
+    }
+    else {
+      this.serviceForm.value.salonId = this.selectedSaloon;
+    }
     if (this.selectedFile) {
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
         this.serviceForm.value.servicePic = this.selectedFileUrl;
+        this.serviceForm.value.serviceId = this.serviceIdforEdit;
         let salonId = this.getUserData();
         this.serviceForm.value.salonId = salonId.salonId
         console.log(this.serviceForm)
         if (this.serviceForm.valid) {
           this._apiService.updateServiceById(this.serviceForm.value).subscribe((res) => {
+            this.editVisible = false
+        if (userdata.userType != "superadmin") {
+          this.loadData(userdata.salonId);
+        }
+        else {
+          this.loadData(+this.selectedSaloon);
+        }
           });
         } else {
           console.log('Form is invalid');
@@ -68,7 +110,12 @@ export class ServicesComponent implements OnInit {
       this._apiService.updateServiceById(this.serviceForm.value).subscribe((res) => {
 
         this.editVisible = false
-        this.loadData(null);
+        if (userdata.userType != "superadmin") {
+          this.loadData(userdata.salonId);
+        }
+        else {
+          this.loadData(+this.selectedSaloon);
+        }
       });
     }
     this.visible = false
@@ -80,7 +127,13 @@ export class ServicesComponent implements OnInit {
 
   onSubmit() {
     let salonId = this.getUserData();
-    this.serviceForm.value.salonId = salonId.salonId
+    let userdata = this.getUserData();
+    if (userdata.userType != "superadmin") {
+      this.serviceForm.value.salonId = userdata.salonId;
+    }
+    else {
+      this.serviceForm.value.salonId = this.selectedSaloon;
+    }
     if (this.selectedFile) {
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
@@ -89,8 +142,21 @@ export class ServicesComponent implements OnInit {
         console.log(this.serviceForm)
         if (this.serviceForm.valid) {
           this._apiService.addservice(this.serviceForm.value).subscribe((res) => {
-            this.serviceslist.unshift(res);
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
+            if(res){
+              this.serviceslist.unshift(res);
+              this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
+              if (userdata.userType != "superadmin") {
+                this.loadData(userdata.salonId);
+              }
+              else {
+                this.loadData(+this.selectedSaloon);
+              }
+            }
+            else{
+              this.filteredServices.length = 0;
+              this.message = 'No Data Found'
+            }
+           
           });
         } else {
           console.log('Form is invalid');
@@ -102,6 +168,12 @@ export class ServicesComponent implements OnInit {
         this._apiService.addservice(this.serviceForm.value).subscribe((res)=>{
           this.serviceslist.unshift(res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
+          if (userdata.userType != "superadmin") {
+            this.loadData(userdata.salonId);
+          }
+          else {
+            this.loadData(+this.selectedSaloon);
+          }
         });
       } else {
         console.log('Form is invalid');
@@ -109,7 +181,8 @@ export class ServicesComponent implements OnInit {
     }
 
 
-    this.visible = false
+    this.visible = false;
+    
 
   }
 
@@ -129,6 +202,11 @@ export class ServicesComponent implements OnInit {
   addServices() {
     this.clearData();
     this.visible = true;
+    this.selectedFile = null;
+
+    this.serviceForm.patchValue({
+      status: true,
+    });
   }
 
   isInvalid(controlName: string): boolean {
@@ -181,6 +259,16 @@ export class ServicesComponent implements OnInit {
         this.serviceslist = res
         this.totalCount = res.length;
         console.log(this.serviceslist);
+        if(res){
+          this.filteredServices = [...this.serviceslist];
+        }
+        else{
+          this.filteredServices.length = 0
+          this.message = 'No Data Found';
+        }
+        
+      },err => {
+       this.message = 'No Data Found'
       });
     }
     else {
@@ -188,6 +276,16 @@ export class ServicesComponent implements OnInit {
         this.serviceslist = res
         this.totalCount = res.length;
         console.log(this.serviceslist);
+        if(res){
+          this.filteredServices = [...this.serviceslist];
+        }
+        else{
+          this.filteredServices.length = 0
+          this.message = 'No Data Found';
+        }
+      },err => {
+        this.message = "No Data Found";
+        this.filteredServices.length = 0;
       });
     }
 
@@ -197,10 +295,11 @@ export class ServicesComponent implements OnInit {
     this.selectedSaloon = selectedId ? Number(selectedId) : null;
     console.log('Selected Salon ID:', this.selectedSaloon);
     this.loadData(this.selectedSaloon);
-    this.isSuperAdmin = false;
+    this.showAddServiceButton = true;
   }
 
   ngOnInit(): void {
+    
     let userdata = this.getUserData();
     if (userdata.userType == "superadmin") {
       this._apiService.getSaloonList().subscribe((res) => {
@@ -217,7 +316,7 @@ export class ServicesComponent implements OnInit {
       price: [null, [Validators.required, Validators.min(0)]],
       servicePic: [],
       discountPrice: [null, [Validators.required, Validators.min(0)]],
-      status: [false, [Validators.required]],
+      status: [true, [Validators.required]],
       serviceType: ['', [Validators.required]]
     });
   }

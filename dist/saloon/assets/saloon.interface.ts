@@ -41,3 +41,16 @@ export interface Service {
     status: boolean;
     serviceType: string;
 }
+
+
+export interface Package {
+    packageId: number;
+    packageName: string;
+    packageLogo: string;  // Assuming packageLogo can be a URL or empty string
+    price: number;
+    discountPrice: number;
+    startDate: [number, number, number]; // Representing [year, month, day]
+    endDate: [number, number, number];   // Representing [year, month, day]
+    status: boolean;
+    services: number[]; // Array of service IDs
+  }

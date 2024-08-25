@@ -1,0 +1,28 @@
+/* Customize the card header and body */
+.bodyContainer{
+    background-image: url('../../assets/pic2.png') !important;
+    height: 88vh;
+    border-radius: 5px;
+    color: #f2f2f2;
+  }
+  .card-header {
+    background-color: #FED8B1;
+      color: #000000;
+    }
+    
+    .card-body {
+      background-color: #f8f9fa;
+    }
+    
+    .table th, .table td {
+      vertical-align: middle;
+    }
+    
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f2f2f2;
+    }
+    
+    .input-group {
+      margin-top: 20px;
+    }
+    
