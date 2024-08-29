@@ -32,6 +32,7 @@ import { ViewServiceComponent } from './custommer/custommer-service/view-service
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
     SidebarModule,
     CalendarModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
+    InputTextareaModule
   ],
   providers: [DialogService,ApiService,MessageService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

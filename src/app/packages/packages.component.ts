@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , HostBinding} from '@angular/core';
 import { ApiService } from '../api.service';
-import { Salon, Package } from '../../assets/saloon.interface';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Salon, Package, Service } from '../../assets/saloon.interface';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 import { ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./packages.component.css']
 })
 export class PackagesComponent implements OnInit {
-
+  @HostBinding('class.custom-dropdown-position') customDropdownPosition = true;
   constructor(private _apiService: ApiService,
     private fb: FormBuilder,
     private _exportToExcelService: ExportToExcelService,
@@ -44,6 +45,22 @@ export class PackagesComponent implements OnInit {
   selectedFile: any
   selectedFileUrl: any;
   message = '';
+  selectedServices: any;
+  package = {
+    packageId: null,
+    packageName: "",
+    packageLogo: "",
+    salonLogo: "",
+    price: null,
+    discountPrice: null,
+    startDate: "",
+    endDate: "",
+    status: true,
+    services: [],
+    salonId: null
+  };
+  demoImage: any;
+
 
   onOptionChange(event: any, value: string) {
     if (event.target.checked) {
@@ -67,6 +84,18 @@ export class PackagesComponent implements OnInit {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.demoImage = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
   }
 
   exportToExcel(): void {
@@ -74,23 +103,29 @@ export class PackagesComponent implements OnInit {
   }
 
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
+
+    const validationErrors = this.formValidator();
+    if (validationErrors) {
+      this.message = this.getValidationMessage(validationErrors);
+      return;
+    }
     let salonId = this.getUserData();
     let userdata = this.getUserData();
     if (userdata.userType != "superadmin") {
-      this.packageForm.value.salonId = userdata.salonId;
+      this.package.salonId = userdata.salonId;
     }
     else {
-      this.packageForm.value.salonId = this.selectedSaloon;
+      this.package.salonId = this.selectedSaloon;
     }
     if (this.selectedFile) {
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
-        this.packageForm.value.packageLogo = this.selectedFileUrl;
-        this.packageForm.value.services = this.selectedOptions;
+        this.package.packageLogo = this.selectedFileUrl;
+        this.package.services = this.selectedServices;
 
 
-        this._apiService.addPackages(this.packageForm.value).subscribe((res) => {
+        this._apiService.addPackages(this.package).subscribe((res) => {
           if (res) {
             this.serviceslist.unshift(res);
             if (userdata.userType != "superadmin") {
@@ -108,9 +143,9 @@ export class PackagesComponent implements OnInit {
         });
       });
     }
-    else {
-      if (true) {
-        this._apiService.addPackages(this.packageForm.value).subscribe((res) => {
+    else {    
+        this.package.services = this.selectedServices;
+        this._apiService.addPackages(this.package).subscribe((res) => {
           this.serviceslist.unshift(res);
           if (userdata.userType != "superadmin") {
             this.loadData(userdata.salonId);
@@ -119,9 +154,6 @@ export class PackagesComponent implements OnInit {
             this.loadData(+this.selectedSaloon);
           }
         });
-      } else {
-        console.log('Form is invalid');
-      }
     }
 
 
@@ -129,30 +161,29 @@ export class PackagesComponent implements OnInit {
 
 
   }
-  onEdit() {
-
+  onEdit(form: NgForm) {
+    const validationErrors = this.formValidator();
+    if (validationErrors) {
+      this.message = this.getValidationMessage(validationErrors);
+      return;
+    }
     let salonId = this.getUserData();
     let userdata = this.getUserData();
     if (userdata.userType != "superadmin") {
-      this.packageForm.value.salonId = userdata.salonId;
+      this.package.salonId = userdata.salonId;
     }
     else {
-      this.packageForm.value.salonId = this.selectedSaloon;
+      this.package.salonId = this.selectedSaloon;
     }
     if (this.selectedFile) {
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
-        this.packageForm.value.packageLogo = this.selectedFileUrl;
+        this.package.packageLogo = this.selectedFileUrl;
+        this.package.services = this.selectedServices;
+        this.package.packageId = this.editPackageForm.packageId;
+        this.package.salonLogo = this.editPackageForm.salonLogo;
+        this._apiService.updatePackageById(this.package).subscribe((res) => {
 
-        const formValues = this.packageForm.value;
-
-        formValues.startDate = this.formatDate(formValues.startDate);
-        formValues.endDate = this.formatDate(formValues.endDate);
-        this.packageForm.value.services = this.editPackageForm.services;
-
-        this.packageForm.value.packageId = this.editPackageForm.packageId;
-        this._apiService.updatePackageById(this.packageForm.value).subscribe((res) => {
-  
           this.editVisible = false
           if (userdata.userType != "superadmin") {
             this.loadData(userdata.salonId);
@@ -166,20 +197,11 @@ export class PackagesComponent implements OnInit {
       });
     }
     else {
-      const formValues = this.packageForm.value;
-
-      formValues.startDate = this.formatDate(formValues.startDate);
-      formValues.endDate = this.formatDate(formValues.endDate);
-      if (!this.packageForm.value.services) {
-        this.packageForm.value.services = this.editPackageForm.services;
-      }
-      else {
-
-      }
-      // this.packageForm.value.packageLogo = '';
-      // this.packageForm.value.salonLogo = '';
-      this.packageForm.value.packageId = this.editPackageForm.packageId;
-      this._apiService.updatePackageById(this.packageForm.value).subscribe((res) => {
+      this.package.services = this.selectedServices;
+      this.package.packageId = this.editPackageForm.packageId;
+      this.package.packageLogo = this.editPackageForm.packageLogo;
+      this.package.salonLogo = this.editPackageForm.salonLogo;
+      this._apiService.updatePackageById(this.package).subscribe((res) => {
 
         this.editVisible = false
         if (userdata.userType != "superadmin") {
@@ -225,19 +247,27 @@ export class PackagesComponent implements OnInit {
   };
   imgUrl = ''
   populateForm(data: any) {
-    this.packageForm.patchValue({
+    this.package = {
       packageName: data.packageName,
       price: data.price,
       discountPrice: data.discountPrice,
-      startDate: this.formatDate(data.startDate),
-      endDate: this.formatDate(data.endDate),
+      startDate: data.startDate,
+      endDate: data.endDate,
       status: data.status,
-      salonId: data.salonId
-    });
+      services: data.services,
+      salonId: data.salonId,
+      packageLogo: data.packageLogo,
+      salonLogo: data.salonLogo,
+      packageId: data.packageId
+    };
     this.imgUrl = data.packageLogo;
-
+    const editData = data.services;
     const dateStr = this.arrayToDateStr(data.startDate);
     this.packageForm.value.startDate = dateStr
+
+
+    this.selectedServices = editData.map((service: { serviceId: any; }) => service.serviceId);
+
   }
 
   arrayToDateStr(dateArray: number[]): string {
@@ -248,22 +278,30 @@ export class PackagesComponent implements OnInit {
   }
 
   clearData() {
-    this.packageForm.patchValue({
+    this.package = {
       packageName: '',
       price: null,
       discountPrice: null,
-      startDate: null,
-      endDate: null,
-      status: null,
-      salonId: null
-    });
+      startDate: '',
+      endDate: '',
+      status: false,
+      services: [],
+      salonId: null,
+      packageLogo: '',
+      salonLogo: '',
+      packageId: null
+    };
+    this.message = '';
+
+    this.selectedServices = [];
+    this.selectedFile = null;
   }
   onEditSubmit() { }
 
   addSaloon() {
     this.clearData();
     this.visible = true;
-
+    this.demoImage = null;
     this.packageForm.patchValue({
       status: true,
     });
@@ -279,19 +317,20 @@ export class PackagesComponent implements OnInit {
     this.userData = localStorage.getItem('userData');
     return JSON.parse(this.userData);
   }
+
   onCheckboxChange(e: any) {
-    const selectedServices: number[] = this.packageForm.get('services').value as number[];
+    this.selectedServices = this.packageForm.get('services').value as number[];
 
     if (e.target.checked) {
-      selectedServices.push(parseInt(e.target.value, 10));
+      this.selectedServices.push(parseInt(e.target.value, 10));
     } else {
-      const index = selectedServices.indexOf(parseInt(e.target.value, 10));
+      const index = this.selectedServices.indexOf(parseInt(e.target.value, 10));
       if (index > -1) {
-        selectedServices.splice(index, 1);
+        this.selectedServices.splice(index, 1);
       }
     }
 
-    this.packageForm.patchValue({ services: selectedServices });
+    this.packageForm.patchValue({ services: this.selectedServices });
   }
 
   loadData(saloonIdIfSuperAdmin: any) {
@@ -333,6 +372,83 @@ export class PackagesComponent implements OnInit {
 
   }
 
+  discountPriceValidator: ValidatorFn = (formGroup: AbstractControl): ValidationErrors | null => {
+    const price = formGroup.get('price')?.value;
+    const discountPrice = formGroup.get('discountPrice')?.value;
+
+    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice >= price) {
+      return { discountPriceInvalid: 'Discount price should be less than the regular price.' };
+    }
+    return null;
+  };
+
+  // Custom validator for date range
+  dateRangeValidator: ValidatorFn = (formGroup: AbstractControl): ValidationErrors | null => {
+    const startDate = formGroup.get('startDate')?.value;
+    const endDate = formGroup.get('endDate')?.value;
+
+    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+      return { dateRangeInvalid: 'Start date must be prior to end date.' };
+    }
+    return null;
+  };
+
+  // Form validator function to handle all validations
+  formValidator(): ValidationErrors | null {
+    const errors: ValidationErrors = {};
+
+    const packageName = this.package.packageName;
+    const price = this.package.price;
+    const discountPrice = this.package.discountPrice;
+    const startDate = this.package.startDate;
+    const endDate = this.package.endDate;
+
+    if (!packageName) {
+      errors['packageNameRequired'] = 'Package Name is required.';
+    }
+
+    if (price === null || price === '' || price < 0) {
+      errors['priceInvalid'] = 'Price is required and must be a non-negative number.';
+    }
+
+    if (discountPrice !== null && discountPrice < 0) {
+      errors['discountPriceInvalid'] = 'Discount Price must be a non-negative number.';
+    }
+
+    if (!startDate) {
+      errors['startDateRequired'] = 'Start Date is required.';
+    }
+
+    if (!endDate) {
+      errors['endDateRequired'] = 'End Date is required.';
+    }
+
+    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice > price) {
+      errors['discountPriceInvalid'] = 'Discount price should be less than the regular price.';
+    }
+
+    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+      errors['dateRangeInvalid'] = 'Start date must be prior to end date.';
+    }
+
+    if(this.selectedServices.length < 2){
+      errors['dateRangeInvalid'] = 'Select atleast 2 services';
+    }
+    
+
+    return Object.keys(errors).length ? errors : null;
+  }
+
+  getValidationMessage(errors: ValidationErrors): string {
+    if (errors['packageNameRequired']) return errors['packageNameRequired'];
+    if (errors['priceInvalid']) return errors['priceInvalid'];
+    if (errors['discountPriceInvalid']) return errors['discountPriceInvalid'];
+    if (errors['startDateRequired']) return errors['startDateRequired'];
+    if (errors['endDateRequired']) return errors['endDateRequired'];
+    if (errors['dateRangeInvalid']) return errors['dateRangeInvalid'];
+    if (errors['selectServiceInvalid']) return errors['selectServiceInvalid'];
+    return 'Please correct the errors in the form.';
+  }
 
   onSalonSelect(event: Event) {
     this.selectedId = (event.target as HTMLSelectElement).value;
@@ -366,12 +482,12 @@ export class PackagesComponent implements OnInit {
     this.packageForm = this.fb.group({
       packageName: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
-      discountPrice: [null, [Validators.required, Validators.min(0)]],
+      discountPrice: [null, [Validators.min(0)]],
       startDate: [null, Validators.required],
-      packageLogo: [null, Validators.required],
+      packageLogo: [null], // Optional
       endDate: [null, Validators.required],
       status: [true, Validators.required]
-    });
+    }, { validators: [this.discountPriceValidator, this.dateRangeValidator] });
   }
 
 }

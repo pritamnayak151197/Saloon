@@ -217,8 +217,28 @@
 
 /* Image preview styling */
 .image-preview img {
-  max-width: 100%;
-  height: 250px;
+  max-width: 200px;
+  height: auto;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer{
+  padding: 5%;
+}
+
+
+/* Target specific internal classes if the component library uses them */
+.custom-multiselect .p-multiselect-trigger {
+  width: 300px !important; /* Enforce width */
+}
+
+.custom-multiselect .p-multiselect-panel {
+  max-height: 150px !important; /* Enforce max-height */
+  overflow-y: auto !important; /* Add scrollbar */
+}
+
+.custom-multiselect .p-multiselect-items {
+  max-height: 150px !important; /* Enforce max-height */
+  overflow-y: auto !important; /* Add scrollbar */
 }

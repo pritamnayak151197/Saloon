@@ -6,31 +6,36 @@
         <h2 style="margin: 0; font-size: 24px;">Services List</h2>
         <span style="font-size: 18px;">Total count: {{filteredServices.length}}</span>
       </div>
-      <div *ngIf="isSuperAdmin"style="display: flex; gap: 10px; margin-top: 15px;">
-        <div  style="width: 300px;">
-          <select id="salon" class="gender-select" (change)="onSalonSelect($event)">
+      <div *ngIf="isSuperAdmin" style="display: flex; gap: 10px; margin-top: 15px;">
+        <div style="width: 300px;">
+          <select id="salon" class="gender-select2" (change)="onSalonSelect($event)">
             <option value="" disabled selected>Select a Salon</option>
             <option *ngFor="let salon of salons" [value]="salon.salonId">{{ salon.salonName }}</option>
           </select>
         </div>
-        
-        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText" (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px;">
-        <button *ngIf="showAddServiceButton" type="button" class="btn btn-success" (click)="exportToExcel()" style="padding: 10px 20px;">Export</button>
-        <button *ngIf="showAddServiceButton" type="button" class="btn btn-secondary" (click)="addServices()" style="padding: 10px 20px;">
+
+        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText"
+          (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px; margin-left: 10px;">
+        <button *ngIf="showAddServiceButton" type="button" class="btn btn-success" (click)="exportToExcel()"
+          style="padding: 10px 20px;">Export</button>
+        <button *ngIf="showAddServiceButton" type="button" class="btn btn-secondary" (click)="addServices()"
+          style="padding: 10px 20px;">
           <i class="fa-solid fa-plus"></i> Add Service
         </button>
       </div>
 
 
-      <div *ngIf="!isSuperAdmin"style="display: flex; gap: 10px; margin-top: 15px;">
-        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText" (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px;">
-        <button type="button" class="btn btn-success" (click)="exportToExcel()" style="padding: 10px 20px;">Export</button>
+      <div *ngIf="!isSuperAdmin" style="display: flex; gap: 10px; margin-top: 15px;">
+        <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchText"
+          (input)="filterServices()" style="flex: 1; border-radius: 5px; padding: 10px;">
+        <button type="button" class="btn btn-success" (click)="exportToExcel()"
+          style="padding: 10px 20px;">Export</button>
         <button type="button" class="btn btn-secondary" (click)="addServices()" style="padding: 10px 20px;">
           <i class="fa-solid fa-plus"></i> Add Service
         </button>
       </div>
     </div>
-  
+
     <div *ngIf="filteredServices.length > 0" class="card-body table-container" style="padding: 0;">
       <table class="table table-hover table-bordered">
         <thead class="thead-dark">
@@ -46,12 +51,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of filteredServices; let i = index" 
-              [class.table-active]="selectedCardId === item.serviceId"
-              [ngClass]="{'odd-row': i % 2 !== 0, 'even-row': i % 2 === 0}">
+          <tr *ngFor="let item of filteredServices; let i = index"
+            [class.table-active]="selectedCardId === item.serviceId"
+            [ngClass]="{'odd-row': i % 2 !== 0, 'even-row': i % 2 === 0}">
             <td>
-              <img [src]="item.servicePic" alt="Service Image" 
-                   style="height: 50px; width: 50px; border-radius: 50%;">
+              <img [src]="item.servicePic" alt="Service Image" style="height: 50px; width: 50px; border-radius: 50%;">
             </td>
             <td>{{ item.serviceName }}</td>
             <td>{{ item.price | currency:'INR' }}</td>
@@ -70,18 +74,22 @@
         </tbody>
       </table>
     </div>
-  
+
     <div *ngIf="filteredServices.length === 0" class="card-body text-center">
       <p>{{message}}</p>
     </div>
   </div>
-  
-  
-  
-  
+
+
+
+
 </div>
-<p-dialog header="Add New Service" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+<p-dialog header="Add New Service" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
   <div class="row">
+
+    <div *ngIf="message" class="alert alert-danger mt-2">
+      {{ message }}
+    </div>
     <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
       <div style="display: flex; gap: 10px;">
         <div class="mb-2">
@@ -89,9 +97,20 @@
           <input id="serviceName" formControlName="serviceName" type="text" class="form-control">
         </div>
         <div class="mb-2">
-          <label for="details">Details</label>
-          <input id="details" formControlName="details" class="form-control">
+          <div class="form-group">
+            <label for="gender">Service Type</label>
+            <select id="gender" formControlName="serviceType" class="gender-select">
+              <option value="" disabled>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
         </div>
+      </div>
+      <div class="mb-2">
+        <label for="details">Details</label>
+        <textarea style="height: 50px;" rows="5" cols="30" pInputTextarea formControlName="details"></textarea>
       </div>
 
       <div class="mb-2">
@@ -115,23 +134,9 @@
 
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" formControlName="serviceType" class="gender-select">
-              <option value="" disabled selected>Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          
-          
-        </div>
-
-        <div class="col-md-6" style="padding-top: 5%;">
-          <div class="mb-2">
+          <div>
             <label for="status">Status</label>
-            <input id="status" formControlName="status" type="checkbox"  style="margin-left: 10px;">
+            <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
           </div>
         </div>
       </div>
@@ -141,75 +146,92 @@
         <button type="button" class="btn btn-danger" (click)="visible = false">Cancel</button>
       </div>
     </form>
+
   </div>
 </p-dialog>
 
 
-<p-dialog header="Edit Service" [modal]="true" [(visible)]="editVisible" [style]="{ width: '28rem' }">
+<p-dialog header="Edit Service" [modal]="true" [(visible)]="editVisible" [style]="{ width: '45rem' }">
   <div class="row">
+    <div *ngIf="message" class="alert alert-danger mt-2">
+      {{ message }}
+    </div>
     <form [formGroup]="serviceForm" (ngSubmit)="onUpdate()">
-
-      <div class="mb-2">
-        <!-- <label for="servicePic">Service Picture</label> -->
-        <div style="display: flex; flex-direction: column; align-items: center;">
+      <div class="row">
+        <div class="col-md-4 imageContainer">
           <div class="image-preview mb-2">
             <img [src]="imgURL" alt="Service Image" class="img-fluid" />
           </div>
-          <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
-          <input *ngIf="imageInputVisible" type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
+         
         </div>
-      </div>
+        <div class="col-md-8">
 
-      <div style="display: flex; gap: 10px;">
-        <div class="mb-2">
-          <label for="serviceName">Service Name</label>
-          <input id="serviceName" formControlName="serviceName" type="text" class="form-control">
-        </div>
-        <div class="mb-2">
-          <label for="details">Details</label>
-          <input id="details" formControlName="details" class="form-control">
-        </div>
-      </div>
-
-      
-
-      <div style="display: flex; gap: 10px;" class="mb-2">
-        <div class="mb-2">
-          <label for="price">Price</label>
-          <input id="price" formControlName="price" type="number" class="form-control">
-        </div>
-
-        <div class="mb-2">
-          <label for="discountPrice">Discount Price</label>
-          <input id="discountPrice" formControlName="discountPrice" type="number" class="form-control">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" formControlName="serviceType" class="gender-select">
-              <option value="" disabled selected>Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="col-md-6" style="padding-top: 5%;">
           <div class="mb-2">
-            <label for="status">Status</label>
-            <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
+            <label for="servicePic">Service Picture</label>
+            <div style="display: flex; flex-direction: column;">
+              <input type="file" (change)="onFileSelected($event)" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="details">Details</label>
+            <textarea style="height: 50px;" rows="5" cols="30" pInputTextarea formControlName="details"></textarea>
+          </div>
+        
+          
+
+          <div style="display: flex; gap: 10px;">
+            <div class="mb-2">
+              <label for="serviceName">Service Name</label>
+              <input id="serviceName" formControlName="serviceName" type="text" class="form-control">
+            </div>
+            <div class="mb-2">
+
+              <div class="form-group">
+                <label for="gender">Service Type</label>
+                <select id="gender" formControlName="serviceType" class="gender-select">
+                  <option value="" disabled selected>Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <div style="display: flex; gap: 10px;" class="mb-2">
+            <div class="mb-2">
+              <label for="price">Price</label>
+              <input id="price" formControlName="price" type="number" class="form-control">
+            </div>
+
+            <div class="mb-2">
+              <label for="discountPrice">Discount Price</label>
+              <input id="discountPrice" formControlName="discountPrice" type="number" class="form-control">
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6" style="padding-top: 5%;">
+              <div class="mb-2">
+                <label for="status">Status</label>
+                <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2" style="margin-top: 5px;">
+            <button type="submit" class="btn btn-success">Update</button>
+            <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
           </div>
         </div>
       </div>
 
-      <div class="d-flex justify-content-end gap-2" style="margin-top: 5px;">
-        <button type="submit" class="btn btn-success">Update</button>
-        <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
-      </div>
+
     </form>
   </div>
 </p-dialog>

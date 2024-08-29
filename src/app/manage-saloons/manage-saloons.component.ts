@@ -39,6 +39,7 @@ export class ManageSaloonsComponent implements OnInit {
   filteredServices: Salon[] = [];
   searchText: string = '';
   selectedFile2: any
+  message = ''
   
 
   exportToExcel(): void {
@@ -97,9 +98,10 @@ export class ManageSaloonsComponent implements OnInit {
           this.responseDataSubmit = data;
           this.saloonList.push(this.responseDataSubmit.data);
           this.createAdmin = true;
+          this.loaddata();
         },
         error: (err) => {
-          console.error('Error occurred:', err);
+          this.message = err.error.message
         }
       });
       
@@ -111,6 +113,7 @@ export class ManageSaloonsComponent implements OnInit {
           this.responseDataSubmit = data;
           this.saloonList.push(this.responseDataSubmit.data);
           this.createAdmin = true;
+          this.loaddata();
         });
       }
     }
@@ -160,14 +163,38 @@ export class ManageSaloonsComponent implements OnInit {
   }
 
   onEdit(){
+    if (!this.selectedFile || !this.selectedFile2) {
     this.salonForm.value['salonId'] = this.saloonId2;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
       this.saloonList.push(this.responseDataSubmit.data);
       this.editSaloonData = false;
       this.loaddata();
+    }, err =>{
+      alert(err.error.message)
     });
-    
+  }
+  else{
+    if(this.selectedFile){
+      this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
+        this.selectedFile = res[0].url;
+      })
+    }
+    if(this.selectedFile2){
+      this._apiService.uploadImage(this.selectedFile2).subscribe((res: any) => {
+        this.selectedFile2 = res[0].url;
+      })
+    }
+    this.salonForm.value['salonId'] = this.saloonId2;
+    this.salonForm.value['salonLogo'] = this.selectedFile;
+    this.salonForm.value['qrCode'] = this.selectedFile;
+    this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
+      this.responseDataSubmit = data;
+      this.saloonList.push(this.responseDataSubmit.data);
+      this.editSaloonData = false;
+      this.loaddata();
+    });
+  }
   }
  
   editSaloon(id : any){
@@ -224,6 +251,7 @@ export class ManageSaloonsComponent implements OnInit {
     this.password = '';
     this.selectedFile = null;
     this.selectedFile2 = null;
+    this.message = '';
   }
   saloonId = null;
   onRightClick(event: MouseEvent, salonId: any) {

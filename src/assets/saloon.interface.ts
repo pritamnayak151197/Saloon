@@ -52,7 +52,7 @@ export interface Package {
     startDate: [number, number, number]; // Representing [year, month, day]
     endDate: [number, number, number];   // Representing [year, month, day]
     status: boolean;
-    services: number[]; // Array of service IDs
+    services: Service[]; // Array of service IDs
   }
 
   export interface Service {

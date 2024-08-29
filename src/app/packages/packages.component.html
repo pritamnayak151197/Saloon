@@ -53,7 +53,7 @@
         <span style="font-size: 18px;">Total count: {{filteredServices.length}}</span>
       </div>
       <div *ngIf="isSuperAdmin" style="display: flex; gap: 10px; margin-top: 15px;">
-        <div  style="width: 300px;">
+        <div style="width: 300px;">
           <select id="salon" class="gender-select" (change)="onSalonSelect($event)">
             <option value="" disabled selected>Select a Salon</option>
             <option *ngFor="let salon of salons" [value]="salon.salonId">{{ salon.salonName }}</option>
@@ -89,7 +89,7 @@
             <th>package Name</th>
             <th>Price</th>
             <th>Discount Price</th>
-            <th>Package Id</th>
+            <th>Services</th>
             <th>Start Date</th>
             <th>End Date</th>
 
@@ -107,7 +107,12 @@
             <td>{{ item.packageName }}</td>
             <td>{{ item.price | currency:'INR' }}</td>
             <td>{{ item.discountPrice | currency:'INR' }}</td>
-            <td>{{ item.packageId }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let service of item.services" style="color: #1E2A5E;">{{ service.serviceName }}</li>
+              </ul>
+            </td>
+             
             <td>{{ item.startDate}}</td>
             <td>{{ item.endDate}}</td>
 
@@ -124,181 +129,145 @@
       </table>
     </div>
 
-    <div *ngIf="filteredServices.length === 0" class="card-body text-center">
+    <!-- <div *ngIf="filteredServices.length === 0" class="card-body text-center">
       <p>{{message}}</p>
-    </div>
+    </div> -->
   </div>
 
 </div>
-<p-dialog header="Add New Package" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+<p-dialog header="Add New Package" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
   <div class="row">
-    <form [formGroup]="packageForm" (ngSubmit)="onSubmit()">
-      <div class="mb-2">
+    <div *ngIf="message" class="alert alert-danger mt-2">
+      {{ message }}
+    </div>
+    <form #packageForm="ngForm" (ngSubmit)="onSubmit(packageForm)">
+      <div style="display: flex; flex-direction: column; align-items: center;" class="mb-3">
+        <!-- <div style="height: 150px; width: 150px;">
+          <img [src]="demoImage" alt="Service Image" class="img-fluid"  />
+        </div> -->
+        <!-- <label for="servicePic">Package Image</label> -->
+        <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
+      </div>
+
+      <div class="mb-3">
         <label for="packageName">Package Name:</label>
-        <input class="form-control" id="packageName" formControlName="packageName" type="text">
+        <input class="form-control" id="packageName" name="packageName" [(ngModel)]="package.packageName" type="text" required>
       </div>
-
-
-      <div class="mb-2">
-        <label for="servicePic">Package Picture</label>
-        <div style="display: flex; flex-direction: column;">
-          <input type="file" (change)="onFileSelected($event)" class="form-control" required />
-        </div>
-      </div>
+    
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="price">Price:</label>
-          <input class="form-control" id="price" formControlName="price" type="number">
+          <input class="form-control" id="price" name="price" [(ngModel)]="package.price" type="number" required>
         </div>
-
+    
         <div class="col-md-6">
           <label for="discountPrice">Discount Price:</label>
-          <input class="form-control" id="discountPrice" formControlName="discountPrice" type="number">
+          <input class="form-control" id="discountPrice" name="discountPrice" [(ngModel)]="package.discountPrice" type="number">
         </div>
       </div>
-
+    
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="startDate">Start Date:</label>
-          <input class="form-control" id="startDate" formControlName="startDate" type="date" style="width: 110%;">
+          <input class="form-control" id="startDate" name="startDate" [(ngModel)]="package.startDate" type="date" required>
         </div>
-
+    
         <div class="col-md-6">
           <label for="endDate">End Date:</label>
-          <input class="form-control" id="endDate" formControlName="endDate" type="date">
+          <input class="form-control" id="endDate" name="endDate" [(ngModel)]="package.endDate" type="date" required>
         </div>
       </div>
-
-
-
-      <!-- <div class="mb-2">
-        <div class="dropdown">
-          <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span>Select Options</span>
-          </div>
-          <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li *ngFor="let option of serviceData">
-              <div class="form-check custom-dropdown-item">
-                <input class="form-check-input" type="checkbox"
-                  [value]="option.serviceId"
-                  (change)="onOptionChange($event, option.serviceId)"
-                  [checked]="selectedOptions.includes(option.serviceId)">
-                <label class="form-check-label">
-                  {{ option.serviceName }}
-                </label>
-              </div>
-            </li>
-          </ul>
-            
-        </div>
-
-
-        <p>Selected Options: {{ selectedOptions | json }}</p>
-
-      </div> -->
-
-      <p-multiSelect 
-  [options]="serviceData.serviceName" 
-  [(ngModel)]="serviceData.serviceId" 
-  optionLabel="name" 
-  optionValue="id" 
-  placeholder="Select Services">
-</p-multiSelect>
-
-      <div>
+  
+      <div class="col-md-6">
+        <p-multiSelect [options]="serviceData" optionLabel="serviceName" optionValue="serviceId" display="chip" 
+        [(ngModel)]="selectedServices" name="selectedServices" placeholder="Select Services" class="custom-multiselect" [showClear]="true"></p-multiSelect>
+      </div>
+      
+    
+      <div class="col-md-6">
         <label for="status">Status</label>
-        <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
+        <input id="status" name="status" [(ngModel)]="package.status" type="checkbox" style="margin-left: 10px;">
       </div>
+    
       <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
         <button type="submit" class="btn btn-success">Submit</button>
         <button type="button" class="btn btn-danger" (click)="visible = false">Cancel</button>
       </div>
     </form>
+    
 
   </div>
 
 </p-dialog>
 
-<p-dialog header="Edit Package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '30rem' }">
+<p-dialog header="Edit Package" [modal]="true" [(visible)]="editVisible" [style]="{ width: '45rem' }">
   <div class="row">
-    <form [formGroup]="packageForm" (ngSubmit)="onEdit()">
-
-
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <div class="image-preview mb-2">
-          <img [src]="imgUrl" alt="Service Image" class="img-fluid" />
-        </div>
-        <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
-         <label for="servicePic">Package Image</label>
-        <input type="file" (change)="onFileSelected($event)" class="form-control mt-2"/>
-      </div>
-
-      <div class="mb-2">
-        <label for="packageName">Package Name:</label>
-        <input class="form-control" id="packageName" formControlName="packageName" type="text">
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="price">Price:</label>
-          <input class="form-control" id="price" formControlName="price" type="number">
-        </div>
-
-        <div class="col-md-6">
-          <label for="discountPrice">Discount Price:</label>
-          <input class="form-control" id="discountPrice" formControlName="discountPrice" type="number">
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="startDate">Start Date:</label>
-          <input class="form-control" id="startDate" formControlName="startDate" type="date" style="width: 110%;">
-        </div>
-
-        <div class="col-md-6">
-          <label for="endDate">End Date:</label>
-          <input class="form-control" id="endDate" formControlName="endDate" type="date">
-        </div>
-      </div>
-
-
-
-      <div class="mb-2">
-        <div class="dropdown">
-          <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            <span>Select Options</span>
+    <div *ngIf="message" class="alert alert-danger mt-2">
+      {{ message }}
+    </div>
+    <form #packageForm="ngForm" (ngSubmit)="onEdit(packageForm)">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="image-preview imageContainer mb-2">
+            <img [src]="imgUrl" alt="Service Image" class="img-fluid" />
           </div>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li *ngFor="let option of serviceData">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" [value]="option.serviceId"
-                  (change)="onOptionChange($event, option.serviceId)"
-                  [checked]="selectedOptions.includes(option.serviceId)">
-                <label class="form-check-label">
-                  {{ option.serviceName }}
-                </label>
-              </div>
-            </li>
-          </ul>
-          
         </div>
-
-
-
-
-        <p>Selected Options: {{ selectedOptions | json }}</p>
-
+        <div class="col-md-7">
+          <div style="display: flex; flex-direction: column;">
+       
+            <label for="servicePic" style="margin-top: 5px;">Package Image</label>
+            <input type="file" (change)="onFileSelected($event)" style="margin-top: 5px;" class="form-control mt-2" />
+          </div>
+    
+          <div class="mb-2"  style="margin-top: 10px;">
+            <label for="packageName">Package Name:</label>
+            <input class="form-control" id="packageName" name="packageName" [(ngModel)]="package.packageName" type="text"
+              required>
+          </div>
+    
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="price">Price:</label>
+              <input class="form-control" id="price" name="price" [(ngModel)]="package.price" type="number" required>
+            </div>
+    
+            <div class="col-md-6">
+              <label for="discountPrice">Discount Price:</label>
+              <input class="form-control" id="discountPrice" name="discountPrice" [(ngModel)]="package.discountPrice"
+                type="number">
+            </div>
+          </div>
+    
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="startDate">Start Date:</label>
+              <input class="form-control" id="startDate" name="startDate" [(ngModel)]="package.startDate" type="date"
+                required>
+            </div>
+    
+            <div class="col-md-6">
+              <label for="endDate">End Date:</label>
+              <input class="form-control" id="endDate" name="endDate" [(ngModel)]="package.endDate" type="date" required>
+            </div>
+          </div>
+    
+          <p-multiSelect [options]="serviceData" optionLabel="serviceName" optionValue="serviceId"
+            [(ngModel)]="selectedServices" name="selectedServices" placeholder="Select Services"></p-multiSelect>
+    
+          <div class="mt-3">
+            <label for="status">Status:</label>
+            <input id="status" name="status" [(ngModel)]="package.status" type="checkbox" style="margin-left: 10px;">
+          </div>
+    
+          <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
+            <button type="submit" class="btn btn-success" [disabled]="!packageForm.valid">Submit</button>
+            <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label for="status">Status:</label>
-        <input id="status" formControlName="status" type="checkbox" style="margin-left: 10px;">
-      </div>
-      <div class="d-flex justify-content-end gap-2" style="margin-top: 10px;">
-        <button type="submit" class="btn btn-success">Submit</button>
-        <button type="button" class="btn btn-danger" (click)="editVisible = false">Cancel</button>
-      </div>
+     
+
     </form>
 
   </div>

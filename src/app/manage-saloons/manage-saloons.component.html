@@ -10,9 +10,9 @@
           <button class="btn btn-secondary" style="margin-left: auto;" (click)="addSaloon()"><i
               class="fa-solid fa-plus"></i></button>
         </div>
-        <div style="display: flex; padding: 5px;">
+        <div style="padding: 5px;">
           <span style="font-size: 20px; font-weight: 700; color: #FFFFFF;">Total Salons on Platform</span>
-          <h4 style="margin-left: 220px; font-size: 20px; font-weight: 800; color: #FFFFFF;">{{totalCount}}</h4>
+          <h4 style="font-size: 20px; font-weight: 800; color: #FFFFFF; float: right;">{{totalCount}}</h4>
         </div>
         <div class="card" style="margin-bottom: 5px;" *ngFor="let item of filteredServices; let i = index"
           (contextmenu)="onRightClick($event, item.salonId)" (click)="handleCardClick(item.salonId)"
@@ -140,6 +140,10 @@
   <form [formGroup]="salonForm" (ngSubmit)="onSubmit()" *ngIf="!createAdmin">
     <div class="container">
       <div class="row">
+
+        <div *ngIf="message" class="alert alert-danger mt-2">
+          {{ message }}
+        </div>
         <!-- <div class="col-md-6 mb-3">
           <label for="salonId" class="form-label">Salon ID:</label>
           <input id="salonId" formControlName="salonId" type="number" class="form-control" [class.is-invalid]="isInvalid('salonId')">
