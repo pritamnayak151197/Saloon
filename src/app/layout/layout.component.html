@@ -74,14 +74,14 @@
     </p>
     <ul class="menu" style="margin-top: 5px;">
       <li class="menu-items" [class.active]="selectedItem === 'item5'" routerLink="Bookings"><a
-        (click)="selectItem('item5')"><i class="fa-solid fa-bars-progress"></i> Bookings</a></li>
+          (click)="selectItem('item5')"><i class="fa-solid fa-bars-progress"></i> Bookings</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item2'" routerLink="Saloons"><a
           (click)="selectItem('item2')"><i class="fa-solid fa-bars-progress"></i> Manage</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item3'" routerLink="Services"><a
           (click)="selectItem('item3')"><i class="fa-solid fa-cube"></i> Services</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item4'" routerLink="Packages"><a
           (click)="selectItem('item4')"><i class="fa-solid fa-cubes"></i> Package</a></li>
-          <!-- <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="History"><a
+      <!-- <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="History"><a
             (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> History</a></li> -->
       <li style="bottom: 0; cursor: pointer;" (click)="logout()"><a><i class="fa-solid fa-arrow-right-from-bracket"></i>
           Log Out</a></li>
@@ -166,8 +166,8 @@
           (click)="selectItem('item3')"><i class="fa-solid fa-cube"></i> Services</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item4'" routerLink="Packages"><a
           (click)="selectItem('item4')"><i class="fa-solid fa-cubes"></i> Package</a></li>
-          <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="History"><a
-            (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Bookings</a></li>
+      <li class="menu-items" [class.active]="selectedItem === 'item1'" routerLink="History"><a
+          (click)="selectItem('item1')"><i class="fa-solid fa-table-columns"></i> Bookings</a></li>
       <li style="bottom: 0; cursor: pointer;" (click)="logout()"><a><i class="fa-solid fa-arrow-right-from-bracket"></i>
           Log Out</a></li>
     </ul>
@@ -179,93 +179,101 @@
         <!-- <h3 *ngIf="isAdmin">{{adminSalonData.name}}</h3> -->
         <!-- <button (click)="editSaloon()">editSaloonData</button> -->
         <div *ngIf="isAdmin">
-          <img [src]="saloonLogo" alt="Profile Picture" class="profile-pic" (click)="editSaloon()">
+          <img [src]="saloonLogo" alt="Profile Picture" class="profile-pic">
 
-          <h5>{{adminSalonData.salonName}}</h5>
+          <h5 style="font-family: monospace;">{{adminSalonData.salonName | titlecase}}</h5>
         </div>
 
         <div style="margin-left: auto;">
-
-          <div class="notification-bell" (click)="toggleDropdown()">
-            <span class="bell-icon">
-              🔔
-              <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
-            </span>
-            <div class="notification-dropdown" *ngIf="dropdownVisible">
-              <div>
-                <button class="close-btn" (click)="toggleDropdown($event)"
-                  style="float: inline-end; margin-bottom: 20px;">✖</button>
-              </div>
-              <div *ngFor="let notification of notifications" (click)="markAsRead(notification)">
-                <div class="card">
-                  <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
-                  <span style="margin-left: auto; font-size: small;">{{ notification.timestamp | date:'short' }}</span>
+          <div style="display: flex; gap: 10px;">
+            <div class="notification-bell" (click)="toggleDropdown()">
+              <span class="bell-icon">
+                🔔
+                <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+              </span>
+              <div class="notification-dropdown" *ngIf="dropdownVisible">
+                <div>
+                  <button class="close-btn" (click)="toggleDropdown($event)"
+                    style="float: inline-end; margin-bottom: 20px;">✖</button>
                 </div>
+                <div *ngFor="let notification of notifications" (click)="markAsRead(notification)">
+                  <div class="card">
+                    <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
+                    <span style="margin-left: auto; font-size: small;">{{ notification.timestamp | date:'short'
+                      }}</span>
+                  </div>
 
+                </div>
               </div>
             </div>
+
+            <div *ngIf="isAdmin" style="display: flex; gap: 10px; ">
+              <!-- <div class="profile-placeholder" > -->
+                <i class="fa-solid fa-user-pen profile-placeholder" (click)="editSaloon()"></i>
+              <!-- </div> -->
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
 
-    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="editSaloonData" [style]="{ width: '50rem' }">
-      <form [formGroup]="salonForm" (ngSubmit)="onEdit()">
-        <div class="container">
-          <div class="row">
-            <!-- <div class="col-md-6 mb-3">
+      <p-dialog header="Edit Profile" [modal]="true" [(visible)]="editSaloonData" [style]="{ width: '50rem' }">
+        <form [formGroup]="salonForm" (ngSubmit)="onEdit()">
+          <div class="container">
+            <div class="row">
+              <!-- <div class="col-md-6 mb-3">
                 <label for="salonId" class="form-label">Salon ID:</label>
                 <input id="salonId" formControlName="salonId" type="number" class="form-control" [class.is-invalid]="isInvalid('salonId')">
               </div> -->
 
-            <div class="col-md-6 mb-3">
-              <!-- <label for="servicePic">Service Picture</label> -->
-              <div style="display: flex; flex-direction: column; align-items: center;">
-                <div class="image-preview mb-2">
-                  <img [src]="saloonLogo" alt="Service Image" class="img-fluid" />
+              <div class="col-md-6 mb-3">
+                <!-- <label for="servicePic">Service Picture</label> -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div class="image-preview mb-2">
+                    <img [src]="saloonLogo" alt="Service Image" class="img-fluid" />
+                  </div>
+                  <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
+                  <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
                 </div>
-                <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
-                <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
               </div>
-            </div>
 
-            <div class="col-md-6 mb-3">
-              <!-- <label for="servicePic">Service Picture</label> -->
-              <div style="display: flex; flex-direction: column; align-items: center;">
-                <div class="image-preview mb-2">
-                  <img [src]="qrCode" alt="Service Image" class="img-fluid" />
+              <div class="col-md-6 mb-3">
+                <!-- <label for="servicePic">Service Picture</label> -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div class="image-preview mb-2">
+                    <img [src]="qrCode" alt="Service Image" class="img-fluid" />
+                  </div>
+                  <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
+                  <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
                 </div>
-                <!-- <button type="button" class="btn btn-primary" (click)="changeImage()">Change Image</button> -->
-                <input type="file" (change)="onFileSelected($event)" class="form-control mt-2" />
               </div>
-            </div>
 
-            <div class="col-md-6 mb-3">
-              <label for="salonName" class="form-label">Salon Name:</label>
-              <input id="salonName" formControlName="salonName" type="text" class="form-control"
-                [class.is-invalid]="isInvalid('salonName')">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="phone" class="form-label">Phone:</label>
-              <input id="phone" formControlName="phone" type="text" class="form-control"
-                [class.is-invalid]="isInvalid('phone')">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="address" class="form-label">Address:</label>
-              <input id="address" formControlName="address" type="text" class="form-control"
-                [class.is-invalid]="isInvalid('address')">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="addressUrl" class="form-label">Address URL:</label>
-              <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control"
-                [class.is-invalid]="isInvalid('addressUrl')">
-            </div>
-            <!-- <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-3">
+                <label for="salonName" class="form-label">Salon Name:</label>
+                <input id="salonName" formControlName="salonName" type="text" class="form-control"
+                  [class.is-invalid]="isInvalid('salonName')">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone:</label>
+                <input id="phone" formControlName="phone" type="text" class="form-control"
+                  [class.is-invalid]="isInvalid('phone')">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <input id="address" formControlName="address" type="text" class="form-control"
+                  [class.is-invalid]="isInvalid('address')">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="addressUrl" class="form-label">Address URL:</label>
+                <input id="addressUrl" formControlName="addressUrl" type="text" class="form-control"
+                  [class.is-invalid]="isInvalid('addressUrl')">
+              </div>
+              <!-- <div class="col-md-6 mb-3">
                 <label for="salonLogo" class="form-label">Salon Logo:</label>
                 <input id="salonLogo" formControlName="salonLogo" type="text" class="form-control"
                   [class.is-invalid]="isInvalid('salonLogo')">
               </div> -->
-            <!-- <div class="col-md-6 mb-3">
+              <!-- <div class="col-md-6 mb-3">
                 <label for="registeredOn" class="form-label">Registered On:</label>
                 <input id="registeredOn" formControlName="registeredOn" type="date" class="form-control"
                   [class.is-invalid]="isInvalid('registeredOn')">
@@ -297,21 +305,21 @@
                 <input id="membership" style="margin-left: 5px;" formControlName="membership" type="checkbox"
                   class="form-check-input" [class.is-invalid]="isInvalid('membership')">
               </div> -->
-            <!-- <div class="col-md-6 mb-3">
+              <!-- <div class="col-md-6 mb-3">
                 <label for="qrCode" class="form-label">QR Code:</label>
                 <input id="qrCode" formControlName="qrCode" type="text" class="form-control"
                   [class.is-invalid]="isInvalid('qrCode')">
               </div> -->
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="submit" class="btn btn-success" [disabled]="!salonForm.valid">Submit</button>
+              <button type="button" class="btn btn-danger" (click)="editSaloonData = false">Cancel</button>
+            </div>
           </div>
-          <div class="d-flex justify-content-end gap-2">
-            <button type="submit" class="btn btn-success" [disabled]="!salonForm.valid">Submit</button>
-            <button type="button" class="btn btn-danger" (click)="editSaloonData = false">Cancel</button>
-          </div>
-        </div>
-      </form>
-    </p-dialog>
+        </form>
+      </p-dialog>
 
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
+    </div>
+
   </div>
-
-</div>

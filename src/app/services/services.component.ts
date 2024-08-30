@@ -149,7 +149,7 @@ export class ServicesComponent implements OnInit {
         this.serviceForm.value.servicePic = this.selectedFileUrl;
 
         console.log(this.serviceForm)
-        if (this.serviceForm.valid) {
+
           this._apiService.addservice(this.serviceForm.value).subscribe((res) => {
             if (res) {
               this.serviceslist.unshift(res);
@@ -167,9 +167,6 @@ export class ServicesComponent implements OnInit {
             }
 
           });
-        } else {
-          console.log('Form is invalid');
-        }
       });
     }
     else {
@@ -366,11 +363,11 @@ export class ServicesComponent implements OnInit {
       errors['priceInvalid'] = 'Price is required and must be a non-negative number.';
     }
 
-    if (discountPrice !== null || discountPrice !== '' || discountPrice < 0) {
+    if (discountPrice < 0) {
       errors['discountPriceInvalid'] = 'Discount Price must be a non-negative number.';
     }
 
-    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice > price) {
+    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice >= price) {
       errors['discountPriceInvalid'] = 'Discount price should be less than the regular price.';
     }
 

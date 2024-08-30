@@ -195,3 +195,22 @@ h5 {
   border-radius: 50%; /* Makes the image circular */
   object-fit: cover; /* Ensures the image covers the area without distortion */
 }
+
+
+.profile-placeholder {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+
+.profile-placeholder:hover{
+  color: #007bff;
+}
+

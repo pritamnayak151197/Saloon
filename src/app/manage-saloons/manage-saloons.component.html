@@ -80,30 +80,40 @@
           </div>
         </div>
         <hr>
-        <h3>Service List</h3>
+        <h1 style="font-size: 30px; font-weight: 600;">Service List</h1>
+        <!-- <h3>Service List</h3> -->
         <h3></h3>
         <div class="card-container" style="margin-top: 3%;">
           <div class="card service-card" *ngFor="let service of saloonData.services">
             <div class="card-header">
-              <span>{{service.serviceName | titlecase}}</span>
+              <img class="service-image" [src]="service.servicePic" alt="{{service.serviceName}}">
+              <div class="header-content">
+                <h2 class="service-title">{{service.serviceName | titlecase}}</h2>
+                <span class="service-id">Service ID: {{service.serviceId}}</span>
+              </div>
             </div>
             <div class="card-body">
-              <span class="label">Service Id:</span>
-              <span class="value">{{service.serviceId}}</span> <br>
-
-              <span class="label">Service Details:</span>
-              <span class="value">{{service.details}}</span> <br>
-
-              <span class="label">Price:</span>
-              <span class="value">{{service.price}}</span> <br>
-
-              <span class="label">Discount:</span>
-              <span class="value">{{service.discountPrice}}</span> <br>
-
-              <span class="label">Service Type:</span>
-              <span class="value">{{service.serviceType}}</span> <br>
+              <div class="details">
+                <div class="detail-item">
+                  <span class="label">Service Details:</span>
+                  <span class="value">{{service.details}}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Price:</span>
+                  <span class="value">{{service.price}}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Discount:</span>
+                  <span class="value">{{service.discountPrice}}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Service Type:</span>
+                  <span class="value">{{service.serviceType}}</span>
+                </div>
+              </div>
             </div>
           </div>
+          
         </div>
         <hr>
         <h3>Customer List</h3>
@@ -227,7 +237,7 @@
     <h5>Create Admin</h5>
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label">User Name:</label>
+        <label class="form-label">Email:</label>
         <input #userNameInput type="text" class="form-control">
       </div>
       <div class="col-md-6 mb-3">

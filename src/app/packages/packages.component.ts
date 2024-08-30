@@ -423,7 +423,7 @@ export class PackagesComponent implements OnInit {
       errors['endDateRequired'] = 'End Date is required.';
     }
 
-    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice > price) {
+    if (discountPrice !== null && discountPrice !== '' && price !== null && price !== '' && discountPrice >= price) {
       errors['discountPriceInvalid'] = 'Discount price should be less than the regular price.';
     }
 

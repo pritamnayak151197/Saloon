@@ -137,14 +137,7 @@ export class ManageSaloonsComponent implements OnInit {
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
     this._apiService.uploadImage(this.selectedFile).subscribe((res: any) =>{
-      this.salonForm.value = this.saloonData;
-
-      this.salonForm.value['salonId'] = this.saloonId2;
-      this.salonForm.value['salonLogo'] = res[0].url;
-      this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
-        this.responseDataSubmit = data;
-        this.saloonList.push(this.responseDataSubmit.data);
-      });
+      this.saloonLogo = res;
     })
   }
 
@@ -152,19 +145,16 @@ export class ManageSaloonsComponent implements OnInit {
     this.selectedFile2 = event.target.files[0];
 
     this._apiService.uploadImage(this.selectedFile2).subscribe((res: any) =>{
-      this.salonForm.value = this.saloonData;
-      this.salonForm.value['salonId'] = this.saloonId2;
-      this.salonForm.value['qrCode'] = res[0].url;
-      this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
-        this.responseDataSubmit = data;
-        this.saloonList.push(this.responseDataSubmit.data);
-      });
+      this.qrCode = res;
     })
   }
 
   onEdit(){
+
     if (!this.selectedFile || !this.selectedFile2) {
     this.salonForm.value['salonId'] = this.saloonId2;
+    this.salonForm.value['salonLogo'] = this.selectedFile;
+    this.salonForm.value['qrCode'] = this.selectedFile;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
       this.saloonList.push(this.responseDataSubmit.data);
@@ -175,19 +165,14 @@ export class ManageSaloonsComponent implements OnInit {
     });
   }
   else{
-    if(this.selectedFile){
-      this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
-        this.selectedFile = res[0].url;
-      })
+    if(this.saloonLogo){
+      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
     }
-    if(this.selectedFile2){
-      this._apiService.uploadImage(this.selectedFile2).subscribe((res: any) => {
-        this.selectedFile2 = res[0].url;
-      })
+    if(this.qrCode){
+      this.salonForm.value['qrCode'] = this.qrCode[0].url;
     }
     this.salonForm.value['salonId'] = this.saloonId2;
-    this.salonForm.value['salonLogo'] = this.selectedFile;
-    this.salonForm.value['qrCode'] = this.selectedFile;
+    this.salonForm.value['services'] = this.selectedFile;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
       this.saloonList.push(this.responseDataSubmit.data);
@@ -211,8 +196,8 @@ export class ManageSaloonsComponent implements OnInit {
     return `${d.getFullYear()}-${month}-${day}`;
   }
 
-  saloonLogo = '';
-  qrCode = '';
+  saloonLogo: any;;
+  qrCode: any;
   populateForm(data: any) {
     this.salonForm.patchValue({
       salonName: data.salonName,
@@ -227,7 +212,7 @@ export class ManageSaloonsComponent implements OnInit {
       coupon: data.coupon,
       membership: data.membership
     });
-
+    console.log(this.salonForm.value)
     this.saloonLogo = data.salonLogo;
     this.qrCode = data.qrCode;
   }
