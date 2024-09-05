@@ -74,7 +74,7 @@
     </p>
     <ul class="menu" style="margin-top: 5px;">
       <li class="menu-items" [class.active]="selectedItem === 'item5'" routerLink="Bookings"><a
-          (click)="selectItem('item5')"><i class="fa-solid fa-bars-progress"></i> Bookings</a></li>
+          (click)="selectItem('item5')"><i class="fa-solid fa-bars-progress"></i> Dashboard</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item2'" routerLink="Saloons"><a
           (click)="selectItem('item2')"><i class="fa-solid fa-bars-progress"></i> Manage</a></li>
       <li class="menu-items" [class.active]="selectedItem === 'item3'" routerLink="Services"><a
@@ -175,47 +175,41 @@
   <div style="margin-left: 180px;">
     <div>
 
-      <div class="rounded-top" style="display: flex; margin: 6px;">
-        <!-- <h3 *ngIf="isAdmin">{{adminSalonData.name}}</h3> -->
-        <!-- <button (click)="editSaloon()">editSaloonData</button> -->
-        <div *ngIf="isAdmin">
-          <img [src]="saloonLogo" alt="Profile Picture" class="profile-pic">
-
-          <h5 style="font-family: monospace;">{{adminSalonData.salonName | titlecase}}</h5>
+      <div class="header-container">
+        <!-- Left Section: Admin Info -->
+        <div class="header-left">
+          <div *ngIf="isAdmin" class="admin-info">
+            <img [src]="saloonLogo" alt="Profile Picture" class="profile-pic">
+            <h5 class="salon-name">{{adminSalonData.salonName | titlecase}}</h5>
+          </div>
         </div>
-
-        <div style="margin-left: auto;">
-          <div style="display: flex; gap: 10px;">
+      
+        <!-- Right Section: Notifications and Profile Actions -->
+        <div *ngIf="isAdmin" class="header-right">
+          <div class="notification-container">
             <div class="notification-bell" (click)="toggleDropdown()">
               <span class="bell-icon">
                 🔔
                 <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
               </span>
               <div class="notification-dropdown" *ngIf="dropdownVisible">
-                <div>
-                  <button class="close-btn" (click)="toggleDropdown($event)"
-                    style="float: inline-end; margin-bottom: 20px;">✖</button>
-                </div>
+                <button class="close-btn" (click)="toggleDropdown($event)">✖</button>
                 <div *ngFor="let notification of notifications" (click)="markAsRead(notification)">
-                  <div class="card">
+                  <div class="notification-card">
                     <p [ngClass]="{'unread': !notification.read}">{{ notification.message }}</p>
-                    <span style="margin-left: auto; font-size: small;">{{ notification.timestamp | date:'short'
-                      }}</span>
+                    <span class="notification-timestamp">{{ notification.timestamp | date:'short' }}</span>
                   </div>
-
                 </div>
               </div>
             </div>
-
-            <div *ngIf="isAdmin" style="display: flex; gap: 10px; ">
-              <!-- <div class="profile-placeholder" > -->
-                <i class="fa-solid fa-user-pen profile-placeholder" (click)="editSaloon()"></i>
-              <!-- </div> -->
-            </div>
-
+          </div>
+      
+          <div class="profile-actions">
+            <i class="fa-solid fa-user-pen profile-icon" (click)="editSaloon()"></i>
           </div>
         </div>
       </div>
+      
 
       <p-dialog header="Edit Profile" [modal]="true" [(visible)]="editSaloonData" [style]="{ width: '50rem' }">
         <form [formGroup]="salonForm" (ngSubmit)="onEdit()">

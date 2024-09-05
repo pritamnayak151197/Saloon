@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { PrefixService } from '../prefix.service';
 
 
 @Component({
@@ -15,10 +16,11 @@ export class CustommerLoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private router: Router,
-    private ApiService : ApiService
+    private ApiService : ApiService,
+    private prefixService : PrefixService
   ) {
-
     
+    const prefix = this.prefixService.getPrefix();
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       phone: ['', [Validators.required]],
@@ -28,7 +30,7 @@ export class CustommerLoginComponent implements OnInit {
       birthMonth: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       type: ['Silver', [Validators.required]],
-      prefix: ['krati', Validators.required],
+      prefix: [prefix, Validators.required],
       locality: ['', [Validators.required]],
       salonId: [2, Validators.required]
     });
@@ -43,9 +45,9 @@ export class CustommerLoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-
+    const prefix = this.prefixService.getPrefix();
     this.userForm.patchValue({
-      prefix: 'krati',
+      prefix: prefix,
       salonId: 1,
       startDate: this.currentDate
     });
@@ -64,7 +66,8 @@ export class CustommerLoginComponent implements OnInit {
 
 
   logIn(num : any){
-    this.ApiService.custommerLogin(num).subscribe((res) =>{
+    const prefix = this.prefixService.getPrefix();
+    this.ApiService.custommerLogin(num, prefix).subscribe((res) =>{
       this.userData = res;
       localStorage.setItem('userData', JSON.stringify(this.userData));
       this.router.navigate(['/custommer/c-Services']);

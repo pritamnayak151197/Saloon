@@ -40,6 +40,7 @@ export class ManageSaloonsComponent implements OnInit {
   searchText: string = '';
   selectedFile2: any
   message = ''
+  isLoading = false;
   
 
   exportToExcel(): void {
@@ -71,6 +72,7 @@ export class ManageSaloonsComponent implements OnInit {
 
   onSubmit(){
     if (this.selectedFile || this.selectedFile2) {
+      this.isLoading = true;
       this._apiService.uploadImage(this.selectedFile).pipe(
         switchMap((res1: any) => {
           // First image upload response
@@ -99,6 +101,7 @@ export class ManageSaloonsComponent implements OnInit {
           this.saloonList.push(this.responseDataSubmit.data);
           this.createAdmin = true;
           this.loaddata();
+          this.isLoading = false;
         },
         error: (err) => {
           this.message = err.error.message
@@ -109,29 +112,33 @@ export class ManageSaloonsComponent implements OnInit {
     else{
       if (this.salonForm.valid) {
         console.log(this.salonForm.value);
+        this.isLoading = true;
         this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
           this.responseDataSubmit = data;
           this.saloonList.push(this.responseDataSubmit.data);
           this.createAdmin = true;
           this.loaddata();
+          this.isLoading = false;
         });
       }
     }
     
     
   }
-  createAdminForSalon(userName: string, password: string){
+  createAdminForSalon(userName: string, password: string, prefix: string){
     let body = {
       salonId: this.responseDataSubmit.Data.salonId,
       username: userName,
       password: password,
       phone: this.salonForm.value.phone,
-      prefix: 'krati'
+      prefix: prefix
     };
+    this.isLoading = true;
 
     this._apiService.addAdmin(body).subscribe((res)=>{
       this.adminDetails = res;
       this.visible = false;
+      this.isLoading = false;
     })
   }
   onFileSelected(event: any): void {
@@ -150,27 +157,39 @@ export class ManageSaloonsComponent implements OnInit {
   }
 
   onEdit(){
-
-    if (!this.selectedFile || !this.selectedFile2) {
+    this.isLoading = true;
+    if (!this.selectedFile && !this.selectedFile2) {    
     this.salonForm.value['salonId'] = this.saloonId2;
-    this.salonForm.value['salonLogo'] = this.selectedFile;
-    this.salonForm.value['qrCode'] = this.selectedFile;
+    this.salonForm.value['qrCode'] = this.qrCode;
+    this.salonForm.value['salonLogo'] = this.saloonLogo;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
       this.saloonList.push(this.responseDataSubmit.data);
       this.editSaloonData = false;
       this.loaddata();
-    }, err =>{
-      alert(err.error.message)
+      this.isLoading = false;
+    }, (err) =>{
+      this.message = err.error.message
+      this.isLoading = false;
     });
   }
   else{
-    if(this.saloonLogo){
-      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
-    }
-    if(this.qrCode){
+    if (!this.selectedFile && this.selectedFile2) {    
+      this.salonForm.value['salonLogo'] = this.saloonLogo;
       this.salonForm.value['qrCode'] = this.qrCode[0].url;
     }
+
+    else if (this.selectedFile && !this.selectedFile2) {    
+      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
+      this.salonForm.value['qrCode'] = this.qrCode;
+    }
+
+    else if(this.saloonLogo && this.selectedFile2){
+      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
+      this.salonForm.value['qrCode'] = this.qrCode[0].url;
+    }
+
+    this.isLoading = true;
     this.salonForm.value['salonId'] = this.saloonId2;
     this.salonForm.value['services'] = this.selectedFile;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
@@ -178,6 +197,9 @@ export class ManageSaloonsComponent implements OnInit {
       this.saloonList.push(this.responseDataSubmit.data);
       this.editSaloonData = false;
       this.loaddata();
+      this.isLoading = false;
+    }, err =>{
+      alert(err.error.message)
     });
   }
   }

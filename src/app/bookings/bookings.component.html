@@ -1,75 +1,26 @@
-<div class="container mt-4 bodyContainer">
-    <!-- Search for Customer -->
-     <br>
-
-  
+<div class="container bodyContainer" style="padding: 10px;">  
     <!-- Booking List -->
-    <div class="card">
+    <div class="card" >
       <div class="card-header">
-        <h5>All Bookings List</h5>
+        <h5>Dashboard</h5>
       </div>
       <div class="card-body">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Booking ID</th>
-              <th>Booking Date</th>
-              <th>Slot Date</th>
-              <th>Slot Time</th>
-              <th>Status</th>
-              <th>Remarks</th>
-              <th>Advance Payment</th>
-              <th>Booking Confirmed</th>
-              <th>Actions</th>
+              <th>Salon ID</th>
+              <th>Salon Name</th>
+              <th>Phone No</th>
+              <th>Subscription End Date</th>
+
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let booking of bookings">
-              <td>{{ booking.bookingId }}</td>
-              <td>{{ booking.bookingDate | date:'short' }}</td>
-              <td>
-                <input 
-                  type="date" 
-                  [(ngModel)]="booking.slotAllocatedDate"
-                  (change)="updateBooking(booking)" 
-                  class="form-control"
-                />
-              </td>
-              <td>
-                <input 
-                  type="time" 
-                  [(ngModel)]="booking.slotAllocatedTime"
-                  (change)="updateBooking(booking)" 
-                  class="form-control"
-                />
-              </td>
-              <td>{{ booking.status ? 'Active' : 'Inactive' }}</td>
-              <td>{{ booking.remarks }}</td>
-              <td>
-                <select 
-                  [(ngModel)]="booking.advancePayment"
-                  (change)="updateBooking(booking)" 
-                  class="form-control"
-                >
-                  <option [value]="true">Yes</option>
-                  <option [value]="false">No</option>
-                </select>
-              </td>
-              <td>
-                <select 
-                  [(ngModel)]="booking.bookingConfirm"
-                  (change)="updateBooking(booking)" 
-                  class="form-control"
-                >
-                  <option [value]="true">Yes</option>
-                  <option [value]="false">No</option>
-                </select>
-              </td>
-              <td>
-                <button class="btn btn-success" (click)="saveBooking(booking)">
-                  Save
-                </button>
-              </td>
+            <tr *ngFor="let booking of filteredRecords">
+              <td>{{ booking.salonId }}</td>
+              <td>{{ booking.salonName}}</td>
+              <td>{{ booking.phone}}</td>
+              <td>{{ booking.subscriptionEndDate | date:'short' }}</td>
             </tr>
           </tbody>
         </table>

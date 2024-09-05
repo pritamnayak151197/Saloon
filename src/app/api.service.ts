@@ -109,8 +109,8 @@ export class ApiService {
   }
 
 
-  custommerLogin(number: any){
-    const url = `${this.baseUrl}/customer/getByPhoneAndPrefix?phone=${number}&prefix=krati`;
+  custommerLogin(number: any, prifix: any){
+    const url = `${this.baseUrl}/customer/getByPhoneAndPrefix?phone=${number}&prefix=${prifix}`;
     return this.http.get(url);
   }
 
@@ -161,7 +161,7 @@ export class ApiService {
   }
 
   viewBookingsBySalonId(Id: any){
-    const url = `${this.baseUrl}/booking/viewAllBookingsByCustomerId/${Id}`;
+    const url = `${this.baseUrl}/booking/viewAllBookingsBySalonId/${Id}`;
     return this.http.get(url);
   }
 

@@ -60,6 +60,7 @@ export class PackagesComponent implements OnInit {
     salonId: null
   };
   demoImage: any;
+  isLoading = false;
 
 
   onOptionChange(event: any, value: string) {
@@ -119,6 +120,7 @@ export class PackagesComponent implements OnInit {
       this.package.salonId = this.selectedSaloon;
     }
     if (this.selectedFile) {
+      this.isLoading = true;
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
         this.package.packageLogo = this.selectedFileUrl;
@@ -139,19 +141,22 @@ export class PackagesComponent implements OnInit {
             this.filteredServices.length = 0;
             this.message = 'No Data Found'
           }
-
+          this.isLoading = false;
         });
       });
     }
-    else {    
+    else { 
+      this.isLoading = true;   
         this.package.services = this.selectedServices;
         this._apiService.addPackages(this.package).subscribe((res) => {
           this.serviceslist.unshift(res);
           if (userdata.userType != "superadmin") {
             this.loadData(userdata.salonId);
+            this.isLoading = false; 
           }
           else {
             this.loadData(+this.selectedSaloon);
+            this.isLoading = false; 
           }
         });
     }
@@ -230,11 +235,13 @@ export class PackagesComponent implements OnInit {
     this.packageIdforEdit = details;
     this.editPackageForm = this.serviceslist.find((service: any) => service.packageId === details);
     this.editVisible = true;
-    this.openEditDialog(this.editPackageForm)
+    this.openEditDialog(this.editPackageForm);
+    this.message = '';
   }
 
   openEditDialog(data: any) {
     this.editVisible = true;
+    this.message = '';
     this.populateForm(data); // Assuming data contains existing service details
   }
 

@@ -55,6 +55,7 @@ export class ServicesComponent implements OnInit {
   selectedId: any;
   message: any;
   showAddServiceButton = false;
+  isLoading = false;
 
 
   filterServices() {
@@ -87,6 +88,7 @@ export class ServicesComponent implements OnInit {
       this.serviceForm.value.salonId = this.selectedSaloon;
     }
     if (this.selectedFile) {
+      this.isLoading = true;
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
         this.serviceForm.value.servicePic = this.selectedFileUrl;
@@ -103,23 +105,28 @@ export class ServicesComponent implements OnInit {
             else {
               this.loadData(+this.selectedSaloon);
             }
+            this.isLoading = false;
           });
       });
     }
 
     else {
+      
       this.serviceForm.value.serviceId = this.serviceIdforEdit;
       this.serviceForm.value.servicePic = this.editServiceForm.servicePic;
       this._apiService.updateServiceById(this.serviceForm.value).subscribe((res) => {
-
+        this.isLoading = true;
         this.editVisible = false
         if (userdata.userType != "superadmin") {
           this.loadData(userdata.salonId);
+          this.isLoading = false;
         }
         else {
           this.loadData(+this.selectedSaloon);
+          this.isLoading = false;
         }
       });
+      this.isLoading = false;
     }
     this.visible = false
   }
@@ -144,6 +151,7 @@ export class ServicesComponent implements OnInit {
       this.serviceForm.value.salonId = this.selectedSaloon;
     }
     if (this.selectedFile) {
+      this.isLoading = true;
       this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
         this.selectedFileUrl = res[0].url;
         this.serviceForm.value.servicePic = this.selectedFileUrl;
@@ -156,14 +164,17 @@ export class ServicesComponent implements OnInit {
               this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
               if (userdata.userType != "superadmin") {
                 this.loadData(userdata.salonId);
+                this.isLoading = false;
               }
               else {
                 this.loadData(+this.selectedSaloon);
+                this.isLoading = false;
               }
             }
             else {
               this.filteredServices.length = 0;
               this.message = 'No Data Found'
+              this.isLoading = false;
             }
 
           });
@@ -171,18 +182,22 @@ export class ServicesComponent implements OnInit {
     }
     else {
       if (true) {
+        this.isLoading = true;
         this._apiService.addservice(this.serviceForm.value).subscribe((res) => {
           this.serviceslist.unshift(res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service added successfully!' });
           if (userdata.userType != "superadmin") {
             this.loadData(userdata.salonId);
+            this.isLoading = false;
           }
           else {
             this.loadData(+this.selectedSaloon);
+            this.isLoading = false;
           }
         });
       } else {
         console.log('Form is invalid');
+        this.isLoading = false;
       }
     }
 
@@ -206,7 +221,8 @@ export class ServicesComponent implements OnInit {
     this.serviceIdforEdit = details;
     this.editServiceForm = this.serviceslist.find((service: any) => service.serviceId === details);
     this.editVisible = true;
-    this.openEditDialog(this.editServiceForm)
+    this.openEditDialog(this.editServiceForm);
+    this.message = '';
   }
 
   openEditDialog(data: any) {

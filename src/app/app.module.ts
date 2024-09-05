@@ -33,6 +33,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ViewPackageComponent,
     ViewServiceComponent,
     DashboardComponent,
-    BookingsComponent
+    BookingsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     CalendarModule,
     ReactiveFormsModule,
     MultiSelectModule,
-    InputTextareaModule
+    InputTextareaModule,
+    ProgressSpinnerModule
   ],
   providers: [DialogService,ApiService,MessageService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

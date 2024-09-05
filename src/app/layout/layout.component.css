@@ -33,7 +33,7 @@
   left: 0;
   background-image: url('../../assets/pic3.png');
   padding-top: 20px;
-  border-radius:20px;
+  border-radius:10px;
   display: block;
   color: #FFFFFF;
 }
@@ -42,78 +42,134 @@
 #bottom-item {
   margin-top: auto; /* Push this item to the bottom */
 }
-.rounded-top{
-  border-radius: 5px; /* Border radius applied to the right side */
-  margin: 5px 0 5px 0;
-  height: 50px; 
-  padding: 5px;
+/* Header container */
+.header-container {
   display: flex;
-  color: #ffffff;
-  background-image: url('../../assets/pic3.png');
-} 
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  background-image: url('../../assets/pic3.png') !important;
+  border-radius: 10px;
+  margin: 5px 10px 5px 10px;
+  min-height: 50px;
+}
 
+/* Left Section */
+.header-left {
+  display: flex;
+  align-items: center;
+}
 
+/* Admin Info */
+.admin-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.salon-name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #bedeff;
+}
+
+/* Right Section */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Notification Container */
+.notification-container {
+  position: relative;
+}
 
 .notification-bell {
+  cursor: pointer;
   position: relative;
-  display: inline-block;
+  font-size: 1.5rem;
+  margin-right: 20px;
 }
 
 .bell-icon {
-  font-size: 24px;
-  cursor: pointer;
+  position: relative;
 }
 
 .badge {
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 5px 10px;
-  border-radius: 50%;
-  background: red;
+  top: -10px;
+  right: -10px;
+  background-color: red;
   color: white;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 0.75rem;
 }
 
+/* Notification Dropdown */
 .notification-dropdown {
   position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(-100%);
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  width: 250px;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 300px;
   max-height: 300px;
   overflow-y: auto;
-  color: black;
+  z-index: 1000;
 }
 
-.notification-dropdown .close-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: transparent;
+.close-btn {
+  background: none;
   border: none;
-  font-size: 16px;
+  font-size: 1.25rem;
   cursor: pointer;
+  float: right;
 }
 
-.notification-dropdown div {
+.notification-card {
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #dee2e6;
 }
 
-.notification-dropdown div:hover {
-  background-color: #f9f9f9;
+.notification-card:last-child {
+  border-bottom: none;
 }
 
-.unread {
-  font-weight: bold;
+.notification-timestamp {
+  font-size: 0.75rem;
+  color: #6c757d;
 }
 
+/* Profile Actions */
+.profile-actions {
+  display: flex;
+  align-items: center;
+}
 
-/* CSS */
+.profile-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 15px;
+  color: #daecff;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
 @media only screen and (max-width: 600px) {
   .hide-on-mobile {
     display: none;
