@@ -179,4 +179,14 @@ export class ApiService {
     const url = `${this.baseUrl}/services/getById/${Id}`;
     return this.http.get<Service>(url);
   }
+
+  marlAllRead(id: any){
+    const url = `${this.baseUrl}/notifications/markAllAsReadBySalonId/${id}`;
+    return this.http.post(url, null);
+  }
+
+  getDetailsByPrefix(prefix : any){
+    const url = `${this.baseUrl}/admin/v1/getDetailsByPrefix/krati${prefix}`;
+    return this.http.get<Service>(url);
+  }
 }

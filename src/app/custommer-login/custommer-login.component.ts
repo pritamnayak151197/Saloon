@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
-import { PrefixService } from '../prefix.service';
 
 
 @Component({
@@ -16,11 +15,9 @@ export class CustommerLoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private router: Router,
-    private ApiService : ApiService,
-    private prefixService : PrefixService
+    private ApiService : ApiService
   ) {
     
-    const prefix = this.prefixService.getPrefix();
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       phone: ['', [Validators.required]],
@@ -30,9 +27,9 @@ export class CustommerLoginComponent implements OnInit {
       birthMonth: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       type: ['Silver', [Validators.required]],
-      prefix: [prefix, Validators.required],
+      prefix: [this.prefix, Validators.required],
       locality: ['', [Validators.required]],
-      salonId: [2, Validators.required]
+      salonId: [this.salonId, Validators.required]
     });
    }
 
@@ -40,15 +37,30 @@ export class CustommerLoginComponent implements OnInit {
   display =  false;
   userData: any;
   currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  prefix: string | null = null;
+  salonId = 1;
 
   ngOnInit(): void {
+    const hostname = window.location.hostname;
+    this.prefix = this.getSubdomain(hostname);
+    this.ApiService.getDetailsByPrefix(this.prefix).subscribe((res: any) =>{
+      this.salonId = res.salonId;
+    })
+  }
+
+  getSubdomain(hostname: string): string | null {
+    const parts = hostname.split('.');
+    if (parts.length > 2) {
+      return parts[0]; // Return the first part of the hostname as the subdomain
+    }
+    return null; // No subdomain present
   }
 
   onSubmit(): void {
-    const prefix = this.prefixService.getPrefix();
+
     this.userForm.patchValue({
-      prefix: prefix,
-      salonId: 1,
+      prefix: this.prefix,
+      salonId: this.salonId,
       startDate: this.currentDate
     });
     if (this.userForm.valid) {
@@ -66,8 +78,8 @@ export class CustommerLoginComponent implements OnInit {
 
 
   logIn(num : any){
-    const prefix = this.prefixService.getPrefix();
-    this.ApiService.custommerLogin(num, prefix).subscribe((res) =>{
+    
+    this.ApiService.custommerLogin(num, '').subscribe((res) =>{
       this.userData = res;
       localStorage.setItem('userData', JSON.stringify(this.userData));
       this.router.navigate(['/custommer/c-Services']);

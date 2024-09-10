@@ -1,22 +1,33 @@
 <div class="container">
   <div class="row">
-    <div class="card" *ngFor="let item of serviceList">
-      <div class="card-body">
-        <div class="image-container">
-          <img src="{{item.servicePic}}" alt="Service Image">
+    <div class="col-md-4" *ngFor="let item of serviceList">
+      <div class="card">
+        <div class="card-header">
+          <img src="{{item.servicePic}}" alt="Service Image" class="card-img-top">
         </div>
-        <div class="card-details">
-          <span class="card-title">{{ item.serviceName }}</span>
+        <div class="card-body">
+          <h5 class="card-title">{{ item.serviceName }}</h5>
+          <p class="card-text">{{ item.details | slice:0:100 }}...</p> <!-- Truncate text to 100 characters -->
           <div class="price-details">
-            <span>Price: </span>
-            <span class="original-price">{{ item.price }}</span>
-            <span class="discount-price">{{ item.discountPrice }}rs</span>
+            <span class="price-label">Price:</span>
+            <span class="original-price">{{ item.price | currency:'INR'}}</span>
+            <span class="discount-price">{{ item.discountPrice | currency:'INR' }}</span>
           </div>
-          <!-- <span class="card-text">{{ item.details }}</span> -->
         </div>
-      </div>
-      <div class="product-actions" style="margin: 10px;">
-        <button class="btn btn-warning" (click)="addToCart(item.serviceId)">Add to cart</button>
+        <div class="card-footer">
+          <button 
+            class="btn btn-warning" 
+            [disabled]="isLoading(item.serviceId)"
+            (click)="addToCart(item.serviceId)">
+            <ng-container *ngIf="isLoading(item.serviceId); else buttonText">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span> Adding...</span>
+            </ng-container>
+            <ng-template #buttonText>
+              Add to Cart
+            </ng-template>
+          </button>
+        </div>
       </div>
     </div>
   </div>

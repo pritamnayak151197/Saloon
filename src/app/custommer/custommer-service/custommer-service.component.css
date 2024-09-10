@@ -1,88 +1,98 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-.header {
-  font-size: 24px; /* Adjust font size as needed */
-  font-weight: bold;
-  text-align: center;
-  margin: 5px 0; /* Space above and below the header */
-  color: #333; /* Text color */
-}
-
-.container {
-  padding: 5px;
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
 
 .card {
-  flex: 1 1 calc(50% - 10px); /* Each card takes 1/2 of the row with some margin */
-  background-color: #EEEDEB;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 5px;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .card-body {
-  padding: 10px;
-}
-
-.image-container {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.image-container img {
-  width: 100px;
-  height: 100px; /* Making the image square */
-  border-radius: 8px; /* Optional: to slightly round the corners of the square image */
-  border: solid 1px #ddd;
-}
-
-.card-details {
-  text-align: center;
+  padding: 15px;
 }
 
 .card-title {
-  display: block;
-  font-size: 16px;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
   font-weight: bold;
-  margin-bottom: 5px;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .price-details {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 5px;
+}
+
+.price-label {
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .original-price {
-  font-size: 14px;
-  color: #888;
   text-decoration: line-through;
+  color: #888;
+  margin-right: 5px;
 }
 
 .discount-price {
-  font-size: 16px;
+  font-size: 1.2rem;
+  color: #e74c3c;
   font-weight: bold;
-  color: #E53935;
 }
 
-.card-text {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 3px;
+.card-footer {
+  padding: 10px;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.btn {
+  font-size: 0.9rem;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #d39e00;
 }
 
 
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.spinner-border {
+  margin-right: 5px;
+  vertical-align: middle;
+}

@@ -9,7 +9,9 @@
     </div> -->
     <div class="icon">
       <i class="fas fa-shopping-cart" routerLink="add-to-cart"></i>
+      <span class="cart-count">{{ cartCount }}</span> <!-- Display the cart count -->
     </div>
+    
   </div>
 </div>
 <app-sidebar [isVisible]="isSidebarVisible" (closeSidebar)="closeSidebar()"></app-sidebar>

@@ -48,7 +48,7 @@ body {
 }
 
 .content {
-  padding: 80px 20px 60px; /* Adjust the top and bottom padding to account for the fixed top and bottom bars */
+  padding: 70px 0px; /* Adjust the top and bottom padding to account for the fixed top and bottom bars */
 }
 
 .bottom-bar {
@@ -89,4 +89,29 @@ body {
 
 .bottom-bar.hidden {
   transform: translateY(100%);
+}
+
+
+.icon {
+  position: relative; /* Ensure positioning context for the badge */
+  display: inline-block;
+}
+
+.icon .fa-shopping-cart {
+  font-size: 2rem; /* Adjust the size of the cart icon as needed */
+  color: #f8f2f2; /* Set icon color */
+}
+
+.cart-count {
+  position: absolute;
+  top: -10px; /* Adjust to position the badge above the icon */
+  right: -10px; /* Adjust to position the badge to the right of the icon */
+  background-color: #e74c3c; /* Background color for the badge */
+  color: #fff; /* Text color for the badge */
+  border-radius: 50%; /* Make the badge circular */
+  padding: 0.3rem 0.6rem; /* Adjust size of the badge */
+  font-size: 0.9rem; /* Font size of the badge text */
+  font-weight: bold;
+  text-align: center; /* Center text within the badge */
+  line-height: 1; /* Ensure text is vertically centered */
 }

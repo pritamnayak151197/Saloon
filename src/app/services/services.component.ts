@@ -74,62 +74,88 @@ export class ServicesComponent implements OnInit {
   }
 
   onUpdate() {
+    // Validate form data
     const validationErrors = this.formValidator();
     if (validationErrors) {
       this.message = this.getValidationMessage(validationErrors);
       return;
     }
-    let salonId = this.getUserData();
-    let userdata = this.getUserData();
-    if (userdata.userType != "superadmin") {
+  
+    // Retrieve user data
+    const userdata = this.getUserData();
+    if (userdata.userType !== "superadmin") {
       this.serviceForm.value.salonId = userdata.salonId;
-    }
-    else {
+    } else {
       this.serviceForm.value.salonId = this.selectedSaloon;
     }
+  
+    // Handle file upload
     if (this.selectedFile) {
       this.isLoading = true;
-      this._apiService.uploadImage(this.selectedFile).subscribe((res: any) => {
-        this.selectedFileUrl = res[0].url;
-        this.serviceForm.value.servicePic = this.selectedFileUrl;
-        this.serviceForm.value.serviceId = this.serviceIdforEdit;
-        let salonId = this.getUserData();
-        this.serviceForm.value.salonId = salonId.salonId
-        console.log(this.serviceForm)
-
-          this._apiService.updateServiceById(this.serviceForm.value).subscribe((res) => {
-            this.editVisible = false
-            if (userdata.userType != "superadmin") {
-              this.loadData(userdata.salonId);
+      this._apiService.uploadImage(this.selectedFile).subscribe(
+        (res: any) => {
+          // On successful image upload
+          this.selectedFileUrl = res[0].url;
+          this.serviceForm.value.servicePic = this.selectedFileUrl;
+          this.serviceForm.value.serviceId = this.serviceIdforEdit;
+  
+          // Update service
+          this._apiService.updateServiceById(this.serviceForm.value).subscribe(
+            (res) => {
+              // On successful service update
+              this.editVisible = false;
+              if (userdata.userType !== "superadmin") {
+                this.loadData(userdata.salonId);
+              } else {
+                this.loadData(+this.selectedSaloon);
+              }
+              this.isLoading = false;
+            },
+            (error) => {
+              // Handle error during service update
+              this.isLoading = false;
+              console.error('Service update failed', error);
+              alert('Failed to update service. Please try again later.');
             }
-            else {
-              this.loadData(+this.selectedSaloon);
-            }
-            this.isLoading = false;
-          });
-      });
-    }
-
-    else {
-      
+          );
+        },
+        (error) => {
+          // Handle error during image upload
+          this.isLoading = false;
+          console.error('Image upload failed', error);
+          // alert('Failed to upload image. Please try again later.');
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username or Password is incorrect' });
+        }
+      );
+    } else {
+      // Handle case when no file is selected
       this.serviceForm.value.serviceId = this.serviceIdforEdit;
       this.serviceForm.value.servicePic = this.editServiceForm.servicePic;
-      this._apiService.updateServiceById(this.serviceForm.value).subscribe((res) => {
-        this.isLoading = true;
-        this.editVisible = false
-        if (userdata.userType != "superadmin") {
-          this.loadData(userdata.salonId);
+      this._apiService.updateServiceById(this.serviceForm.value).subscribe(
+        (res) => {
+          // On successful service update
+          this.isLoading = true;
+          this.editVisible = false;
+          if (userdata.userType !== "superadmin") {
+            this.loadData(userdata.salonId);
+          } else {
+            this.loadData(+this.selectedSaloon);
+          }
           this.isLoading = false;
-        }
-        else {
-          this.loadData(+this.selectedSaloon);
+        },
+        (error) => {
+          // Handle error during service update
           this.isLoading = false;
+          console.error('Service update failed', error);
+          alert('Failed to update service. Please try again later.');
         }
-      });
+      );
       this.isLoading = false;
     }
-    this.visible = false
+  
+    this.visible = false;
   }
+  
   imageInputVisible: boolean = true;
   changeImage(): void {
     this.imageInputVisible = true;

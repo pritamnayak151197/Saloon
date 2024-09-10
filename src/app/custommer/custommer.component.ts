@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CartService } from './cart.service';
 
 @Component({
   selector: 'app-custommer',
@@ -8,12 +9,15 @@ import { Router } from '@angular/router';
 })
 export class CustommerComponent implements OnInit {
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router,
+    private cartService: CartService
+  ) { }
 
   previousScrollPosition: number = 0;
   selectedCardId: number | null = null;
   isSidebarVisible: boolean = false;
   data: any;
+  cartCount: number = 0;
 
   openSidebar() {
     this.isSidebarVisible = true;
@@ -46,7 +50,10 @@ export class CustommerComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.data = this.getUserData()
+    this.data = this.getUserData();
+    this.cartService.cartCount$.subscribe((count) => {
+      this.cartCount = count;
+    });
   }
 
   logOut(){

@@ -37,6 +37,7 @@ export class LayoutComponent implements OnInit {
   saloonLogo: any
   qrCode: any;
   selectedFile: any;
+  selectedFile2: any;
 
   selectItem(item: string) {
     this.selectedItem = item;
@@ -46,14 +47,59 @@ export class LayoutComponent implements OnInit {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    this.apiService.uploadImage(this.selectedFile).subscribe((res: any) =>{
+      this.saloonLogo = res;
+    })
+  }
+
+  onFileSelected2(event: any): void {
+    this.selectedFile2 = event.target.files[0];
+
+    this.apiService.uploadImage(this.selectedFile2).subscribe((res: any) =>{
+      this.qrCode = res;
+    })
+  }
+
   onEdit(){
-    this.salonForm.value['salonId'] = this.adminSalonData.salonId;
+    let saloonId = this.getUserData();
+    if (!this.selectedFile && !this.selectedFile2) {    
+    this.salonForm.value['salonId'] = saloonId.salonId;
+    this.salonForm.value['qrCode'] = this.qrCode;
+    this.salonForm.value['salonLogo'] = this.saloonLogo;
     this.apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
-      window.location.reload();
       this.editSaloonData = false;
+      window.location.reload();
     });
+  }
+  else{
+    if (!this.selectedFile && this.selectedFile2) {    
+      this.salonForm.value['salonLogo'] = this.saloonLogo;
+      this.salonForm.value['qrCode'] = this.qrCode[0].url;
+    }
+
+    else if (this.selectedFile && !this.selectedFile2) {    
+      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
+      this.salonForm.value['qrCode'] = this.qrCode;
+    }
+
+    else if(this.saloonLogo && this.selectedFile2){
+      this.salonForm.value['salonLogo'] = this.saloonLogo[0].url;
+      this.salonForm.value['qrCode'] = this.qrCode[0].url;
+    }
     
+    this.salonForm.value['salonId'] = saloonId.salonId;
+    this.salonForm.value['services'] = this.selectedFile;
+    this.apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
+      this.responseDataSubmit = data;
+      this.editSaloonData = false;
+      window.location.reload();
+    }, err =>{
+      alert(err.error.message)
+    });
+  }
   }
 
   getUserData(): any {
@@ -155,20 +201,22 @@ export class LayoutComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-  }
 
   toggleDropdown(event?: MouseEvent): void {
     if (event) {
       event.stopPropagation();
     }
     this.dropdownVisible = !this.dropdownVisible;
+    this.markAsRead()
   }
 
-  markAsRead(notification: any): void {
-    notification.read = true;
+  markAsRead(): void {
+    let saloonId = this.getUserData();
+
     // this.unreadCount = this.notifications.filter(n => !n.read).length;
+    this.apiService.marlAllRead(saloonId.salonId).subscribe(()=> {
+
+    })
   }
 
   logout() {
