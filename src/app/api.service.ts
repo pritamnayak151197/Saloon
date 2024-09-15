@@ -186,7 +186,7 @@ export class ApiService {
   }
 
   getDetailsByPrefix(prefix : any){
-    const url = `${this.baseUrl}/admin/v1/getDetailsByPrefix/krati${prefix}`;
+    const url = `${this.baseUrl}/admin/v1/getDetailsByPrefix/${prefix}`;
     return this.http.get<Service>(url);
   }
 }

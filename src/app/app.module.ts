@@ -35,6 +35,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
     ReactiveFormsModule,
     MultiSelectModule,
     InputTextareaModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TabViewModule
   ],
   providers: [DialogService,ApiService,MessageService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
