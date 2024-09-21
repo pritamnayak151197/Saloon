@@ -1,21 +1,36 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-4" *ngFor="let item of packageList">
-      <div class="card">
-        <div class="card-header">
-          <img src="{{item.packageLogo}}" alt="Service Image" class="card-img-top">
+<div class="container combo-container">
+  <div class="row service-grid">
+    <div class="col-6" *ngFor="let item of packageList" style="padding: 0;">
+      <div class="service-column">
+        <div class="image-container">
+          <img [src]="item.packageLogo" alt="Package Image" class="img-fluid service-img" (click)="goToProductDetail(item.packageId)">
         </div>
-        <div class="card-body">
-          <h5 class="card-title">{{ item.packageName }}</h5>
+        <div class="service-details">
+          <!-- Add a badge for package type if needed -->
+          <!-- <span class="badge package-type-badge">
+            {{ item.packageType }}
+          </span> -->
+          <h5 class="service-title">{{ item.packageName }}</h5>
           <div class="price-details">
-            <span class="original-price">{{ item.price | currency }}</span>
-            <span class="discount-price">{{ item.discountPrice | currency }}</span>
+            <span class="discount-price">{{ item.discountPrice | currency:'INR' }}</span>
+            <span class="original-price">{{ item.price | currency:'INR' }}</span>
           </div>
-          <p class="card-text">{{ item.details }}</p>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-warning" (click)="addToCart(item.packageId)">Add to Cart</button>
-          <!-- <button class="btn btn-secondary" (click)="goToProductDetail(item.packageId)">View Details</button> -->
+          <!-- <button 
+            class="btn btn-warning w-100 mt-2" 
+            (click)="addToCart(item.packageId)">Add to Cart</button> -->
+
+            <button 
+            class="btn btn-warning w-100 mt-2" 
+            [disabled]="isLoading(item.packageId)"
+            (click)="addToCart(item.packageId)">
+            <ng-container *ngIf="isLoading(item.packageId); else buttonText">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span> Adding...</span>
+            </ng-container>
+            <ng-template #buttonText>
+              Add to Cart
+            </ng-template>
+          </button>
         </div>
       </div>
     </div>

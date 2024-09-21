@@ -140,8 +140,8 @@ export class ApiService {
   }
 
 
-  getUserByPhone(phone : any){
-    const url = `${this.baseUrl}/customer/getByPhoneAndPrefix?phone=${phone}&prefix=krati`;
+  getUserByPhone(phone : any, prefix: any){
+    const url = `${this.baseUrl}/customer/getByPhoneAndPrefix?phone=${phone}&prefix=${prefix}`;
     return this.http.get(url);
   }
 
@@ -188,5 +188,14 @@ export class ApiService {
   getDetailsByPrefix(prefix : any){
     const url = `${this.baseUrl}/admin/v1/getDetailsByPrefix/${prefix}`;
     return this.http.get<Service>(url);
+  }
+  changeProfilePic(id: any, pic : any){
+    const url = `${this.baseUrl}/customer/changeProfilePic?customerId=${id}&customerProfilePic=${pic}`;
+    return this.http.patch(url, null);
+  }
+
+  getItemCount(cid: any, sid : any){
+    const url = `${this.baseUrl}/cart/getCartCount/customer/${cid}/salon/${sid}`;
+    return this.http.get(url);
   }
 }

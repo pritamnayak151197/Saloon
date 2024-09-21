@@ -1,21 +1,23 @@
-<!-- product-detail.component.html -->
-<div class="product-detail">
-    <div class="product-image">
-      <img [src]="product.packageLogo" alt="Product Image">
+<div class="combo-container">
+  <div class="service-grid">
+    <div *ngFor="let service of serviceDetails" class="service-card">
+      <div class="service-img">
+        <img [src]="service.servicePic" [alt]="service.serviceName">
+      </div>
+      <div class="service-info">
+        <h3>{{ service.serviceName }}</h3>
+        <p>{{ service.details | slice: 0:50 }}...</p> <!-- Truncate long details -->
+        <p>Price: 
+          <span class="original-price">₹{{ service.price }}</span> 
+          <span class="discount-price">₹{{ service.discountPrice }}</span>
+        </p>
+        <p>Service Type: {{ service.serviceType }}</p>
+      </div>
     </div>
-    <div class="product-info">
-      <h2>{{ product.packageName }}</h2>
-      <p>{{ product.details }}</p>
-      <p>
-        <span class="original-price">{{ product.price | currency:'INR' }}</span>
-        <span class="discounted-price">{{ product.discountPrice | currency:'INR' }}</span>
-      </p>
-      <p>Services: {{ product.services.join(', ') }}</p>
-    </div>
-    <div class="product-actions">
-      <button class="add-to-cart" (click)="addToCart(product.packageId)">Add to Cart</button>
-      <button class="buy-now">Buy Now</button>
-    </div>
-    
   </div>
-  
+  <div class="card-footer text-center" style="margin-top: 5px;">
+    <button 
+      class="btn btn-warning" 
+      (click)="addToCart(packageId)">Add to Cart</button>
+  </div>
+</div>

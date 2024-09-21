@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import { Router } from '@angular/router';
-import { CartService } from '../cart.service';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-custommer-service',
@@ -11,15 +11,21 @@ import { CartService } from '../cart.service';
 export class CustommerServiceComponent implements OnInit {
 
   constructor(private _apiServices: ApiService,
-    private cartService: CartService,
+    private sharedService: SharedService,
     private router: Router) { }
   serviceList: any;
   loadingStates = new Map<number, boolean>();
+  salonId: any;
 
   ngOnInit(): void {
-    this._apiServices.getServiceBySaloonId(1).subscribe((res)=>{
-      this.serviceList = res;
+    const prefix =  localStorage.getItem('prefix');
+    this._apiServices.getDetailsByPrefix(prefix).subscribe((res: any) =>{
+      this.salonId = res.salonId;
+      this._apiServices.getServiceBySaloonId(this.salonId).subscribe((res)=>{
+        this.serviceList = res;
+      })
     })
+    
   }
 
   data : any;
@@ -44,7 +50,7 @@ export class CustommerServiceComponent implements OnInit {
 
     this._apiServices.addToCart(this.finalObject).subscribe((res) =>{
       // this.router.navigate(['custommer/add-to-cart']);
-      this.cartService.updateCartCount();
+      this.sharedService.triggerButtonClick();
     })
   }
 
@@ -61,10 +67,25 @@ export class CustommerServiceComponent implements OnInit {
     const custommerid = this.loadData();
     return {
       customerId: custommerid.customerId,
-      salonId: 1,
+      salonId: this.salonId,
       packageIds: null,
       serviceIds: services
     };
   }
 
+  getServiceTypeClass(serviceType: string): string {
+    // Normalize the service type to lowercase for consistent comparison
+    const normalizedType = serviceType.toLowerCase();
+    
+    // Return the appropriate class based on service type
+    switch (normalizedType) {
+      case 'male':
+        return 'badge-male';    // Returns the class for Male services
+      case 'female':
+        return 'badge-female';  // Returns the class for Female services
+      default:
+        return 'badge-other';   // Returns the class for Other services
+    }
+  }
+  
 }

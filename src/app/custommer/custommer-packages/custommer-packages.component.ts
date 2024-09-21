@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import { Router } from '@angular/router';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-custommer-packages',
@@ -10,14 +11,22 @@ import { Router } from '@angular/router';
 export class CustommerPackagesComponent implements OnInit {
 
   constructor(private _apiServices: ApiService,
+    private sharedService: SharedService,
     private router: Router
   ) { }
   packageList: any;
+  salonId: any;
+  loadingStates = new Map<number, boolean>();
   
   ngOnInit(): void {
-    this._apiServices.getPackagesBySaloonId(1).subscribe((res)=>{
-      this.packageList = res;
+    const prefix = localStorage.getItem('prefix');
+    this._apiServices.getDetailsByPrefix(prefix).subscribe((res: any) =>{
+      this.salonId = res.salonId;
+      this._apiServices.getPackagesBySaloonId(this.salonId).subscribe((res)=>{
+        this.packageList = res;
+      })
     })
+    
   }
 
   goToProductDetail(id : any){
@@ -31,6 +40,12 @@ export class CustommerPackagesComponent implements OnInit {
 
   finalObject : any;
   addToCart(serviceId: any){
+    this.setLoadingState(serviceId, true);
+    // Simulate an API call
+    setTimeout(() => {
+      // Your actual API call logic here
+      this.setLoadingState(serviceId, false);
+    }, 400); // Simulate a 2-second delay
     const cardObject = {
       [serviceId]: 1
     };
@@ -38,7 +53,7 @@ export class CustommerPackagesComponent implements OnInit {
     
 
     this._apiServices.addToCart(this.finalObject).subscribe((res) =>{
-      this.router.navigate(['custommer/add-to-cart']);
+      this.sharedService.triggerButtonClick();
     })
   }
 
@@ -47,11 +62,19 @@ export class CustommerPackagesComponent implements OnInit {
     const custommerid = this.loadData();
     return {
       customerId: custommerid.customerId,
-      salonId: 1,
+      salonId: this.salonId,
       packageIds: packages,
       serviceIds: null
     };
   }
+  private setLoadingState(serviceId: number, isLoading: boolean) {
+    this.loadingStates.set(serviceId, isLoading);
+  }
+
+  isLoading(serviceId: number): boolean {
+    return this.loadingStates.get(serviceId) ?? false;
+  }
+
 }
 
 

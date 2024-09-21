@@ -43,38 +43,42 @@ export class CustommerLoginComponent implements OnInit {
   salonId = 1;
 
   ngOnInit(): void {
-    // Subscribe to query params to get the prefix
-    this.route.queryParams.subscribe(params => {
-      const prefix = params['prefix']; // Retrieve the 'prefix' query param
-      this.prefix = prefix;
-      console.log(prefix)
-      if (prefix) {
-        // Store the prefix in localStorage
-        localStorage.setItem('prefix', prefix);
-        console.log('Prefix stored in localStorage:', prefix);
-        this.ApiService.getDetailsByPrefix(prefix).subscribe((res: any) =>{
-          this.salonId = res.salonId;
-        })
-      } else {
-        console.log('No prefix found in URL.');
-      }
-    });    
+    this.prefix = localStorage.getItem('prefix');
+    if(!this.prefix){
+      this.route.queryParams.subscribe(params => {
+        const prefix = params['prefix']; // Retrieve the 'prefix' query param
+        this.prefix = prefix;
+        console.log(prefix)
+        if (prefix) {
+          // Store the prefix in localStorage
+          localStorage.setItem('prefix', prefix);
+          console.log('Prefix stored in localStorage:', prefix);
+          this.ApiService.getDetailsByPrefix(prefix).subscribe((res: any) =>{
+            this.salonId = res.salonId;
+          })
+        } else {
+          console.log('No prefix found in URL.');
+        }
+      }); 
+    }
+    else{
+      this.ApiService.getDetailsByPrefix(this.prefix).subscribe((res: any) =>{
+        this.salonId = res.salonId;
+      })
+    }
+       
   }
 
   onSubmit(): void {
-
     this.userForm.patchValue({
       prefix: this.prefix,
       salonId: this.salonId,
       startDate: this.currentDate
     });
-    if (this.userForm.valid) {
+
       this.ApiService.addCustommer(this.userForm.value).subscribe((res) => {
-        this.router.navigate(['/Custommer-Login']);
+        this.display = true;
       })
-    } else {
-      console.log('Form is invalid');
-    }
   }
 
   createCustommerAccount(){

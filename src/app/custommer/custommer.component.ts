@@ -1,6 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CartService } from './cart.service';
+import { ApiService } from '../api.service';
+import { SharedService } from '../shared.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-custommer',
@@ -8,9 +10,10 @@ import { CartService } from './cart.service';
   styleUrls: ['./custommer.component.css']
 })
 export class CustommerComponent implements OnInit {
-
+  subscription: Subscription = new Subscription;
   constructor(private router: Router,
-    private cartService: CartService
+    private sharedService: SharedService,
+    private apiService: ApiService
   ) { }
 
   previousScrollPosition: number = 0;
@@ -18,6 +21,7 @@ export class CustommerComponent implements OnInit {
   isSidebarVisible: boolean = false;
   data: any;
   cartCount: number = 0;
+  salondata: any;
 
   openSidebar() {
     this.isSidebarVisible = true;
@@ -51,9 +55,19 @@ export class CustommerComponent implements OnInit {
   
   ngOnInit(): void {
     this.data = this.getUserData();
-    this.cartService.cartCount$.subscribe((count) => {
-      this.cartCount = count;
-    });
+    this.salondata = localStorage.getItem('saloonData')
+    this.apiService.getDetailsByPrefix(this.data.prefix).subscribe((res: any)=>{
+      this.getItemCount(res.salonId)
+      this.subscription = this.sharedService.buttonClicked$.subscribe(() => {
+        this.getItemCount(res.salonId);
+      });
+    })
+    
+  }
+  getItemCount(salonId: any){
+    this.apiService.getItemCount(this.data.customerId, salonId).subscribe((res: any)=>{
+      this.cartCount = res.totalCount;
+    })
   }
 
   logOut(){

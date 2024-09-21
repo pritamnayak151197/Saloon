@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 import { formatDate } from '@angular/common';
+import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -9,12 +10,14 @@ import { formatDate } from '@angular/common';
 })
 export class AddToCartComponent implements OnInit {
 
-  constructor(private ApiService: ApiService) {
+  constructor(private ApiService: ApiService,
+    private sharedService: SharedService
+  ) {
 
   }
 
-  salonId = 1;
-  custommerId = 2
+  salonId: any;
+  custommerId = 15
   cartItems: any;
   userData: any;
   param: any;
@@ -27,6 +30,9 @@ export class AddToCartComponent implements OnInit {
   slotAllocatedTime: string = '';
   remarks: string = '';
   qrCodeUrl: any;
+  selectedPaymentMode = '';
+  packages: any;
+  services: any;
 
   addToCart() {
     // Logic to add the product to the cart
@@ -40,39 +46,50 @@ export class AddToCartComponent implements OnInit {
 
   loadCartDetails() {
     const custommerid = this.loadData();
-    this.ApiService.getItemsForCart(this.salonId, custommerid.customerId).subscribe((res) => {
-      this.cartItems = res;
-      this.cartId = this.cartItems.cartId
-
-      // Expand packages based on quantity
-      this.expandedPackages = this.cartItems.packages.flatMap((pkg: { quantity: any; }) =>
-        Array(pkg.quantity).fill(pkg)
-      );
-
-      // Expand services based on quantity
-      this.expandedServices = this.cartItems.services.flatMap((service: { quantity: any; }) =>
-        Array(service.quantity).fill(service)
-      );
-
-      if (this.expandedPackages.length > 0 || this.expandedServices.length > 0) {
-        this.placeOrderButton = true
+    const prefix = this.loadData()
+    this.ApiService.getDetailsByPrefix(prefix.prefix).subscribe((res: any)=>{
+      this.salonId = res.salonId;
+      this.ApiService.getItemsForCart(this.salonId, custommerid.customerId).subscribe((res: any) => {
+        this.cartItems = res;
+        this.cartId = this.cartItems.cartId
+        this.packages = res.packages
+        this.services = res.services;
+  
+        // Expand packages based on quantity
+        this.expandedPackages = this.cartItems.packages.flatMap((pkg: { quantity: any; }) =>
+          Array(pkg.quantity).fill(pkg)
+        );
+  
+        // Expand services based on quantity
+        this.expandedServices = this.cartItems.services.flatMap((service: { quantity: any; }) =>
+          Array(service.quantity).fill(service)
+        );
+  
+        if (this.packages.length > 0 || this.services.length > 0) {
+          this.placeOrderButton = true;
+        }
+        else{
+          this.placeOrderButton = false;
+        }
+      })
+      this.param = {
+        cartId: this.cartId,
+        customerId: custommerid.customerId,
+        salonId: this.salonId,
+        packageIds: [],
+        serviceIds: []
       }
+      this.sharedService.triggerButtonClick();
     })
-    this.param = {
-      cartId: this.cartId,
-      customerId: custommerid.customerId,
-      salonId: 1,
-      packageIds: [],
-      serviceIds: []
-    }
 
+    
 
   }
   placeOrderButton = false;
   ngOnInit(): void {
     this.loadCartDetails();
 
-    this.ApiService.getSaloonListById(1).subscribe((res) => {
+    this.ApiService.getSaloonListById(48).subscribe((res) => {
       this.qrCodeUrl = res;
     })
 
@@ -80,9 +97,9 @@ export class AddToCartComponent implements OnInit {
   }
 
   finalObject: any;
-  removeitem(packageId: any, name: string) {
+  removeitem(packageId: any, name: string, quantity: any) {
     const cardObject = {
-      [packageId]: 1
+      [packageId]: quantity
     };
     if (name == 'package') {
       this.finalObject = this.createFinalObject(cardObject, null)
@@ -95,19 +112,52 @@ export class AddToCartComponent implements OnInit {
       this.loadCartDetails();
     })
   }
-  // removeitem(id: number, type: string) {
-  //   if (type === 'package') {
-  //     this.expandedPackages = this.expandedPackages.filter(pkg => pkg.packageId !== id);
-  //   } else if (type === 'service') {
-  //     this.expandedServices = this.expandedServices.filter(svc => svc.serviceId !== id);
-  //   }
-  // }
+  removeQuantity(packageId: any, name: string, quantity: any) {
+    const cardObject = {
+      [packageId]: 1
+    };
+    if (name == 'package') {
+      this.finalObject = this.createFinalObject2(cardObject, null)
+    }
+    else {
+      this.finalObject = this.createFinalObject2(null, cardObject)
+    }
+
+    this.ApiService.removeItemfromCart(this.finalObject).subscribe((res) => {
+      this.loadCartDetails();
+    })
+  }
+  addQuantity(packageId: any, name: string, quantity: any) {
+    const cardObject = {
+      [packageId]: 1
+    };
+    if (name == 'package') {
+      this.finalObject = this.createFinalObject2(cardObject, null)
+    }
+    else {
+      this.finalObject = this.createFinalObject2(null, cardObject)
+    }
+
+    this.ApiService.addToCart(this.finalObject).subscribe((res) => {
+      this.loadCartDetails();
+    })
+  }
 
   createFinalObject(item1: any, item2: any) {
     const custommerid = this.loadData();
     return {
       customerId: custommerid.customerId,
-      salonId: 1,
+      salonId: this.salonId,
+      packageIds: item1,
+      serviceIds: item2,
+    };
+  }
+
+  createFinalObject2(item1: any, item2: any) {
+    const custommerid = this.loadData();
+    return {
+      customerId: custommerid.customerId,
+      salonId: this.salonId,
       packageIds: item1,
       serviceIds: item2
     };
@@ -126,7 +176,7 @@ export class AddToCartComponent implements OnInit {
     }, {});
 
     const now = new Date();
-    const bookingDate = formatDate(now, 'yyyy-MM-ddTHH:mm:ss', 'en-US');
+    const bookingDate = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
     const slotAllocatedDate = this.slotAllocatedDate || formatDate(now, 'yyyy-MM-dd', 'en-US');
     const slotAllocatedTime = this.slotAllocatedTime || formatDate(now, 'HH:mm:ss', 'en-US');
 
@@ -140,17 +190,19 @@ export class AddToCartComponent implements OnInit {
       advancePayment: null,
       bookingConfirm: null,
       packageQuantities: packageObj,
-      serviceQuantities: serviceObj
+      serviceQuantities: serviceObj,
+      salonId: this.salonId
     };
     this.ApiService.placeOrder(orderPayload).subscribe((res) => {
-      this.ApiService.clearTheCart(custommerId.customerId, 1).subscribe(() => {
+      this.ApiService.clearTheCart(custommerId.customerId, 48).subscribe(() => {
         this.loadCartDetails();
       });
     })
 
     this.hideDialog();
-    this.displayModal2 = true;
-
+    if(this.selectedPaymentMode == 'upi'){
+      this.displayModal2 = true;
+    }
   }
 
   showDialog() {
@@ -165,7 +217,5 @@ export class AddToCartComponent implements OnInit {
   hideDialog2() {
     this.displayModal2 = false;
   }
-
-
 
 }

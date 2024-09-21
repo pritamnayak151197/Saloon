@@ -120,3 +120,10 @@ body {
     flex: 1 1 calc(100% - 10px); /* Each card takes full width of the row with some margin for smaller screens */
   }
 }
+
+
+.disabled-input {
+  pointer-events: none; /* Prevent interaction */
+  background-color: #e9ecef; /* Light gray background */
+  opacity: 0.5; /* Make it look disabled */
+}

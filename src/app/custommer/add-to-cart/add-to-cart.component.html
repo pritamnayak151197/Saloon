@@ -1,74 +1,108 @@
 <!-- Display Packages -->
-<div *ngIf="expandedPackages.length">
-  <div *ngFor="let package of expandedPackages" class="package">
-    <img [src]="package.packageLogo" alt="{{package.packageName}}" class="package-logo">
-    <div class="package-details">
-      <h2>{{package.packageName}}</h2>
-      <p>Price: {{package.price}} (Discount: {{package.discountPrice}})</p>
-      <p>Start Date: {{package.startDate | date}}</p>
-      <p>End Date: {{package.endDate | date}}</p>
-      <!-- <p>Status: {{package.status ? 'Active' : 'Inactive'}}</p> -->
-    </div>
-    <div style="display: flex; gap: 10px;">
-      <button class="btn btn-warning" (click)="removeitem(package.packageId, 'package')">Remove</button>
+<div *ngIf="expandedPackages.length" class="package-container">
+  <div *ngFor="let package of packages" class="package-card">
+    <div class="d-flex align-items-center">
+      <img [src]="package.packageLogo" alt="{{ package.packageName }}" class="package-logo">
+      <div class="package-details flex-grow-1 ms-3">
+        <h2 class="package-title">{{ package.packageName }}</h2>
+        <p class="price">
+          <span class="discount-price">{{ package.discountPrice | currency:'INR' }}</span>
+          <span class="original-price">{{ package.price | currency:'INR' }}</span>
+        </p>
+        <div class="quantity-container">
+          <button class="quantity-btn" (click)="removeQuantity(package.packageId, 'package', package.quantity)">-</button>
+          <span class="quantity">{{ package.quantity }}</span>
+          <button class="quantity-btn" (click)="addQuantity(package.packageId, 'package', package.quantity)">+</button>
+        </div>
+      </div>
+      <button class="btn delete-btn" (click)="removeitem(package.packageId, 'package', package.quantity)">
+        <i class="fas fa-trash-alt"></i>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- Display Services -->
-<div *ngIf="expandedServices.length">
-  <div *ngFor="let service of expandedServices" class="service">
-    <img [src]="service.servicePic" alt="{{service.serviceName}}" class="service-pic">
-    <div class="service-details">
-      <h2>{{service.serviceName}}</h2>
-      <p>Price: {{service.price}} (Discount: {{service.discountPrice}})</p>
-      <!-- <p>Status: {{service.status ? 'Active' : 'Inactive'}}</p> -->
+<div *ngIf="expandedServices.length" class="package-container">
+<div *ngFor="let service of services" class="package-card">
+  <div class="d-flex align-items-center">
+    <img [src]="service.servicePic" alt="{{ service.serviceName }}" class="package-logo">
+    <div class="package-details flex-grow-1 ms-3">
+      <h2 class="package-title">{{ service.serviceName }}</h2>
+      <p class="price">
+        <span class="discount-price">{{ service.discountPrice | currency:'INR' }}</span>
+        <span class="original-price">{{ service.price | currency:'INR' }}</span>
+      </p>
+      <div class="quantity-container">
+        <button class="quantity-btn" (click)="removeQuantity(service.serviceId, 'service', service.quantity)">-</button>
+        <span class="quantity">{{ service.quantity }}</span>
+        <button class="quantity-btn" (click)="addQuantity(service.serviceId, 'service', service.quantity)">+</button>
+      </div>
     </div>
-    <div style="display: flex; gap: 10px;">
-      <button class="btn btn-warning" (click)="removeitem(service.serviceId, 'service')">Remove</button>
-    </div>
+    <button class="btn delete-btn" (click)="removeitem(service.serviceId, 'service', service.quantity)">
+      <i class="fas fa-trash-alt"></i>
+    </button>
   </div>
 </div>
+</div>
+
+
 
 <!-- Single Place Order Button -->
-<div style="text-align: center; margin-top: 20px;" *ngIf="placeOrderButton">
-  <button class="btn btn-success" (click)="showDialog()">Place Order</button>
+<div class="place-order-container" *ngIf="placeOrderButton" style="text-align: center; margin-top: 5px;">
+  <button class="btn btn-success place-order-btn" (click)="showDialog()">Place Order</button>
 </div>
 
 <!-- PrimeNG Dialog for Slot Selection -->
-<p-dialog header="Select Slot" [(visible)]="displayModal" (onHide)="hideDialog()">
-  <div class="p-grid">
-    <div class="p-col-12 p-md-6">
-      <div class="p-field">
+<p-dialog header="Select Slot" [(visible)]="displayModal" (onHide)="hideDialog()" class="slot-dialog">
+  <div class="p-grid p-fluid">
+    <div class="p-col-6">
+      <div class="p-field mb-3">
         <label for="slotAllocatedDate">Slot Allocated Date</label>
-        <input id="slotAllocatedDate" type="date" pInputText [(ngModel)]="slotAllocatedDate" />
+        <input id="slotAllocatedDate" type="date" pInputText [(ngModel)]="slotAllocatedDate" class="p-inputtext" />
       </div>
     </div>
-    <div class="p-col-12 p-md-6">
+    <div class="p-col-6 mb-3">
       <div class="p-field">
         <label for="slotAllocatedTime">Slot Allocated Time</label>
-        <input id="slotAllocatedTime" type="time" pInputText [(ngModel)]="slotAllocatedTime" />
+        <input id="slotAllocatedTime" type="time" pInputText [(ngModel)]="slotAllocatedTime" class="p-inputtext" />
       </div>
     </div>
-    <div class="p-col-12">
+    <div class="p-col-12 mb-3">
       <div class="p-field">
         <label for="remarks">Remarks</label>
         <input id="remarks" type="text" pInputText [(ngModel)]="remarks" placeholder="Enter remarks" />
       </div>
     </div>
   </div>
+  <div class="payment-mode-container">
+    <span class="payment-label">Select Payment Mode:</span>
+    <div class="payment-options d-flex">
+      <div class="payment-option me-3" [class.selected]="selectedPaymentMode === 'cash'"
+        (click)="selectedPaymentMode = 'cash'">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Cash</span>
+      </div>
+      <div class="payment-option" [class.selected]="selectedPaymentMode === 'upi'"
+        (click)="selectedPaymentMode = 'upi'">
+        <i class="fas fa-mobile-alt"></i>
+        <span>UPI</span>
+      </div>
+    </div>
+  </div>
+
   <p-footer>
-    <button type="button" class="btn btn-success" icon="pi pi-check" (click)="placeOrder()">Subnmit</button>
-    <button type="button"  class="btn btn-danger" icon="pi pi-times" (click)="hideDialog()">Cancel</button>
+    <button type="button" class="btn btn-success" icon="pi pi-check" (click)="placeOrder()">Submit</button>
+    <button type="button" class="btn btn-danger" icon="pi pi-times" (click)="hideDialog()">Cancel</button>
   </p-footer>
 </p-dialog>
 
+
 <!-- PrimeNG Dialog for Make Payment -->
-<p-dialog header="Make Payment" [(visible)]="displayModal2" (onHide)="hideDialog2()">
-  <div style="height: 200px; width: 100%; background-color: black;">
-    <img src="{{this.qrCodeUrl.qrCode}}" alt="" style="height: 200px;">
+<p-dialog header="Make Payment" [(visible)]="displayModal2" (onHide)="hideDialog2()" class="payment-dialog">
+  <div class="qr-code-container">
+    <img [src]="qrCodeUrl.qrCode" alt="QR Code" class="qr-code-img">
   </div>
   <p-footer>
-    <button type="button" class="btn btn-warning"  icon="pi pi-times" (click)="hideDialog2()">Skip</button>
+    <button type="button" class="btn btn-warning" icon="pi pi-times" (click)="hideDialog2()">Done</button>
   </p-footer>
 </p-dialog>
