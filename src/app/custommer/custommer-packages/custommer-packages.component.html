@@ -1,6 +1,6 @@
 <app-spinner [isVisible]="isLoading2"></app-spinner>
-<div class="container combo-container">
-  <div class="row service-grid">
+<div class="container combo-container" style="margin-top: 5px;">
+  <div class="row service-grid" style="padding: 1px;">
     <div class="col-6" *ngFor="let item of packageList" style="padding: 0;">
       <div class="service-column">
         <div class="image-container">
@@ -13,8 +13,8 @@
           </span> -->
           <h5 class="service-title">{{ item.packageName }}</h5>
           <div class="price-details">
+            <span class="original-price">{{ item.discountPrice | currency:'INR' }}</span><br>
             <span class="discount-price">{{ item.price | currency:'INR' }}</span>
-            <span class="original-price">{{ item.discountPrice | currency:'INR' }}</span>
           </div>
           <!-- <button 
             class="btn btn-warning w-100 mt-2" 

@@ -132,9 +132,11 @@ export class PackagesComponent implements OnInit {
             this.serviceslist.unshift(res);
             if (userdata.userType != "superadmin") {
               this.loadData(userdata.salonId);
+              this.isLoading = false;
             }
             else {
               this.loadData(+this.selectedSaloon);
+              this.isLoading = false;
             }
           }
           else {

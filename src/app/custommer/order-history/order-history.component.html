@@ -1,3 +1,9 @@
+<div class="update-slot-notice">
+  <span class="notice-icon"></span> <!-- You can replace this with an actual icon if using an icon library -->
+  <p>If you want to update your slot, please contact <strong>{{mobileNumber}}</strong>.</p>
+</div>
+
+
 <div class="booking-card" *ngFor="let booking of orderHistory">
   <div class="booking-header">
     <span class="booking-id">Booking ID: {{ booking.bookingId }}</span>
@@ -12,4 +18,3 @@
     <p *ngIf="booking.status === 'Reject' && booking.rejectedReason"><strong>Rejection Reason:</strong> {{ booking.rejectedReason }}</p>
   </div>
 </div>
-

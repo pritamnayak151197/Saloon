@@ -71,7 +71,7 @@ export class CustommerLoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.dates = Array.from({ length: 31 }, (_, i) => i + 1);
-    localStorage.removeItem('prefix');
+    // localStorage.removeItem('prefix');
     if(!this.prefix){
       this.route.queryParams.subscribe(params => {
         const prefix = params['prefix']; // Retrieve the 'prefix' query param
@@ -116,7 +116,7 @@ export class CustommerLoginComponent implements OnInit {
 
 
   logIn(num : any){
-    
+    this.prefix = localStorage.getItem("prefix")
     this.ApiService.custommerLogin(num, this.prefix).subscribe((res) =>{
       this.userData = res;
       localStorage.setItem('userData', JSON.stringify(this.userData));

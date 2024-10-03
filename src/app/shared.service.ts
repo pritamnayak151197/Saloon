@@ -12,4 +12,8 @@ export class SharedService {
   triggerButtonClick() {
     this.buttonClickedSource.next();
   }
+
+  updateUserName(){
+
+  }
 }

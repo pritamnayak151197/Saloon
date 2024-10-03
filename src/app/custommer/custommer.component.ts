@@ -89,7 +89,6 @@ export class CustommerComponent implements OnInit {
 
   confirmLogout(){
     this.showLogoutConfirm = false;
-    localStorage.removeItem('userData');
     this.router.navigate(['/Custommer-Login']);
   }
 

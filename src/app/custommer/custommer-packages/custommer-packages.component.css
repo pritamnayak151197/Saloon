@@ -27,15 +27,16 @@
 }
 
 .discount-price {
-  font-size: 1.1rem; /* Larger discount price */
-  color: green; /* Green for discount price */
-  font-weight: bold; /* Bold for emphasis */
-}
-
-.original-price {
   font-size: 0.9rem; /* Slightly smaller actual price */
   color: red; /* Red color for original price */
   text-decoration: line-through; /* Strikethrough for original price */
+}
+
+.original-price {
+  font-size: 1.1rem; /* Larger discount price */
+  color: green; /* Green for discount price */
+  font-weight: bold; /* Bold for emphasis */
+  
 }
 
 .service-details {

@@ -134,7 +134,7 @@ body {
 
 .notification {
   position: fixed;
-  bottom: 20px;  /* Adjust as needed */
+  bottom: 150px;  /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */

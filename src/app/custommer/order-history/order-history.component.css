@@ -40,3 +40,42 @@
   margin: 5px 0;
   font-size: 14px;
 }
+
+
+.update-slot-notice {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  background: linear-gradient(90deg, rgba(0, 123, 255, 0.8), rgba(0, 173, 238, 0.8)); /* Gradient background */
+  color: #fff; /* White text color for contrast */
+  padding: 8px 15px; /* Reduced padding for less height */
+  border-radius: 20px; /* Rounded corners for badge effect */
+  margin: 10px 5px; /* Space below the notice */
+  font-size: 14px; /* Font size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: transform 0.3s, box-shadow 0.3s; /* Transition effects */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.update-slot-notice:hover {
+  transform: translateY(-2px); /* Lift effect on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}
+
+.update-slot-notice strong {
+  color: #ffcc00; /* Highlight the contact number */
+  margin-left: 5px; /* Space between text and strong element */
+}
+
+/* Optional icon styles */
+.notice-icon {
+  margin-right: 8px; /* Space between icon and text */
+  font-size: 18px; /* Icon size */
+}
+
+@media (max-width: 600px) {
+  .update-slot-notice {
+    font-size: 12px; /* Smaller font size on mobile */
+    padding: 6px 10px; /* Adjust padding for mobile */
+  }
+}

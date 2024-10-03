@@ -13,15 +13,18 @@ export class OrderHistoryComponent implements OnInit {
 
   lastScrollTop = 0;
   bottomBarVisible = true;
-
+  mobileNumber: any;
   constructor(private location: Location,
     private _apiService : ApiService
   ) { }
 
   ngOnInit(): void {
     const custommerId = this.loadData()
-    this._apiService.getOrderHistoryByCustommerId(custommerId.customerId).subscribe((res) =>{
+    this._apiService.getOrderHistoryByCustommerId(custommerId.customerId).subscribe((res:any) =>{
       this.orderHistory = res
+      this._apiService.getSaloonListById(res[0].salonId).subscribe((res: any) =>{
+        this.mobileNumber = res.phone;
+      })
     })
   }
 
