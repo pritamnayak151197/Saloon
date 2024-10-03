@@ -36,6 +36,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { TabViewModule } from 'primeng/tabview';
+import { OrderAnimationComponent } from './order-animation/order-animation.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { TabViewModule } from 'primeng/tabview';
     ViewServiceComponent,
     DashboardComponent,
     BookingsComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    OrderAnimationComponent
   ],
   imports: [
     BrowserModule,

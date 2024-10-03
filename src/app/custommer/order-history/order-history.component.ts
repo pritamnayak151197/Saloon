@@ -35,4 +35,19 @@ export class OrderHistoryComponent implements OnInit {
     this.location.back();
   }
 
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'Pending':
+        return 'status pending';
+      case 'Approve':
+        return 'status approve';
+      case 'Reject':
+        return 'status reject';
+      case 'Slot not available':
+        return 'status slot-not-available';
+      default:
+        return 'status';
+    }
+  }
+
 }

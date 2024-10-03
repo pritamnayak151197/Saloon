@@ -3,41 +3,74 @@
     <!-- <img src="{{data.customerProfilePic}}" alt="User Profile"> -->
     <span class="membership-type">{{data.name}}</span>
   </div>
-  <div class="icon-container">
-    <!-- <div class="icon">
-      <i class="fas fa-heart"></i>
-    </div> -->
-    <div class="icon">
-      <i class="fa-solid fa-cart-shopping" routerLink="add-to-cart"></i>
+  <div class="icon-container" [class.animate]="animationClass" routerLink="add-to-cart">
+    <div class="icon cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
       <span class="cart-count">{{ cartCount }}</span> <!-- Display the cart count -->
     </div>
-    
   </div>
 </div>
-<app-sidebar [isVisible]="isSidebarVisible" (closeSidebar)="closeSidebar()"></app-sidebar>
+
 <div class="content">
   <router-outlet></router-outlet>
 </div>
 
-<div class="bottom-bar" id="bottomBar">
-  <div class="icon">
-    <i class="fa-solid fa-gift" routerLink="c-Services"></i>
+<!-- <div class="bottom-bar" id="bottomBar">
+  <div class="icon" routerLink="c-Services">
+    <i class="fa-solid fa-gift"></i>
     <span>Services</span>
   </div>
-  <div class="icon">
-    <i class="fa-solid fa-gifts" routerLink="c-Packages"></i>
+  <div class="icon" routerLink="c-Packages">
+    <i class="fa-solid fa-gifts"></i>
     <span>Packages</span>
   </div>
-  <div class="icon">
-    <i class="fas fa-user" routerLink="User"></i>
+  <div class="icon" routerLink="User">
+    <i class="fas fa-user"></i>
     <span>User</span>
   </div>
-  <div class="icon">
-    <i class="fas fa-book" routerLink="History"></i>
+  <div class="icon" routerLink="History">
+    <i class="fas fa-book"></i>
     <span>History</span>
   </div>
-  <div class="icon">
-    <i class="fa-solid fa-arrow-right-from-bracket" (click)="logOut()"></i>
+  <div class="icon" (click)="logOut()">
+    <i class="fas fa-arrow-right-from-bracket"></i>
     <span>Logout</span>
+  </div>
+</div> -->
+
+
+
+<div class="bottom-bar" id="bottomBar">
+  <div class="icon" routerLink="c-Services" (click)="setActive('services')" [class.active]="activeTab === 'services'">
+    <i class="bi bi-gift"></i><br>
+    <span>Services</span>
+  </div>
+  <div class="icon" routerLink="c-Packages" (click)="setActive('packages')" [class.active]="activeTab === 'packages'">
+    <i class="bi bi-box-seam"></i><br>
+    <span>Packages</span>
+  </div>
+  <div class="icon" routerLink="User" (click)="setActive('user')" [class.active]="activeTab === 'user'">
+    <i class="bi bi-person"></i><br>
+    <span>User</span>
+  </div>
+  <div class="icon" routerLink="History" (click)="setActive('history')" [class.active]="activeTab === 'history'">
+    <i class="bi bi-journal-text"></i><br>
+    <span>History</span>
+  </div>
+  <div class="icon" (click)="logOut()" (click)="setActive('logout')" [class.active]="activeTab === 'logout'">
+    <i class="bi bi-box-arrow-right"></i><br>
+    <span>Logout</span>
+  </div>
+</div>
+
+
+<div class="logout-modal" *ngIf="showLogoutConfirm">
+  <div class="modal-overlay" (click)="closeModal()"></div>
+  <div class="modal-content">
+    <h3>Are you sure you want to logout?</h3>
+    <div class="modal-actions">
+      <button class="btn cancel-btn" (click)="closeModal()">No</button>
+      <button class="btn confirm-btn" (click)="confirmLogout()">Yes</button>
+    </div>
   </div>
 </div>

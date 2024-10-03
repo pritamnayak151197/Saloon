@@ -1,3 +1,4 @@
+<app-spinner [isVisible]="isLoading2"></app-spinner>
 <div class="container combo-container">
   <div class="row service-grid">
     <div class="col-6" *ngFor="let item of serviceList" style="padding: 0;">
@@ -13,8 +14,8 @@
           <h5 class="service-title">{{ item.serviceName }}</h5>
           <p class="service-description">{{ item.details | slice:0:30 }}...</p>
           <div class="price-details">
-            <span class="discount-price">{{ item.discountPrice | currency:'INR' }}</span>
-            <span class="original-price">{{ item.price | currency:'INR' }}</span>
+            <span class="discount-price">{{ item.price | currency:'INR' }}</span>
+            <span class="original-price">{{ item.discountPrice | currency:'INR' }}</span>
           </div>
           
           <button 
@@ -33,4 +34,14 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+<div class="no-services" *ngIf="noServiceAvailable">
+  <h2 class="not-found-text">No Services Found</h2>
+  <iframe src="https://lottie.host/embed/31610d4a-36b2-4eee-a2ad-ac6b7890c268/j4RIUcfzqZ.json"></iframe>
+  <!-- <iframe src="https://lottie.host/embed/265e3f21-c129-4392-b032-b0bf1e5c9cd5/biOVMOV5xD.json"></iframe> -->
+  <!-- <iframe src="https://lottie.host/embed/d6bb662c-bb1f-4fdd-b49a-4bcd2f43a39a/54cVs7tDdf.json"></iframe>
+  <h2 class="not-found-text">No Services Found</h2> -->
 </div>

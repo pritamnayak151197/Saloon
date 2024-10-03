@@ -181,3 +181,25 @@
 .btn-warning:hover {
   background-color: #e0a800; /* Darker on hover */
 }
+
+
+.order-placed-animation {
+  position: fixed; /* Position the element relative to the viewport */
+  top: 50%; /* Move down to the center of the viewport */
+  left: 50%; /* Move right to the center of the viewport */
+  transform: translate(-50%, -50%); /* Adjust position to truly center */
+  background-color: white; /* Background color */
+  padding: 20px; /* Padding for spacing */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  z-index: 1000; /* Ensure it appears above other elements */
+  text-align: center; /* Center text inside */
+  width: 80%; /* Width for mobile responsiveness */
+  max-width: 400px; /* Max width limit */
+}
+
+@media (max-width: 600px) {
+  .order-placed-animation {
+      width: 90%; /* Wider on smaller screens */
+  }
+}

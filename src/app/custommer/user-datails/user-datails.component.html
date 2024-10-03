@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="margin-top: 20px;">
   <form [formGroup]="userForm">
     <div class="profile-pic">
       <img [src]="profilePicUrl || 'https://via.placeholder.com/100'" alt="Profile Picture">
@@ -14,7 +14,7 @@
 
       <div class="form-group">
         <label for="phone">Phone</label>
-        <input id="phone" type="text" formControlName="phone" />
+        <input id="phone" type="text" formControlName="phone" class="disabled-input" />
       </div>
 
       <div class="form-group">
@@ -41,14 +41,28 @@
         <!-- <input id="startDate" formControlName="startDate"> -->
         <input id="registeredOn" formControlName="startDate" type="date" class="form-control disabled-input" [disabled]="true">
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="birthDate">Birth Date</label>
         <input id="birthDate" formControlName="birthDate">
-      </div>
+      </div> -->
       <div class="form-group">
+        <select id="birthDate" formControlName="birthDate" class="form-control">
+          <option value="" disabled selected>Select a date</option>
+          <option *ngFor="let date of dates" [value]="date">{{ date }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <select id="birthMonth" formControlName="birthMonth" class="form-control">
+          <option value="" disabled selected>Select a month</option>
+          <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+        </select>
+      </div>
+      
+      <!-- <div class="form-group">
         <label for="birthMonth">Birth Month</label>
         <input id="birthMonth" formControlName="birthMonth">
-      </div>
+      </div> -->
     </div>
     <div style="text-align: center;">
       <button type="submit" class="save-button" (click)="updateUser()">Save</button>
@@ -57,3 +71,6 @@
   </form>
 </div>
 
+<div *ngIf="isVisible" class="notification" [ngClass]="{ 'show': isVisible }">
+  {{ message }}
+</div>

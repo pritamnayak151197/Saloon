@@ -5,11 +5,13 @@
     height: 90vh;
     overflow: auto;
 }
+
 .card-title{
   font-weight: 600;
   font-family:Arial, Helvetica, sans-serif;
   color: #1E2A5E;
 }
+
 .card-text{
     font-style:oblique;
     color: #686D76;
@@ -29,12 +31,11 @@
 }
 
 .card-container {
-  display: flex; /* Use Flexbox */
+  display: flex;
   flex-wrap: wrap;
-  gap: 5px; /* Optional: Add spacing between cards */
+  gap: 5px;
 }
 
-/* Basic styles for the card */
 .service-card {
   width: 230px !important;
   background-color: #EEEEEE;
@@ -42,11 +43,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }
-/* .saloon-list-card{
-  border-radius: 5px !important;
-  background-color: #D4E7C5;
-  color: black;
-} */
 
 .odd-card {
   border-radius: 5px !important;
@@ -60,14 +56,10 @@
   color: black;
 }
 
-
-
-/* Additional styles for card content */
 .content {
   font-size: 16px;
 }
 
-/* Animation for card entrance */
 @keyframes fadeIn {
   from {
       opacity: 0;
@@ -89,38 +81,40 @@
   background-image: url('../../assets/pic3.png');
 } 
 
-/* Hover effect and box shadow on hover */
 .card:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
+
 .saloon-list-card:hover{
   background-color: #FED8B1;
   color: rgb(29, 28, 28);
 }
+
 .card.active {
   background-color: #FED8B1;
   color: rgb(29, 28, 28);
 }
+
 .card-header{
   background-color: #FED8B1;
   font-weight: 600;
   font-family:Arial, Helvetica, sans-serif;
   color: #1E2A5E;
 }
+
 .p-dialog-header {
   background-color: #99BC85 !important;
 }
 
 .custom-dialog .ui-dialog-titlebar {
-  background-color: #ff0000; /* Change to your desired color */
-  color: #ffffff; /* Change the text color if needed */
+  background-color: #ff0000; 
+  color: #ffffff; 
 }
 
 .p-ripple{
   color: #ff0000 !important;
 }
-
 
 .context-menu {
   position: fixed;

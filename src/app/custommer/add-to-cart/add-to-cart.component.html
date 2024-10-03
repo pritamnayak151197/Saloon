@@ -1,4 +1,7 @@
 <!-- Display Packages -->
+ <div class="order-placved-animation" *ngIf="isOrderPlaced">
+  <app-order-animation></app-order-animation>
+ </div>
 <div *ngIf="expandedPackages.length" class="package-container">
   <div *ngFor="let package of packages" class="package-card">
     <div class="d-flex align-items-center">

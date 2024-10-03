@@ -33,6 +33,7 @@ export class AddToCartComponent implements OnInit {
   selectedPaymentMode = '';
   packages: any;
   services: any;
+  isOrderPlaced = false;
 
   addToCart() {
     // Logic to add the product to the cart
@@ -49,6 +50,9 @@ export class AddToCartComponent implements OnInit {
     const prefix = this.loadData()
     this.ApiService.getDetailsByPrefix(prefix.prefix).subscribe((res: any)=>{
       this.salonId = res.salonId;
+      this.ApiService.getSaloonListById(this.salonId).subscribe((res) => {
+        this.qrCodeUrl = res;
+      })
       this.ApiService.getItemsForCart(this.salonId, custommerid.customerId).subscribe((res: any) => {
         this.cartItems = res;
         this.cartId = this.cartItems.cartId
@@ -88,12 +92,6 @@ export class AddToCartComponent implements OnInit {
   placeOrderButton = false;
   ngOnInit(): void {
     this.loadCartDetails();
-
-    this.ApiService.getSaloonListById(48).subscribe((res) => {
-      this.qrCodeUrl = res;
-    })
-
-
   }
 
   finalObject: any;
@@ -163,7 +161,60 @@ export class AddToCartComponent implements OnInit {
     };
   }
 
-  placeOrder() {
+  placeUPIOrder(){
+      const custommerId = this.loadData();
+      const packageObj = this.expandedPackages.reduce((acc, pkg) => {
+        acc[String(pkg.packageId)] = pkg.quantity;  // Convert key to string
+        return acc;
+      }, {});
+  
+      const serviceObj = this.expandedServices.reduce((acc, svc) => {
+        acc[String(svc.serviceId)] = svc.quantity;  // Convert key to string
+        return acc;
+      }, {});
+  
+      const now = new Date();
+      const bookingDate = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+      const slotAllocatedDate = this.slotAllocatedDate || formatDate(now, 'yyyy-MM-dd', 'en-US');
+      const slotAllocatedTime = this.slotAllocatedTime || formatDate(now, 'HH:mm:ss', 'en-US');
+  
+      const orderPayload = {
+        customerId: custommerId.customerId,
+        bookingDate: bookingDate,
+        slotAllocatedDate: slotAllocatedDate,
+        slotAllocatedTime: slotAllocatedTime,
+        status: true,
+        remarks: this.remarks,
+        advancePayment: null,
+        bookingConfirm: null,
+        packageQuantities: packageObj,
+        serviceQuantities: serviceObj,
+        salonId: this.salonId
+      };
+      this.ApiService.placeOrder(orderPayload).subscribe((res) => {
+        this.ApiService.clearTheCart(custommerId.customerId, this.salonId).subscribe(() => {
+          this.loadCartDetails();
+          this.isOrderPlaced = true;
+          setTimeout(() => {
+            this.isOrderPlaced = false;
+            console.log('myVariable is now:', this.isOrderPlaced); // Optional: For debugging
+          }, 4000);
+        });
+      })
+  
+      this.hideDialog();
+      
+  
+  }
+  placeOrder(){
+    if(this.selectedPaymentMode == 'upi'){
+      this.displayModal2 = true;
+    }
+    else{
+      this.placeOrderCash();
+    }
+  }
+  placeOrderCash() {
     const custommerId = this.loadData();
     const packageObj = this.expandedPackages.reduce((acc, pkg) => {
       acc[String(pkg.packageId)] = pkg.quantity;  // Convert key to string
@@ -194,8 +245,13 @@ export class AddToCartComponent implements OnInit {
       salonId: this.salonId
     };
     this.ApiService.placeOrder(orderPayload).subscribe((res) => {
-      this.ApiService.clearTheCart(custommerId.customerId, 48).subscribe(() => {
+      this.ApiService.clearTheCart(custommerId.customerId, this.salonId).subscribe(() => {
         this.loadCartDetails();
+        this.isOrderPlaced = true;
+        setTimeout(() => {
+          this.isOrderPlaced = false;
+          console.log('myVariable is now:', this.isOrderPlaced); // Optional: For debugging
+        }, 4000);
       });
     })
 
@@ -215,6 +271,7 @@ export class AddToCartComponent implements OnInit {
   }
 
   hideDialog2() {
+    this.placeUPIOrder();
     this.displayModal2 = false;
   }
 

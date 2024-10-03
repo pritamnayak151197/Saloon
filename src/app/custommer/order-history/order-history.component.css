@@ -1,51 +1,42 @@
-.order-history-container {
-  padding: 20px;
-  background-color: #f2f4f6; /* Light background for contrast */
+.booking-card {
+  background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.order-card {
-  background-color: #ffffff; /* White background for cards */
-  border-radius: 8px;
+  margin: 10px;
   padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s; /* Smooth scaling on hover */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.order-card:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
-}
-
-.order-details {
+.booking-header {
   display: flex;
-  flex-direction: column; /* Stack details vertically */
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.order-info {
-  color: #333; /* Dark text for readability */
-}
-
-.order-name {
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 12px;
   font-weight: bold;
-  font-size: 1.1rem; /* Slightly larger font */
-  color: #007bff; /* Blue color for booking ID */
 }
 
-.order-date {
-  font-size: 0.95rem; /* Slightly smaller font */
-  margin-top: 5px; /* Space between dates */
+.status.pending {
+  background-color: #f1c40f;
 }
 
-.highlight {
-  color: #28a745; /* Green color for highlighted text */
-  font-weight: bold; /* Bold for emphasis */
+.status.approve {
+  background-color: #27ae60;
 }
 
-/* Responsive adjustments */
-@media (max-width: 576px) {
-  .order-card {
-    padding: 10px; /* Less padding on small screens */
-  }
+.status.reject {
+  background-color: #e74c3c;
+}
+
+.status.slot-not-available {
+  background-color: #95a5a6;
+}
+
+.booking-details p {
+  margin: 5px 0;
+  font-size: 14px;
 }

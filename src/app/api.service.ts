@@ -198,4 +198,9 @@ export class ApiService {
     const url = `${this.baseUrl}/cart/getCartCount/customer/${cid}/salon/${sid}`;
     return this.http.get(url);
   }
+
+  updatePrefixBySalonId(salonId: any, prefix : any){
+    const url = `${this.baseUrl}/admin/v1/updatePrefixBySalonId?salonId=${salonId}&prefix=${prefix}`
+    return this.http.patch(url, null);
+  }
 }

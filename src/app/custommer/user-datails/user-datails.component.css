@@ -36,7 +36,7 @@ body {
   padding: 5px 10px;
   font-size: 12px;
   color: #fff;
-  background-color: #e74c3c;
+  background-color: #6C4287;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -78,7 +78,7 @@ body {
   padding: 10px;
   font-size: 16px;
   color: #fff;
-  background-color: #e74c3c;
+  background-color: #6C4287;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -126,4 +126,28 @@ body {
   pointer-events: none; /* Prevent interaction */
   background-color: #e9ecef; /* Light gray background */
   opacity: 0.5; /* Make it look disabled */
+}
+
+
+
+/* notification */
+
+.notification {
+  position: fixed;
+  bottom: 20px;  /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  color: white;
+  padding: 10px 5px;
+  border-radius: 5px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  transform: translate(-50%, 20px);
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }

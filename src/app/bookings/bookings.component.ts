@@ -121,6 +121,7 @@ export class BookingsComponent implements OnInit {
   saveBooking(bookings:any){
     this.apiService.updateBooking(bookings).subscribe((res) =>{
       this.loadData();
+      
     })
   }
 }

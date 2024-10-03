@@ -16,14 +16,28 @@ export class CustommerServiceComponent implements OnInit {
   serviceList: any;
   loadingStates = new Map<number, boolean>();
   salonId: any;
+  isLoading2 = false;
+  noServiceAvailable = false;
 
   ngOnInit(): void {
+    this.isLoading2 = true;
     const prefix =  localStorage.getItem('prefix');
     this._apiServices.getDetailsByPrefix(prefix).subscribe((res: any) =>{
       this.salonId = res.salonId;
-      this._apiServices.getServiceBySaloonId(this.salonId).subscribe((res)=>{
-        this.serviceList = res;
-      })
+      this._apiServices.getServiceBySaloonId(this.salonId).subscribe(
+        (res) => {
+          this.serviceList = res;
+          this.isLoading2 = false;  // Stop loading when data is received
+          if(this.serviceList.message == "No services Found!"){
+            this.noServiceAvailable = true;
+          }
+        },
+        (error) => {
+          console.error('Error fetching service list:', error);  // Log the error for debugging
+          this.isLoading2 = false;  // Stop loading on error as well
+          this.noServiceAvailable = true;
+        }
+      );
     })
     
   }

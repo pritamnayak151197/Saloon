@@ -104,22 +104,45 @@
               </div>
             </div>
 
-          
-            <div>
+            <!-- <div>
               <label for="birthDate">Birth Date</label>
               <input id="birthDate" formControlName="birthDate" type="number" class="form-control">
               <div *ngIf="userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched">
                 Birth Date is required.
               </div>
-            </div>
+            </div> -->
+            
           
             <div>
+              <label for="birthDate">Birth Date</label>
+              <select id="birthDate" formControlName="birthDate" class="form-control">
+                <option value="" disabled selected>Select a date</option>
+                <option *ngFor="let date of dates" [value]="date">{{ date }}</option>
+              </select>
+              <div *ngIf="userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched">
+                Birth Date is required.
+              </div>
+            </div>
+          
+            <!-- <div>
               <label for="birthMonth">Birth Month</label>
               <input id="birthMonth" formControlName="birthMonth" type="number" class="form-control">
               <div *ngIf="userForm.get('birthMonth')?.invalid && userForm.get('birthMonth')?.touched">
                 Birth Month is required.
               </div>
+            </div> -->
+
+            <div>
+              <label for="birthMonth">Birth Month</label>
+              <select id="birthMonth" formControlName="birthMonth" class="form-control">
+                <option value="" disabled selected>Select a month</option>
+                <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+              </select>
+              <div *ngIf="userForm.get('birthMonth')?.invalid && userForm.get('birthMonth')?.touched">
+                Birth Month is required.
+              </div>
             </div>
+            
           
             <div>
               <label for="gender">Gender</label>
@@ -157,6 +180,10 @@
   </div>
 </div>
 
+
+<div *ngIf="isVisible" class="notification" [ngClass]="{ 'show': isVisible }">
+  {{ message }}
+</div>
 
 <!-- Forgot password Modal -->
 

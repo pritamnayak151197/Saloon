@@ -18,6 +18,7 @@ import { ViewPackageComponent } from './custommer/custommer-packages/view-packag
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookingsComponent } from './bookings/bookings.component';
+import { OrderAnimationComponent } from './order-animation/order-animation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Login', pathMatch: 'full' },
@@ -43,7 +44,8 @@ const routes: Routes = [
       { path: 'History', component: OrderHistoryComponent },
       { path: 'add-to-cart', component: AddToCartComponent },
       { path: 'Package-detail/:id', component: ViewPackageComponent },
-      { path: 'Package-detail', component: ViewPackageComponent }
+      { path: 'Package-detail', component: ViewPackageComponent },
+      { path: 'order-confirmation', component: OrderAnimationComponent }
     ]
   },
   { path: 'unauthorized', component: UnauthorizedComponent },

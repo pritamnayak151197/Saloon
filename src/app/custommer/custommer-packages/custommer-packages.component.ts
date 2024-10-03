@@ -17,13 +17,20 @@ export class CustommerPackagesComponent implements OnInit {
   packageList: any;
   salonId: any;
   loadingStates = new Map<number, boolean>();
+  isLoading2 = false;
+  noServiceAvailable = false;
   
   ngOnInit(): void {
+    this.isLoading2 = true;
     const prefix = localStorage.getItem('prefix');
     this._apiServices.getDetailsByPrefix(prefix).subscribe((res: any) =>{
       this.salonId = res.salonId;
       this._apiServices.getPackagesBySaloonId(this.salonId).subscribe((res)=>{
         this.packageList = res;
+        this.isLoading2 = false;
+        if(this.packageList.message == "No packages available!"){
+          this.noServiceAvailable = true;
+        }
       })
     })
     

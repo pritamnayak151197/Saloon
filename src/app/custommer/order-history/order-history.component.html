@@ -1,11 +1,15 @@
-<div class="order-history-container">
-  <div *ngFor="let order of orderHistory" class="order-card">
-    <div class="order-details">
-      <div class="order-info">
-        <div class="order-name">Booking ID: <span class="highlight">{{ order.bookingId }}</span></div>
-        <div class="order-date">Booking Date: <span class="highlight">{{ order.bookingDate | date }}</span></div>
-        <div class="order-date">Slot Allocated Date: <span class="highlight">{{ order.slotAllocatedDate | date }}</span></div>
-      </div>
-    </div>
+<div class="booking-card" *ngFor="let booking of orderHistory">
+  <div class="booking-header">
+    <span class="booking-id">Booking ID: {{ booking.bookingId }}</span>
+    <span [ngClass]="getStatusClass(booking.status)">
+      {{ booking.status }}
+    </span>
+  </div>
+  <div class="booking-details">
+    <p><strong>Booking Date:</strong> {{ booking.bookingDate }}</p>
+    <p *ngIf="booking.slotAllocatedDate"><strong>Slot Allocated:</strong> {{ booking.slotAllocatedDate }} at {{ booking.slotAllocatedTime }}</p>
+    <!-- <p *ngIf="booking.remarks"><strong>Remarks:</strong> {{ booking.remarks }}</p> -->
+    <p *ngIf="booking.status === 'Reject' && booking.rejectedReason"><strong>Rejection Reason:</strong> {{ booking.rejectedReason }}</p>
   </div>
 </div>
+

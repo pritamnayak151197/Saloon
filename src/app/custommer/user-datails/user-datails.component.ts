@@ -16,7 +16,33 @@ export class UserDatailsComponent implements OnInit {
   prefix = localStorage.getItem('prefix');
   uploadedfile: any;
   url: any;
-  salonId: any
+  salonId: any;
+  isVisible = false;
+  message = '';
+  months = [
+    { name: 'January', value: 1 },
+    { name: 'February', value: 2 },
+    { name: 'March', value: 3 },
+    { name: 'April', value: 4 },
+    { name: 'May', value: 5 },
+    { name: 'June', value: 6 },
+    { name: 'July', value: 7 },
+    { name: 'August', value: 8 },
+    { name: 'September', value: 9 },
+    { name: 'October', value: 10 },
+    { name: 'November', value: 11 },
+    { name: 'December', value: 12 },
+  ];
+  dates: number[] = [];
+
+  show(message: string, duration: number = 3000) {
+    this.message = message;
+    this.isVisible = true;
+
+    setTimeout(() => {
+      this.isVisible = false;
+    }, duration);
+  }
 
   constructor(private fb: FormBuilder,
     private ApiService: ApiService
@@ -45,6 +71,7 @@ export class UserDatailsComponent implements OnInit {
 
   ngOnInit(): void {
     // Any initialization logic
+    this.dates = Array.from({ length: 31 }, (_, i) => i + 1);
     this.data = this.loadData();
     this.ApiService.getDetailsByPrefix(this.prefix).subscribe((res: any)=>{
       this.salonId = res.salonId;
@@ -119,18 +146,14 @@ export class UserDatailsComponent implements OnInit {
 
   updateUser() {
     if (!this.uploadedfile) {
-      if (this.userForm.valid) {
         this.userForm.patchValue({
           salonId: this.salonId,
           customerId: this.data.customerId,
           startDate: this.data2.startDate
         });
         this.ApiService.updateCustommer(this.userForm.value).subscribe((res) => {
-
+          this.show("user Updated")
         })
-      } else {
-        console.log('Form is invalid');
-      }
     }
     else{
 

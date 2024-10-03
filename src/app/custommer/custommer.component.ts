@@ -22,9 +22,16 @@ export class CustommerComponent implements OnInit {
   data: any;
   cartCount: number = 0;
   salondata: any;
+  activeTab: string = 'services'; // Default active tab
+  showLogoutConfirm: boolean = false;
+  animationClass: string = '';
 
   openSidebar() {
     this.isSidebarVisible = true;
+  }
+
+  setActive(tab: string) {
+    this.activeTab = tab;
   }
 
   closeSidebar(){
@@ -67,12 +74,32 @@ export class CustommerComponent implements OnInit {
   getItemCount(salonId: any){
     this.apiService.getItemCount(this.data.customerId, salonId).subscribe((res: any)=>{
       this.cartCount = res.totalCount;
+      this.triggerAnimation();
     })
   }
 
-  logOut(){
+  triggerAnimation() {
+    // Add animation class
+    this.animationClass = 'animate';
+    setTimeout(() => {
+      // Remove class after animation ends
+      this.animationClass = '';
+    }, 500); // Match the duration in your CSS animation
+  }
+
+  confirmLogout(){
+    this.showLogoutConfirm = false;
     localStorage.removeItem('userData');
     this.router.navigate(['/Custommer-Login']);
+  }
+
+
+  logOut() {
+    this.showLogoutConfirm = true;  // Show the modal when logout is clicked
+  }
+
+  closeModal() {
+    this.showLogoutConfirm = false;  // Close the modal when 'No' or outside is clicked
   }
 
 }

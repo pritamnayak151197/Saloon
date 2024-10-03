@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExportToExcelService } from '../export-to-excel.service';
 import { Router } from '@angular/router';
 import { switchMap, catchError } from 'rxjs/operators';
+import { error } from 'console';
 
 @Component({
   selector: 'app-manage-saloons',
@@ -41,6 +42,7 @@ export class ManageSaloonsComponent implements OnInit {
   selectedFile2: any
   message = ''
   isLoading = false;
+  updatedPrefix: any;
   
 
   exportToExcel(): void {
@@ -70,7 +72,7 @@ export class ManageSaloonsComponent implements OnInit {
   }
  
 
-  onSubmit(){
+  onSubmit() {
     if (this.selectedFile || this.selectedFile2) {
       this.isLoading = true;
       this._apiService.uploadImage(this.selectedFile).pipe(
@@ -78,7 +80,7 @@ export class ManageSaloonsComponent implements OnInit {
           // First image upload response
           this.selectedFile = res1[0].url;
           this.salonForm.value.salonLogo = this.selectedFile;
-      
+  
           // Upload the second image
           return this._apiService.uploadImage(this.selectedFile2);
         }),
@@ -86,7 +88,7 @@ export class ManageSaloonsComponent implements OnInit {
           // Second image upload response
           this.selectedFile2 = res2[0].url;
           this.salonForm.value.qrCode = this.selectedFile2;
-      
+  
           // After both images are uploaded, call the addSaloon API
           if (this.salonForm.valid) {
             return this._apiService.addSaloon(this.salonForm.value);
@@ -98,33 +100,38 @@ export class ManageSaloonsComponent implements OnInit {
         next: (data) => {
           // Handle the response from addSaloon API
           this.responseDataSubmit = data;
-          this.saloonList.push(this.responseDataSubmit.data);
+         
           this.createAdmin = true;
           this.loaddata();
           this.isLoading = false;
         },
         error: (err) => {
-          this.message = err.error.message
+          this.isLoading = false; // Ensure loading state is updated
+          this.message = err.error?.message || 'An unknown error occurred';
+          console.error(this.message);
         }
       });
-      
-    }
-    else{
+    } else {
       if (this.salonForm.valid) {
         console.log(this.salonForm.value);
         this.isLoading = true;
-        this._apiService.addSaloon(this.salonForm.value).subscribe((data) =>{
-          this.responseDataSubmit = data;
-          this.saloonList.push(this.responseDataSubmit.data);
-          this.createAdmin = true;
-          this.loaddata();
-          this.isLoading = false;
+        this._apiService.addSaloon(this.salonForm.value).subscribe({
+          next: (data) => {
+            this.responseDataSubmit = data;
+            this.createAdmin = true;
+            this.loaddata();
+            this.isLoading = false;
+          },
+          error: (err) => {
+            this.isLoading = false; // Ensure loading state is updated
+            this.message = err.error?.message || 'An unknown error occurred';
+            console.error(this.message);
+          }
         });
       }
     }
-    
-    
   }
+  
   createAdminForSalon(userName: string, password: string, prefix: string){
     let body = {
       salonId: this.responseDataSubmit.Data.salonId,
@@ -135,11 +142,28 @@ export class ManageSaloonsComponent implements OnInit {
     };
     this.isLoading = true;
 
-    this._apiService.addAdmin(body).subscribe((res)=>{
-      this.adminDetails = res;
-      this.visible = false;
-      this.isLoading = false;
-    })
+    this._apiService.addAdmin(body).subscribe(
+      (res: any) => {
+        this.adminDetails = res;
+        this.visible = false;
+        this.isLoading = false;
+        this.clearData();
+        this.loaddata();
+      },
+      (error: any) => {
+        // Handle the error here
+        if (error.error) {
+          // Display or log the error message
+
+        this.message = "This prefix is already used by another admin."
+        } else {
+          console.error('An unknown error occurred.');
+        }
+        this.isLoading = false;
+        this.loaddata();
+      }
+    );
+    
   }
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
@@ -164,7 +188,6 @@ export class ManageSaloonsComponent implements OnInit {
     this.salonForm.value['salonLogo'] = this.saloonLogo;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
-      this.saloonList.push(this.responseDataSubmit.data);
       this.editSaloonData = false;
       this.loaddata();
       this.isLoading = false;
@@ -194,7 +217,6 @@ export class ManageSaloonsComponent implements OnInit {
     this.salonForm.value['services'] = this.selectedFile;
     this._apiService.updateSaloonById(this.salonForm.value).subscribe((data) =>{
       this.responseDataSubmit = data;
-      this.saloonList.push(this.responseDataSubmit.data);
       this.editSaloonData = false;
       this.loaddata();
       this.isLoading = false;
@@ -258,7 +280,8 @@ export class ManageSaloonsComponent implements OnInit {
     this.password = '';
     this.selectedFile = null;
     this.selectedFile2 = null;
-    this.message = '';
+    this.message = '',
+    this.createAdmin = false;
   }
   saloonId = null;
   onRightClick(event: MouseEvent, salonId: any) {
@@ -293,10 +316,10 @@ export class ManageSaloonsComponent implements OnInit {
     this.clearData();
     this.visible = true;
 
-    this.salonForm.patchValue({
-      status: true,
-      sms: true
-    });
+    // this.salonForm.patchValue({
+    //   status: true,
+    //   sms: true
+    // });
   }
 
   isInvalid(controlName: string): boolean {
@@ -306,14 +329,30 @@ export class ManageSaloonsComponent implements OnInit {
 
   loaddata(){
     this._apiService.getSaloonList().subscribe((res: any) =>{
-      this.saloonList = res
-      this.totalCount = res.length
-      this.saloonData = this.saloonList.find(salon => salon.salonId === 1);
-      this.filteredServices = [...this.saloonList];
+      this.saloonList = res;
+      this.totalCount = res.length;
+      if (Array.isArray(this.saloonList)) {
+        this.saloonData = this.saloonList.find(salon => salon.salonId === this.saloonList[0]?.salonId);
+        this.filteredServices = [...this.saloonList];
+        this.isLoading = false;
+      } else {
+        this.saloonData = null; // Or any default value
+        this.isLoading = false;
+      }
+    });
+  }
+
+  updatePrefix(){
+    this._apiService.updatePrefixBySalonId(this.saloonId2, this.updatedPrefix).subscribe((res:any)=>{
+      this.editSaloonData = false;
+    }, (err) =>{
+      this.message = err.error.message
+      this.isLoading = false;
     });
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loaddata();
     this.salonForm = this.fb.group({
       salonName: ['', Validators.required],
@@ -330,8 +369,6 @@ export class ManageSaloonsComponent implements OnInit {
       coupon: [false, ],
       membership: [false, ]
     });
-
-    
   }
 
 }

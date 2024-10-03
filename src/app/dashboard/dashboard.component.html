@@ -42,7 +42,15 @@
                 class="form-control"
               />
             </td>
-            <td>{{ booking.status ? 'Active' : 'Inactive' }}</td>
+            <!-- <td>{{ booking.status ? 'Active' : 'Inactive' }}</td> -->
+            <td>
+              <select [(ngModel)]="booking.status" (change)="onStatusChange(booking)" class="form-control">
+                <option value="Pending">Pending</option>
+                <option value="Approve">Approve</option>
+                <option value="Reject">Reject</option>
+                <option value="Slot not available">Slot not available</option>
+              </select>
+            </td>
             <td>{{ booking.remarks }}</td>
             <td>
               <select 
@@ -78,4 +86,10 @@
       </table>
     </div>
   </div>
+</div>
+
+
+
+<div *ngIf="isVisible" class="notification" [ngClass]="{ 'show': isVisible }">
+  {{ message }}
 </div>

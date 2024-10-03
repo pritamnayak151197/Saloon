@@ -13,7 +13,17 @@ export class DashboardComponent implements OnInit {
   bookings: any;
   custommerList: any;
   show = false;
-  message = ''
+  message = '';
+  isVisible = false;
+
+  showMessage(message: string, duration: number = 3000) {
+    this.message = message;
+    this.isVisible = true;
+
+    setTimeout(() => {
+      this.isVisible = false;
+    }, duration);
+  }
 
   constructor(private apiService: ApiService) { }
 
@@ -87,7 +97,12 @@ export class DashboardComponent implements OnInit {
 
   saveBooking(bookings: any) {
     this.apiService.updateBooking(bookings).subscribe((res) => {
-
+      this.showMessage("Booking Updated successfully!");
     })
+  }
+
+  onStatusChange(booking: any) {
+    console.log(`Booking ID: ${booking.bookingId}, New Status: ${booking.status}`);
+    // Here, you could also call an API to update the status
   }
 }
