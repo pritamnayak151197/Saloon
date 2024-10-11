@@ -25,6 +25,7 @@ export class CustommerComponent implements OnInit {
   activeTab: string = 'services'; // Default active tab
   showLogoutConfirm: boolean = false;
   animationClass: string = '';
+  salonData: any;
 
   openSidebar() {
     this.isSidebarVisible = true;
@@ -64,7 +65,10 @@ export class CustommerComponent implements OnInit {
     this.data = this.getUserData();
     this.salondata = localStorage.getItem('saloonData')
     this.apiService.getDetailsByPrefix(this.data.prefix).subscribe((res: any)=>{
-      this.getItemCount(res.salonId)
+      this.getItemCount(res.salonId);
+      this.apiService.getSaloonListById(res.salonId).subscribe((res: any)=>{
+        this.salonData = res;
+      })
       this.subscription = this.sharedService.buttonClicked$.subscribe(() => {
         this.getItemCount(res.salonId);
       });

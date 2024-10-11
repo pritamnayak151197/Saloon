@@ -88,21 +88,22 @@
 
   .notification {
     position: fixed;
-    bottom: 20px;  /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
-    color: white;
-    padding: 10px 5px;
-    border-radius: 5px;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 0;
-    transform: translate(-50%, 20px);
-    z-index: 1000; /* Ensure it is above other elements */
+  bottom: 20px;  /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 0, 0, 0.7); /* Semi-transparent red for errors */
+  color: white;
+  padding: 10px 15px; /* Padding to make it look spacious */
+  border-radius: 5px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  transform: translate(-50%, 20px);
+  z-index: 1000; /* Ensure it is above other elements */
   }
   
   .notification.show {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+  
   

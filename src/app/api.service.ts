@@ -10,28 +10,28 @@ import { Service } from '../assets/saloon.interface';
 export class ApiService {
 
   constructor(private http: HttpClient){}
-  private baseUrl = 'http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com';
+  private baseUrl = 'http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/';
   
 
   login(param : any){
-    return this.http.post('http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com/admin/v1/login/usernameOrPhone', param);
+    return this.http.post('http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/admin/v1/login/usernameOrPhone', param);
   }
 
   
   logInWithOtp(param: any){
-    return this.http.post(`http://testapp-env.eba-4t2jzzh3.ap-south-1.elasticbeanstalk.com/otp/request`, param);
+    return this.http.post(`http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/otp/request`, param);
   }
   validateOtp(param: any){
-    return this.http.post(`http://testapp-env.eba-4t2jzzh3.ap-south-1.elasticbeanstalk.com/otp/validate`, param);
+    return this.http.post(`http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/otp/validate`, param);
   }
 
   getSaloonList(){
-    const url = `http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com/salon/viewList`;
+    const url = `http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/salon/viewList`;
     return this.http.get(url);
   }
 
   getSaloonList2(){
-    return this.http.get('https://98aa-152-58-93-216.ngrok-free.app/salon/viewList');
+    return this.http.get('http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/salon/viewList');
   }
   getSaloonListById(saloonId: any){
     const url = `${this.baseUrl}/salon/getDataBySalonId/${saloonId}`;
@@ -44,7 +44,7 @@ export class ApiService {
   }
 
   getServiceBySaloonId(saloonId: any): Observable<any> {
-    const url = `http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com/services/getBySalonId/${saloonId}`;
+    const url = `http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/services/getBySalonId/${saloonId}`;
     return this.http.get(url);
   }
 
@@ -99,12 +99,12 @@ export class ApiService {
 
 
   getOrderHistoryByCustommerId(id:any){
-    const url = `http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com/booking/viewAllBookingsByCustomerId/${id}`;
+    const url = `http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/booking/viewAllBookingsByCustomerId/${id}`;
     return this.http.get(url);
   }
 
   getPackageById(id: any){
-    const url = `http://salon-env.eba-ncmipgef.ap-south-1.elasticbeanstalk.com/package/getPackageById/${id}`;
+    const url = `http://salonapi-env.eba-seddiyjw.ap-south-1.elasticbeanstalk.com/package/getPackageById/${id}`;
     return this.http.get(url);
   }
 

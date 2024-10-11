@@ -18,6 +18,7 @@ export class CustommerServiceComponent implements OnInit {
   salonId: any;
   isLoading2 = false;
   noServiceAvailable = false;
+  filteredServices: any;
 
   ngOnInit(): void {
     this.isLoading2 = true;
@@ -27,8 +28,9 @@ export class CustommerServiceComponent implements OnInit {
       this._apiServices.getServiceBySaloonId(this.salonId).subscribe(
         (res) => {
           this.serviceList = res;
+          this.filteredServices = res.filter((service: { status: boolean; }) => service.status === true);
           this.isLoading2 = false;  // Stop loading when data is received
-          if(this.serviceList.message == "No services Found!"){
+          if(this.filteredServices == "No services Found!"){
             this.noServiceAvailable = true;
           }
         },

@@ -4,6 +4,8 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -58,6 +60,7 @@ export class CustommerLoginComponent implements OnInit {
     { name: 'December', value: 12 },
   ];
   isVisible = false;
+  errorVisible = false;
   message = '';
 
   show(message: string, duration: number = 3000) {
@@ -114,14 +117,29 @@ export class CustommerLoginComponent implements OnInit {
     this.display = true;
   }
 
+  clearError() {
+    this.message = ''; // Clear the message
+    this.isVisible = false; // Hide the error message
+  }
 
   logIn(num : any){
     this.prefix = localStorage.getItem("prefix")
-    this.ApiService.custommerLogin(num, this.prefix).subscribe((res) =>{
-      this.userData = res;
-      localStorage.setItem('userData', JSON.stringify(this.userData));
-      this.router.navigate(['/custommer/c-Services']);
-    })
+    this.ApiService.custommerLogin(num, this.prefix).pipe(
+      catchError((error) => {
+        this.isVisible = true;
+        this.message = error?.error?.message || 'Login failed. Please try again.';
+        setTimeout(() => {
+          this.clearError(); // Call method to clear the message
+        }, 3000);
+        return of(null); // Return a null observable to continue the stream
+      })
+    ).subscribe((res) => {
+      if (res) { // Check if the response is not null
+        this.userData = res;
+        localStorage.setItem('userData', JSON.stringify(this.userData));
+        this.router.navigate(['/custommer/c-Services']);
+      }
+    });
     
   }
 

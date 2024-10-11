@@ -18,7 +18,7 @@
             <th>Status</th>
             <th>Remarks</th>
             <th>Advance Payment</th>
-            <th>Booking Confirmed</th>
+            <!-- <th>Booking Confirmed</th> -->
             <th>Actions</th>
           </tr>
         </thead>
@@ -62,7 +62,7 @@
                 <option [value]="false">No</option>
               </select>
             </td>
-            <td>
+            <!-- <td>
               <select 
                 [(ngModel)]="booking.bookingConfirm"
                 (change)="updateBooking(booking)" 
@@ -71,7 +71,7 @@
                 <option [value]="true">Yes</option>
                 <option [value]="false">No</option>
               </select>
-            </td>
+            </td> -->
             <td>
               <button class="btn btn-success" (click)="saveBooking(booking)">
                 Save

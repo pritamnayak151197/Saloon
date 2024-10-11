@@ -114,3 +114,51 @@
     transform: translateY(0);
   }
 }
+
+
+/* 
+button color */
+.gradient-btn {
+  background: linear-gradient(90deg, #6a11cb, #2575fc); /* Blue to Purple */
+  color: #fff; /* Text color */
+  border: none; /* Remove default border */
+  padding: 8px 16px; /* Reduced padding for a smaller button */
+  font-size: 14px; /* Smaller font size */
+  border-radius: 30px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  position: relative; /* Position for the pseudo-element */
+  overflow: hidden; /* Hide overflow for animations */
+  transition: transform 0.3s ease; /* Transition for scaling */
+}
+
+.gradient-btn:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.gradient-btn:hover {
+  transform: scale(1.05); /* Slight scale on hover */
+}
+
+/* Animation for loading state */
+.gradient-btn.loading {
+  cursor: wait; /* Change cursor to wait */
+  pointer-events: none; /* Disable interactions */
+}
+
+/* Pseudo-element for hover effect */
+.gradient-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%; /* Adjust based on desired effect */
+  height: 300%; /* Adjust based on desired effect */
+  background: rgba(255, 255, 255, 0.2); /* Light overlay effect */
+  border-radius: 50%; /* Circle shape */
+  transform: translate(-50%, -50%) scale(0); /* Start hidden */
+  transition: transform 0.5s ease; /* Transition for the overlay */
+}
+
+.gradient-btn:hover::after {
+  transform: translate(-50%, -50%) scale(1); /* Show overlay on hover */
+}
